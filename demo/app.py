@@ -18,7 +18,7 @@ TL_GAN_HASH_FUNCS = {
 }
 
 def main():
-    st.title("Streamlit Face-GAN Demo")
+    st.title("Demo")
     # Download all data files if they aren't already in the working directory.
     for filename in EXTERNAL_DEPENDENCIES.keys():
         download_file(filename)
