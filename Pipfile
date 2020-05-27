@@ -17,10 +17,11 @@ lmdb = ">=0.94"
 moviepy = ">=0.2.3.5"
 scikit-learn = ">=0.20.0"
 opencv-python = ">=3.4.0.12"
-tensorflow = "==1.15.2"
+tensorflow = "*"
 streamlit = "==0.57.0"
 Pillow = ">=5.3.0"
 Keras = ">=2.2.4"
+certifi = "*"
 
 [requires]
 python_version = "3.7"

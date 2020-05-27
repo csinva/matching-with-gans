@@ -10,6 +10,7 @@ streamlit run app.py
 ```
 
 - when using, use `pipenv shell` from the demo repo before running
+    - for mac may need to run `pipenv install certifi`
 - adapted from https://github.com/streamlit/demo-face-gan/
 
 # description
