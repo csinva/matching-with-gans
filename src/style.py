@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
-
-
+import seaborn as sns
+cmap_div = sns.diverging_palette(10, 220, as_cmap=True)
 #
 # plotting controls
 #

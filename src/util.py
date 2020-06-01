@@ -1,6 +1,8 @@
+import torch
 import numpy as np
 import numpy.linalg as npl
 from copy import deepcopy
+
 def orthogonalize_paper(vs: np.ndarray):
     '''
     Params
@@ -20,6 +22,37 @@ def orthogonalize_paper(vs: np.ndarray):
         vs_orth[:, i] = vs_orth[:, i] / npl.norm(vs_orth[:, i])
     return vs_orth
 #     for i in range
+
+def pearsonr(x, y):
+    """
+    Mimics `scipy.stats.pearsonr`
+
+    Arguments
+    ---------
+    x : 1D torch.Tensor
+    y : 1D torch.Tensor
+
+    Returns
+    -------
+    r_val : float
+        pearsonr correlation coefficient between x and y
+    
+    Scipy docs ref:
+        https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.pearsonr.html
+    
+    Scipy code ref:
+        https://github.com/scipy/scipy/blob/v0.19.0/scipy/stats/stats.py#L2975-L3033
+    Example:
+        >>> x = np.random.randn(100)
+        >>> y = np.random.randn(100)
+        >>> sp_corr = scipy.stats.pearsonr(x, y)[0]
+        >>> th_corr = pearsonr(torch.from_numpy(x), torch.from_numpy(y))
+        >>> np.allclose(sp_corr, th_corr)
+    """
+    xm = x - torch.mean(x)
+    ym = y - torch.mean(y)
+    return xm.dot(ym) / (torch.norm(xm, 2) * torch.norm(ym, 2))
+
 
 def orthogonalize(v0: np.ndarray, vs: np.ndarray):
     '''
