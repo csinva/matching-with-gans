@@ -4,6 +4,9 @@ import numpy.linalg as npl
 from copy import deepcopy
 import scipy.stats
 
+def detach(tensor):
+    return tensor.detach().cpu().numpy()
+
 def orthogonalize_paper(vs: np.ndarray):
     '''
     Params
@@ -38,10 +41,12 @@ def spearman_mean(y_pred: torch.Tensor, y_train: torch.Tensor):
         mean spearman correlation between corresponding columns
         of y_pred and y_train
     '''
+    
+    
     spearman_cum = 0
     for i in range(y_pred.shape[1]):
-        spearman_cum += scipy.stats.spearmanr(y_pred[:, i].detach().numpy(),
-                                              y_train[:, i]).correlation
+        spearman_cum += scipy.stats.spearmanr(detach(y_pred[:, i]),
+                                              detach(y_train[:, i])).correlation
     return spearman_cum / y_pred.shape[1]
 
 

@@ -32,50 +32,36 @@ DIRECTIONS_DIR = '../data/annotation-dataset-stylegan2/linear_models/new' # path
 GENERATING_LATENTS_DIR = '../data/annotation-dataset-stylegan2/data'
 
 def plot_mse_vs_corrs():
-    # linear plots
-    df = pd.read_pickle(oj(PROCESSED_DIR, '06_df_loss_tradeoff_linear.pkl'))
-    df = df.iloc[1:]
-    df = df.iloc[:-4]
+    
+    fnames = {
+        '06_df_loss_tradeoff_linear.pkl': 'Linear',
+        '06_df_loss_tradeoff_nonlinear.pkl': 'MLP',
+        '07_df_loss_tradeoff_nonlinear_INN.pkl': 'Nonlinear-INN',
+        '07_df_loss_tradeoff_nonlinear_INN_wide.pkl': 'Nonlinear-INN-Wide',
+        '07_df_loss_tradeoff_nonlinear_INN_2lay.pkl': 'Nonlinear-INN-2Lay',
+        '07_df_loss_tradeoff_nonlinear_INN_3lay.pkl': 'Nonlinear-INN-3Lay'
+    }
+    
     R, C = 1, 2
     plt.figure(figsize=(12, 5), dpi=500)
-    plt.subplot(R, C, 1)
-    plt.plot(df['mse'], df['indep_corr'], 'o-', label='Linear')
-    plt.xlabel('Mean-squared error')
-    plt.ylabel('corr. between attributes')
-    plt.title('Training')
+    for k, v in fnames.items():
+        df = pd.read_pickle(oj(PROCESSED_DIR, k))
+        df = df.iloc[1:]
+        plt.subplot(R, C, 1)
+        plt.plot(df['mse'], df['indep_corr'], 'o-', label=v)
+        plt.xlabel('Mean-squared error')
+        plt.ylabel('corr. between attributes')
+        plt.title('Training')
+        plt.xlim((-0.1, 1))
 
-    ax = plt.subplot(R, C, 2)
-    plt.plot(df['mse_test'], df['indep_corr_test'], 'o-', label='Linear')
-    plt.xlabel('Mean-squared error')
-    plt.title('Testing')
-
-    # nonlinear plots
-    df2 = pd.read_pickle(oj(PROCESSED_DIR, '06_df_loss_tradeoff_nonlinear.pkl'))
-    df2 = df2.iloc[1:]
-    df2 = df2.iloc[:-3]
-
-    plt.subplot(R, C, 1)
-    plt.plot(df2['mse'], df2['indep_corr'], 'o-', label='Nonlinear')
-    plt.ylabel('Mean Inter-Attribute Correlation')
-
-    ax = plt.subplot(R, C, 2)
-    plt.plot(df2['mse_test'], df2['indep_corr_test'], 'o-', label='Nonlinear')
-
-    # nonlinear plots
-    df2 = pd.read_pickle(oj(PROCESSED_DIR, '07_df_loss_tradeoff_nonlinear_INN.pkl'))
-    df2 = df2.iloc[1:]
-    df2 = df2.iloc[:-3]
-
-    plt.subplot(R, C, 1)
-    plt.plot(df2['mse'], df2['indep_corr'], 'o-', label='Nonlinear-INN')
-    plt.ylabel('Mean Inter-Attribute Correlation')
-
-    ax = plt.subplot(R, C, 2)
-    plt.plot(df2['mse_test'], df2['indep_corr_test'], 'o-', label='Nonlinear-INN')
-
+        ax = plt.subplot(R, C, 2)
+        plt.plot(df['mse_test'], df['indep_corr_test'], 'o-', label=v)
+        plt.xlabel('Mean-squared error')
+        plt.title('Testing')
+        plt.xlim((0.1, 1))
+    
+        
     # previous 
-    plt.subplot(R, C, 2)
-
     MSE_ORIG = 0.3671995300361915
     CORR_ORIG = 0.5514424823248604
     plt.plot(MSE_ORIG, CORR_ORIG, 'x', color='black', ms=10)

@@ -15,8 +15,3 @@ def calc_mean_corrs_between_attributes(Ahat: torch.Tensor):
 
 def mse(y_pred, y_true):
     return torch.mean(torch.square(y_pred - y_true))
-
-def loss_with_indep(y_pred, y_true, reg_param=1):
-    corr = calc_mean_corrs_between_attributes(y_pred)
-    
-    return 

@@ -13,3 +13,7 @@ python run_generator.py generate-images --network=gdrive:networks/stylegan2-ffhq
 	- had to make minor changes to stylegan code to get it to compile properly
 
 ```
+
+
+- start the lab running in the background
+`screen jupyter lab --certfile=~/ssl/mycert.pem --keyfile ~/ssl/mykey.key`
