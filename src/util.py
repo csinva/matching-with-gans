@@ -40,8 +40,8 @@ def spearman_mean(y_pred: torch.Tensor, y_train: torch.Tensor):
     '''
     spearman_cum = 0
     for i in range(y_pred.shape[1]):
-        spearman_cum += scipy.stats.spearmanr(y_pred.detach().numpy(),
-                              y_train).correlation
+        spearman_cum += scipy.stats.spearmanr(y_pred[:, i].detach().numpy(),
+                                              y_train[:, i]).correlation
     return spearman_cum / y_pred.shape[1]
 
 
