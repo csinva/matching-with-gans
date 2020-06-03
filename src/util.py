@@ -2,6 +2,7 @@ import torch
 import numpy as np
 import numpy.linalg as npl
 from copy import deepcopy
+import scipy.stats
 
 def orthogonalize_paper(vs: np.ndarray):
     '''
@@ -21,7 +22,28 @@ def orthogonalize_paper(vs: np.ndarray):
                 vs_orth[:, i] -= Q[:, j] * scalar
         vs_orth[:, i] = vs_orth[:, i] / npl.norm(vs_orth[:, i])
     return vs_orth
-#     for i in range
+
+def spearman_mean(y_pred: torch.Tensor, y_train: torch.Tensor):
+    '''
+    Params
+    ------
+    y_pred
+        (n_samples, n_attributes)
+    y_train
+        (n_samples, n_attributes)
+        
+    Returns
+    -------
+    mean_rho: float
+        mean spearman correlation between corresponding columns
+        of y_pred and y_train
+    '''
+    spearman_cum = 0
+    for i in range(y_pred.shape[1]):
+        spearman_cum += scipy.stats.spearmanr(y_pred.detach().numpy(),
+                              y_train).correlation
+    return spearman_cum / y_pred.shape[1]
+
 
 def pearsonr(x, y):
     """

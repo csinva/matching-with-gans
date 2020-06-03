@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
+import matplotlib as mpl
 cmap_div = sns.diverging_palette(10, 220, as_cmap=True)
 #
 # plotting controls
@@ -19,3 +20,6 @@ plt.rc('ytick', labelsize=MEDIUM_SIZE)    # fontsize of the tick labels
 plt.rc('legend', fontsize=SMALL_SIZE)    # legend fontsize
 plt.rc('figure', titlesize=VERY_LARGE_SIZE)  # fontsize of the figure title
 plt.rc('lines', lw=3)
+
+mpl.rcParams['axes.spines.right'] = False
+mpl.rcParams['axes.spines.top'] = False
