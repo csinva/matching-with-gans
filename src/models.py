@@ -5,7 +5,7 @@ import FrEIA.framework as Ff
 import FrEIA.modules as Fm
 from FrEIA.framework import *
 
-def get_INN(num_layers: int, input_size, hidden_size):
+def get_INN(num_layers: int, input_size: int, hidden_size: int):
     '''Invertible neural network made of glow coupling blocks
     Params
     ------
@@ -18,7 +18,8 @@ def get_INN(num_layers: int, input_size, hidden_size):
     '''
     def subnet_fc(c_in, c_out):
         return nn.Sequential(nn.Linear(c_in, hidden_size),
-                             nn.ReLU(),
+                             nn.Tanh(),
+#                              nn.ReLU(),
                              nn.Linear(hidden_size,  c_out))
 
     # InputNode is just a node that is the input
@@ -28,6 +29,7 @@ def get_INN(num_layers: int, input_size, hidden_size):
     for k in range(num_layers):
         nodes.append(Ff.Node(nodes[-1], # what does it take input from
                              Fm.GLOWCouplingBlock,
+#                              Fm.RNVPCouplingBlock,
                              {'subnet_constructor':subnet_fc, 'clamp': 2.0},
                              name=F'coupling_{k}'))
 

@@ -33,15 +33,15 @@ PROCESSED_DIR = 'processed'
 RESULTS_DIR = 'results'
 DIRECTIONS_DIR = '../data/annotation-dataset-stylegan2/linear_models/new' # path to many datasets, includes on directory before the below dirs
 GENERATING_LATENTS_DIR = '../data/annotation-dataset-stylegan2/data'
-NUM_SWEEPS = 20
-reg_params = np.logspace(-5, 5, num=NUM_SWEEPS) # increase penalization on corrs
-fname = '07_df_loss_tradeoff_nonlinear_INN_3lay'
+NUM_SWEEPS = 12
+reg_params = np.logspace(-4, 3, num=NUM_SWEEPS)[::-1] # increase penalization on corrs
+fname = '07_df_loss_tradeoff_nonlinear_INN_RNVP_1lay'
 p = {
     'num_layers': 3,
-    'hidden_size': 100,
-    'optimizer': 'adam',
+    'hidden_size': 512, #2048,
+    'optimizer': 'adam', # sgd, adam
     'lr': 5e-4, # 1e-2 seems good for sgd, 5e-4 seems good for adam
-    'EPOCHS_PER_RUN': 1200,
+    'EPOCHS_PER_RUN': 1000,
 }
 p['EPOCHS'] = p['EPOCHS_PER_RUN'] * (NUM_SWEEPS - 1)
 device = 'cuda'
@@ -108,8 +108,7 @@ i = 0
 for epoch in range(p['EPOCHS']): 
     y_pred_full = m(X_train_t)
     y_pred = y_pred_full[:, :N_A]
-    y_pred_test_full = m(X_test_t)
-    y_pred_test = y_pred_test_full[:, :N_A]
+    
     
     # remember thes are only looking at first N_A dims
     reg_param = reg_params[i]
@@ -133,12 +132,22 @@ for epoch in range(p['EPOCHS']):
         s.indep_corr.append(detach(losses.calc_mean_corrs_between_attributes(y_pred)))
         
         # testing
-        s.mse_test.append(detach(torch.mean(torch.square(y_pred_test - y_test_t))))
+        y_pred_test_full = m(X_test_t)
+        y_pred_test = y_pred_test_full[:, :N_A]
+        mse_test = detach(torch.mean(torch.square(y_pred_test - y_test_t)))
+        corr_test = detach(losses.calc_mean_corrs_between_attributes(y_pred_test))
+        s.mse_test.append(mse_test)
         s.spearman_test.append(util.spearman_mean(y_pred_test, y_test_t))
-        s.indep_corr_test.append(detach(losses.calc_mean_corrs_between_attributes(y_pred_test)))
+        s.indep_corr_test.append(corr_test)
         i += 1
+#         if mse_test > 0.7 and reg_param > 3:
+#             break
     if epoch % 100 == 0:
-        print(f'\tmse {mse.item():.3E}, corr {corr.item():.3E}')        
+        y_pred_test_full = m(X_test_t)
+        y_pred_test = y_pred_test_full[:, :N_A]
+        mse_test = detach(torch.mean(torch.square(y_pred_test - y_test_t)))
+        corr_test = detach(losses.calc_mean_corrs_between_attributes(y_pred_test))
+        print(f'\tmse {mse.item():.3E}, corr {corr.item():.3E} mse_test {mse_test:.3E}, corr_test {corr_test:.3E}')        
 
 # save results as dataframe
 s_dict = s._dict(s)

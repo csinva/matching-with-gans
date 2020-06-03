@@ -36,10 +36,13 @@ def plot_mse_vs_corrs():
     fnames = {
         '06_df_loss_tradeoff_linear.pkl': 'Linear',
         '06_df_loss_tradeoff_nonlinear.pkl': 'MLP',
-        '07_df_loss_tradeoff_nonlinear_INN.pkl': 'Nonlinear-INN',
+#         '07_df_loss_tradeoff_nonlinear_INN.pkl': 'Nonlinear-INN',
         '07_df_loss_tradeoff_nonlinear_INN_wide.pkl': 'Nonlinear-INN-Wide',
-        '07_df_loss_tradeoff_nonlinear_INN_2lay.pkl': 'Nonlinear-INN-2Lay',
-        '07_df_loss_tradeoff_nonlinear_INN_3lay.pkl': 'Nonlinear-INN-3Lay'
+#         '07_df_loss_tradeoff_nonlinear_INN_2lay.pkl': 'Nonlinear-INN-2Lay',
+#         '07_df_loss_tradeoff_nonlinear_INN_3lay.pkl': 'Nonlinear-INN-3Lay',
+        '07_df_loss_tradeoff_nonlinear_INN_8lay.pkl': 'Nonlinear-INN-8Lay',
+        '07_df_loss_tradeoff_nonlinear_INN_affine.pkl': 'Real-NVP',
+        '07_df_loss_tradeoff_nonlinear_INN_RNVP_1lay.pkl': 'misc'
     }
     
     R, C = 1, 2
@@ -54,12 +57,17 @@ def plot_mse_vs_corrs():
         plt.title('Training')
         plt.xlim((-0.1, 1))
 
-        ax = plt.subplot(R, C, 2)
+        plt.subplot(R, C, 2)
         plt.plot(df['mse_test'], df['indep_corr_test'], 'o-', label=v)
         plt.xlabel('Mean-squared error')
         plt.title('Testing')
-        plt.xlim((0.1, 1))
-    
+        plt.xlim((0.1, 0.7))
+
+    # grid
+    ax = plt.subplot(R, C, 2)
+    ax.minorticks_on()
+    ax.grid(which='both')
+#     plt.grid()
         
     # previous 
     MSE_ORIG = 0.3671995300361915
@@ -71,6 +79,8 @@ def plot_mse_vs_corrs():
     CORR_ORTH = 0.340195386
     plt.plot(MSE_ORTH, CORR_ORTH, 'x', color='black', ms=10)
     ax.annotate('Orthogonal weights', (MSE_ORTH + 0.04, CORR_ORTH), color='black')
+
+    plt.subplot(R, C, 1)
     plt.legend()
     plt.tight_layout()
     plt.savefig(oj(RESULTS_DIR, 'fig_attr_mse.pdf'))
