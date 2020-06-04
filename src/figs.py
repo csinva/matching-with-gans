@@ -37,12 +37,21 @@ def plot_mse_vs_corrs():
         '06_df_loss_tradeoff_linear.pkl': 'Linear',
         '06_df_loss_tradeoff_nonlinear.pkl': 'MLP',
 #         '07_df_loss_tradeoff_nonlinear_INN.pkl': 'Nonlinear-INN',
-        '07_df_loss_tradeoff_nonlinear_INN_wide.pkl': 'Nonlinear-INN-Wide',
+#         '07_df_loss_tradeoff_nonlinear_INN_wide.pkl': 'Nonlinear-INN-Wide',
 #         '07_df_loss_tradeoff_nonlinear_INN_2lay.pkl': 'Nonlinear-INN-2Lay',
 #         '07_df_loss_tradeoff_nonlinear_INN_3lay.pkl': 'Nonlinear-INN-3Lay',
-        '07_df_loss_tradeoff_nonlinear_INN_8lay.pkl': 'Nonlinear-INN-8Lay',
-        '07_df_loss_tradeoff_nonlinear_INN_affine.pkl': 'Real-NVP',
-        '07_df_loss_tradeoff_nonlinear_INN_RNVP_1lay.pkl': 'misc'
+#         '07_df_loss_tradeoff_nonlinear_INN_8lay.pkl': 'Nonlinear-INN-8Lay',
+#         '07_df_loss_tradeoff_nonlinear_INN_affine.pkl': 'Real-NVP',
+#         '07_df_loss_tradeoff_nonlinear_INN_RNVP_1lay.pkl': 'Tanh-Reverse-Order',
+#         '07_tanh_3lay.pkl': 'Tanh-3lay',
+#         '07_tanh_.pkl': 'Tanh-3lay-2',
+#         '07_df_loss_tradeoff_nonlinear_INN_RNVP_8lay.pkl': '8Lay',
+#         '07_relu_retrain_3lay.pkl': 'Relu-retrain-3-lay',
+#         '07_relu_retrain_3lay_noise.pkl': 'Relu-retrain-3-lay-noise',
+        '07_relu_retrain_3lay_noise_big.pkl': 'Relu-retrain-3-lay-noise-big',
+        '07_relu_retrain_3lay_noise_huge.pkl': 'Relu-retrain-3-lay-noise-huge',
+        '07_relu_retrain_3lay_noise_wide.pkl': 'Relu-retrain-3-lay-noise-wide',
+        
     }
     
     R, C = 1, 2
@@ -81,6 +90,7 @@ def plot_mse_vs_corrs():
     ax.annotate('Orthogonal weights', (MSE_ORTH + 0.04, CORR_ORTH), color='black')
 
     plt.subplot(R, C, 1)
+    plt.grid()
     plt.legend()
     plt.tight_layout()
     plt.savefig(oj(RESULTS_DIR, 'fig_attr_mse.pdf'))

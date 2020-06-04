@@ -18,9 +18,8 @@ def get_INN(num_layers: int, input_size: int, hidden_size: int):
     '''
     def subnet_fc(c_in, c_out):
         return nn.Sequential(nn.Linear(c_in, hidden_size),
-                             nn.Tanh(),
-#                              nn.ReLU(),
-                             nn.Linear(hidden_size,  c_out))
+#                              nn.Tanh(),
+                             nn.ReLU(), nn.Linear(hidden_size,  c_out))
 
     # InputNode is just a node that is the input
     nodes = [Ff.InputNode(input_size, name='input')] 
@@ -36,8 +35,6 @@ def get_INN(num_layers: int, input_size: int, hidden_size: int):
     # OutputNode is just a node that yields the output
     nodes.append(Ff.OutputNode(nodes[-1], name='output')) 
     return Ff.ReversibleGraphNet(nodes)
-
-        
 
 
     

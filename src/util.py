@@ -3,6 +3,12 @@ import numpy as np
 import numpy.linalg as npl
 from copy import deepcopy
 import scipy.stats
+import matplotlib.pyplot as plt
+
+
+def imshow(im):
+    plt.imshow(im)
+    plt.axis('off')
 
 def detach(tensor):
     return tensor.detach().cpu().numpy()
