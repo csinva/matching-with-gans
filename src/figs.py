@@ -48,9 +48,10 @@ def plot_mse_vs_corrs():
 #         '07_df_loss_tradeoff_nonlinear_INN_RNVP_8lay.pkl': '8Lay',
 #         '07_relu_retrain_3lay.pkl': 'Relu-retrain-3-lay',
 #         '07_relu_retrain_3lay_noise.pkl': 'Relu-retrain-3-lay-noise',
-        '07_relu_retrain_3lay_noise_big.pkl': 'Relu-retrain-3-lay-noise-big',
-        '07_relu_retrain_3lay_noise_huge.pkl': 'Relu-retrain-3-lay-noise-huge',
-        '07_relu_retrain_3lay_noise_wide.pkl': 'Relu-retrain-3-lay-noise-wide',
+        '07_relu_retrain_3lay_noise_big.pkl': 'Invertible-Neural-Network',
+#         '07_relu_retrain_3lay_noise_huge.pkl': 'Relu-retrain-3-lay-noise-huge',
+#         '07_relu_retrain_3lay_noise_wide.pkl': 'Relu-retrain-3-lay-noise-wide',
+#         '07_relu_retrain_3lay_noise_wide_deep.pkl': 'Relu-retrain-3-lay-noise-wide_deep',
         
     }
     

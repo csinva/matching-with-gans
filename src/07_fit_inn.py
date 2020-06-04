@@ -36,9 +36,9 @@ DIRECTIONS_DIR = '../data/annotation-dataset-stylegan2/linear_models/new' # path
 GENERATING_LATENTS_DIR = '../data/annotation-dataset-stylegan2/data'
 NUM_SWEEPS = 12
 reg_params = np.logspace(-4, 3, num=NUM_SWEEPS) # increase penalization on corrs
-fname = '07_relu_retrain_3lay_noise_wide'
+fname = '07_relu_retrain_3lay_noise_wide_deep'
 p = {
-    'num_layers': 3,
+    'num_layers': 8,
     'hidden_size': 512, #2048,512
     'optimizer': 'adam', # sgd, adam
     'lr': 5e-4, # 1e-2 seems good for sgd, 5e-4 seems good for adam
