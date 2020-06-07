@@ -5,6 +5,23 @@ from copy import deepcopy
 import scipy.stats
 import matplotlib.pyplot as plt
 
+def plot_row(images, suptitle=''):
+    '''
+    Params
+    ------
+    images: np.ndarray
+        (num_images, H, W, C)
+    '''
+    N_IMS = images.shape[0]
+    plt.figure(figsize=(N_IMS * 3, 3))
+    for i in range(N_IMS):
+        
+        plt.subplot(1, N_IMS, i + 1)
+        imshow(images[i])
+    
+    plt.subplot(1, N_IMS, N_IMS // 2 + 1)
+    plt.title(suptitle)
+    plt.tight_layout()
 
 def imshow(im):
     plt.imshow(im)
