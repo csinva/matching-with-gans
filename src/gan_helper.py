@@ -46,14 +46,14 @@ class Generator:
         '''        
         return self.Gs.run(z, None, **self.Gs_kwargs) # [minibatch, height, width, channel]
     
-    def gen_full(self, z):
+    def gen_full(self, z_full):
         '''Generate image from full latent
         Params
         ------
         z: np.ndarray
             (batch_size, 18, 512)
         '''
-        im = tflib.run(self.Gs.components.synthesis.get_output_for(z))
+        im = tflib.run(self.Gs.components.synthesis.get_output_for(z_full))
         return get_transformed_im(im)
         
     
