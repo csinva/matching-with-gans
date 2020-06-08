@@ -44,7 +44,7 @@ p = {
     'lr': 5e-4, # 1e-2 seems good for sgd, 5e-4 seems good for adam
     'EPOCHS_PER_RUN': 1500,
     'noise_mult': 1e-1,
-    'attrs': ['skin-color', 'gender', 'hair-length'], # ['age', 'facial-hair', 'skin-color', 'gender', 'hair-length', 'makeup'],
+    'attrs': ['age', 'facial-hair', 'skin-color', 'gender', 'hair-length', 'makeup'],
 }
 p['EPOCHS'] = p['EPOCHS_PER_RUN'] * (NUM_SWEEPS - 1)
 device = 'cuda'
