@@ -38,8 +38,24 @@ class Generator:
         self.proj.set_network(Gs)
     
     def gen(self, z):
+        '''Generate image from shared latent
+        Params
+        ------
+        z: np.ndarray
+            (batch_size, 512)
+        '''        
         return self.Gs.run(z, None, **self.Gs_kwargs) # [minibatch, height, width, channel]
     
+    def gen_full(self, z):
+        '''Generate image from full latent
+        Params
+        ------
+        z: np.ndarray
+            (batch_size, 18, 512)
+        '''
+        im = tflib.run(self.Gs.components.synthesis.get_output_for(z))
+        return get_transformed_im(im)
+        
     
     def project(self, im: np.ndarray, image_prefix='im0', num_steps=50, num_snapshots=3, lr=0.1):
         '''Projects an image into the latent space
@@ -58,12 +74,6 @@ class Generator:
             
         also saves a bunch of things to the projections folder...
         '''            
-        
-        def get_transformed_im():
-            im = np.transpose(self.proj.get_images(),
-                          axes=(0, 3, 1, 2))
-            return np.rot90(util.norm(im), k=-1,
-                             axes=(1, 2))
             
         # adjust image range to [-1, 1]
         if np.max(im) > 1:
@@ -91,7 +101,8 @@ class Generator:
                 misc.save_image_grid(self.proj.get_images(),
                                      png_prefix + f'step{self.proj.get_cur_step():04d}.png',
                                      drange=[-1, 1])
-                ims_list.append(get_transformed_im())
+                im_latent = self.proj.get_images()
+                ims_list.append(get_transformed_im(im_latent))
         print('\r%-30s\r' % '', end='', flush=True)
 
         
@@ -99,4 +110,8 @@ class Generator:
         return self.proj.get_dlatents(), ims_list
     
     
-    
+def get_transformed_im(im):
+    im = np.transpose(im,
+                  axes=(0, 3, 1, 2))
+    return np.rot90(util.norm(im), k=-1,
+                     axes=(1, 2))
