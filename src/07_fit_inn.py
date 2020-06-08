@@ -36,7 +36,7 @@ DIRECTIONS_DIR = '../data/annotation-dataset-stylegan2/linear_models/new' # path
 GENERATING_LATENTS_DIR = '../data/annotation-dataset-stylegan2/data'
 NUM_SWEEPS = 12
 reg_params = np.logspace(-4, 3, num=NUM_SWEEPS) # increase penalization on corrs
-fname = '07_relu_retrain_3lay_noise_wide_deep'
+fname = '3feats/07_relu_retrain_3lay_noise_wide_deep'
 p = {
     'num_layers': 8,
     'hidden_size': 512, #2048,512
@@ -44,6 +44,7 @@ p = {
     'lr': 5e-4, # 1e-2 seems good for sgd, 5e-4 seems good for adam
     'EPOCHS_PER_RUN': 1500,
     'noise_mult': 1e-1,
+    'attrs': ['skin-color', 'gender', 'hair-length'], # ['age', 'facial-hair', 'skin-color', 'gender', 'hair-length', 'makeup'],
 }
 p['EPOCHS'] = p['EPOCHS_PER_RUN'] * (NUM_SWEEPS - 1)
 device = 'cuda'
@@ -56,10 +57,10 @@ annotations_dict_names = pkl.load(open(oj(PROCESSED_DIR, '01_annotations_labels_
 # rename keys
 annotations_dict = {k.replace('calibration-random-v2-', '').replace('-000', ''): annotations_dict[k]
                     for k in annotations_dict}
-attrs = ['age', 'facial-hair', 'skin-color', 'gender', 'hair-length', 'makeup']
-N_A = len(attrs)
+# attrs = ['age', 'facial-hair', 'skin-color', 'gender', 'hair-length', 'makeup']
+N_A = len(p['attrs'])
 
-attr_mat = np.array([annotations_dict[attr].mean(axis=1) for attr in attrs]).transpose()
+attr_mat = np.array([annotations_dict[attr].mean(axis=1) for attr in p['attrs']]).transpose()
 attr_mat = (attr_mat - attr_mat.mean(axis=0)) / attr_mat.std(axis=0)
 X = latents
 Y = np.zeros(latents.shape) # pad Y with zeros, only first N rows have attributes

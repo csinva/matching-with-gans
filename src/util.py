@@ -12,6 +12,8 @@ def plot_row(images, suptitle=''):
     images: np.ndarray
         (num_images, H, W, C)
     '''
+    if type(images) == list:
+        images = np.array(images)
     N_IMS = images.shape[0]
     plt.figure(figsize=(N_IMS * 3, 3))
     for i in range(N_IMS):
@@ -23,7 +25,20 @@ def plot_row(images, suptitle=''):
     plt.title(suptitle)
     plt.tight_layout()
 
+def norm(im):
+    '''Normalize to [0, 1]
+    '''
+    return (im - np.min(im)) / (np.max(im) - np.min(im)) # converts range to [0, 1]
+    
 def imshow(im):
+    # if 4d, take first image
+    if len(im.shape) > 3:
+        im = im[0]
+        
+    # if channels dimension first, transpose
+    if im.shape[0] == 3 and len(im.shape) == 3:
+        im = im.transpose()
+    
     plt.imshow(im)
     plt.axis('off')
 
