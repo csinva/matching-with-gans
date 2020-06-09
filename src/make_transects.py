@@ -2,7 +2,8 @@ import sys
 import os
 import pickle
 import numpy as np
-import ganwrapper
+# import ganwrapper
+import gan_helper
 import imageio
 import itertools
 from argparse import ArgumentParser
@@ -10,10 +11,10 @@ from argparse import ArgumentParser
 
 def main(config):
 
-    base_dir  = "/data/vision/billf/scratch/balakg/amn"
-    model_dir = "./results/latent-models/" #"%s/latent-models/v%d" % (base_dir, config.gan)
-    seed_path = "./results/annotation-data/W.npy" #"%s/annotation-data-%d/W.npy" % (base_dir, config.gan)
-    save_dir  = "./results/outputs/" #"%s/transects/v%d/%s" % (base_dir, config.gan, '-'.join(config.attr))
+#     base_dir  = "/data/vision/billf/scratch/balakg/amn"
+    model_dir = '../data/annotation-dataset-stylegan2/linear_models/new' #"./results/latent-models/" #"%s/latent-models/v%d" % (base_dir, config.gan)
+    seed_path = '../data/annotation-dataset-stylegan2/data/W.npy' # #"%s/annotation-data-%d/W.npy" % (base_dir, config.gan)
+    save_dir  = "./results/" #"%s/transects/v%d/%s" % (base_dir, config.gan, '-'.join(config.attr))
 
     #model_dir = "%s/latent-models/v%d" % (base_dir, config.gan)
     #seed_path = "%s/annotation-data-%d/W.npy" % (base_dir, config.gan)
@@ -22,13 +23,14 @@ def main(config):
     batch     = 1 
     all_attrs = 'HAGCBMSEW'
 
-    os.environ["CUDA_VISIBLE_DEVICES"] = str(config.gpu)
+#     os.environ["CUDA_VISIBLE_DEVICES"] = str(config.gpu)
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
 
     # Get GAN
-    G = ganwrapper.GANWrapper(version = config.gan, image_size=512)
-    z_dim = G.Gs.input_shape[1]
+    G = gan_helper.Generator() # initializes gan
+#     G = ganwrapper.GANWrapper(version = config.gan, image_size=512)
+    z_dim = 512 # G.Gs.input_shape[1]
 
     # Load models
     planes = []
@@ -74,7 +76,7 @@ def main(config):
     dirs  = dirs[0:2][::-1] + dirs[2:]
 
     # Offset vectors from boundary in latent space
-    deltas = sum( [ np.expand_dims(dirs[i],0) * np.expand_dims(grids[i],-1) 
+    deltas = sum([np.expand_dims(dirs[i],0) * np.expand_dims(grids[i], -1) 
                     for i in range(len(grids)) ] )
     deltas = np.reshape(deltas, (-1, z_dim), 'F')
 
@@ -95,7 +97,7 @@ def main(config):
             W = W0 + delta
 
             img = G.generateImageFromStyle(W)
-            img = (img*255).astype(np.uint8)
+            img = (img * 255).astype(np.uint8)
 
             for k in range(batch):
                 
@@ -178,5 +180,5 @@ if __name__ == "__main__":
 
     config = parser.parse_args()
 
-    #np.random.seed(2) #2
+    np.random.seed(2) #2
     main(config)
