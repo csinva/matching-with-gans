@@ -5,6 +5,13 @@ cmap_div = sns.diverging_palette(10, 220, as_cmap=True)
 #
 # plotting controls
 #
+
+c0 = '#1f77b4'
+c1 = '#ff7f0e'
+c2 = '#2ca02c'
+c3 = '#d62728'
+cs = [c0, c1, c2, c3]
+
 STANDARD_FIG_SIZE = (20,14)
 VERY_SMALL_SIZE = 12
 SMALL_SIZE = 16
