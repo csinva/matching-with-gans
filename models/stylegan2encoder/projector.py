@@ -31,6 +31,7 @@ class Projector:
         self.lr_rampup_length           = 0.05
         self.noise_ramp_length          = 0.75
         self.regularize_noise_weight    = 1e5
+        self.regularize_mean_deviation_weight = 1e5 # added by chandan
         self.verbose                    = verbose
         self.clone_net                  = True
 
@@ -117,6 +118,15 @@ class Projector:
             self._lpips = misc.load_pkl(self.vgg16_pkl) # vgg16_zhang_perceptual.pkl
         self._dist = self._lpips.get_output_for(proc_images_expr, self._target_images_var)
         self._loss = tf.reduce_sum(self._dist)
+        
+        # Chandan add reg on dlatents
+        latents_mean = tf.reduce_mean(self._dlatents_var, 1)
+        print('shape', self._dlatents_var, 'mean', latents_mean.shape)
+        latents_diff_squared = tf.square(self._dlatents_var - latents_mean)
+        latents_mse_diff = tf.reduce_mean(latents_diff_squared)
+        print('latents_diff.shape', latents_diff.shape, 'latents_mse_diff', latents_mse_diff.shape)
+        
+        self._loss += self.regularize_mean_deviation_weight * latents_mse_diff
 
         # Noise regularization graph.
         self._info('Building noise regularization graph...')
@@ -131,6 +141,7 @@ class Projector:
                 v = tf.reduce_mean(v, axis=[3, 5])
                 sz = sz // 2
         self._loss += reg_loss * self.regularize_noise_weight
+        
 
         # Optimizer.
         self._info('Setting up optimizer...')

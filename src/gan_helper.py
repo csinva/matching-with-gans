@@ -36,6 +36,20 @@ class Generator:
         # object for projecting real images
         self.proj = projector.Projector()
         self.proj.set_network(Gs)
+        
+    def z_to_style(self, z):
+        '''Maps z to style vector
+        Params
+        ------
+        z: np.ndarray
+            (batch_size, 512)
+        
+        Returns
+        -------
+        w: np.ndarray
+            (batch_size, 18, 512)
+        '''
+        return self.Gs.components.mapping.run(z, None, randomize_noise=False) # [minibatch, layer, component]
     
     def gen(self, z):
         '''Generate image from shared latent
@@ -53,8 +67,19 @@ class Generator:
         z: np.ndarray
             (batch_size, 18, 512)
         '''
+#         im = tflib.run(self.Gs.components.synthesis.get_output_for(z_full))
+        im = self.Gs.components.synthesis.run(z_full, **self.Gs_kwargs)
+        return im #get_transformed_im(im)
+        
+    def gen_full_old(self, z_full):
+        '''Generate image from full latent
+        Params
+        ------
+        z: np.ndarray
+            (batch_size, 18, 512)
+        '''
         im = tflib.run(self.Gs.components.synthesis.get_output_for(z_full))
-        return get_transformed_im(im)
+        return get_transformed_im(im)        
         
     
     def project(self, im: np.ndarray, image_prefix='im0', num_steps=50, num_snapshots=3, lr=0.1):

@@ -1,1 +1,6 @@
-python project_images.py aligned_images/ generated_images/ --video False
+# celeba generated
+# python align_images.py ../../data/celeba-hq/images ../../data_processed/celeba-hq/aligned_images
+# python project_images.py ../../data/celeba-hq/images/ ../../data_processed/celeba-hq/generated_images/
+
+# stylegan2 generated
+python project_images.py ../../data/annotation-dataset-stylegan2/images/ ../../data_processed/stylegan2/generated_images/

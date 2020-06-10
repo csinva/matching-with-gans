@@ -9,3 +9,5 @@ data
 **results*
 **.pdf
 **.weights
+data_processed
+**tmp*
