@@ -93,6 +93,10 @@ def main():
     parser.add_argument('--video-fps', type=int, default=25, help='Video framerate')
     parser.add_argument('--video-codec', default='libx264', help='Video codec')
     parser.add_argument('--video-bitrate', default='5M', help='Video bitrate')
+
+    
+    
+    parser.add_argument('--regularize_mean_deviation_weight', type=float, default=0, help='Penalize different w vectors to be the same')
     args = parser.parse_args()
 
     print('Loading networks from "%s"...' % args.network_pkl)
@@ -102,19 +106,26 @@ def main():
         num_steps             = args.num_steps,
         initial_learning_rate = args.initial_learning_rate,
         initial_noise_factor  = args.initial_noise_factor,
-        verbose               = args.verbose
+        verbose               = args.verbose,
+        regularize_mean_deviation_weight = args.regularize_mean_deviation_weight
     )
     proj.set_network(Gs)
 
     src_files = sorted([os.path.join(args.src_dir, f) for f in os.listdir(args.src_dir) if f[0] not in '._'])
     for src_file in src_files:
-        project_image(proj, src_file, args.dst_dir, args.tmp_dir, video=args.video)
-        if args.video:
-            render_video(
-                src_file, args.dst_dir, args.tmp_dir, args.num_steps, args.video_mode,
-                args.video_size, args.video_fps, args.video_codec, args.video_bitrate
-            )
-        shutil.rmtree(args.tmp_dir)
+        # check if file already exists and skip
+        filename = os.path.join(args.dst_dir, os.path.basename(src_file)[:-4] + '.png')
+        if not os.path.exists(filename):
+
+            project_image(proj, src_file, args.dst_dir, args.tmp_dir, video=args.video)
+            if args.video:
+                render_video(
+                    src_file, args.dst_dir, args.tmp_dir, args.num_steps, args.video_mode,
+                    args.video_size, args.video_fps, args.video_codec, args.video_bitrate
+                )
+            shutil.rmtree(args.tmp_dir)
+        else:
+            print('skipping', filename)
 
 
 if __name__ == '__main__':

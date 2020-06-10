@@ -19,7 +19,8 @@ class Projector:
         num_steps                       = 1000,
         initial_learning_rate           = 0.1,
         initial_noise_factor            = 0.05,
-        verbose                         = False
+        verbose                         = False,
+        regularize_mean_deviation_weight = 0
     ):
 
         self.vgg16_pkl                  = vgg16_pkl
@@ -31,7 +32,7 @@ class Projector:
         self.lr_rampup_length           = 0.05
         self.noise_ramp_length          = 0.75
         self.regularize_noise_weight    = 1e5
-        self.regularize_mean_deviation_weight = 1e5 # added by chandan
+        self.regularize_mean_deviation_weight = regularize_mean_deviation_weight # added by chandan
         self.verbose                    = verbose
         self.clone_net                  = True
 
@@ -121,10 +122,10 @@ class Projector:
         
         # Chandan add reg on dlatents
         latents_mean = tf.reduce_mean(self._dlatents_var, 1)
-        print('shape', self._dlatents_var, 'mean', latents_mean.shape)
+#         print('shape', self._dlatents_var, 'mean', latents_mean.shape)
         latents_diff_squared = tf.square(self._dlatents_var - latents_mean)
         latents_mse_diff = tf.reduce_mean(latents_diff_squared)
-        print('latents_diff.shape', latents_diff.shape, 'latents_mse_diff', latents_mse_diff.shape)
+#         print('latents_diff.shape', latents_diff_squared.shape, 'latents_mse_diff', latents_mse_diff.shape)
         
         self._loss += self.regularize_mean_deviation_weight * latents_mse_diff
 
