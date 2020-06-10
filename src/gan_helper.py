@@ -49,7 +49,9 @@ class Generator:
         w: np.ndarray
             (batch_size, 18, 512)
         '''
-        return self.Gs.components.mapping.run(z, None, randomize_noise=False) # [minibatch, layer, component]
+        return self.Gs.components.mapping.run(z, None,
+                                              truncation_psi=0.5,
+                                              randomize_noise=False) # randomize_noise=False) # [minibatch, layer, component]
     
     def gen(self, z):
         '''Generate image from shared latent
@@ -58,7 +60,7 @@ class Generator:
         z: np.ndarray
             (batch_size, 512)
         '''        
-        return self.Gs.run(z, None, **self.Gs_kwargs) # [minibatch, height, width, channel]
+        return self.Gs.run(z, **self.Gs_kwargs) # [minibatch, height, width, channel]
     
     def gen_full(self, z_full):
         '''Generate image from full latent
@@ -67,9 +69,8 @@ class Generator:
         z: np.ndarray
             (batch_size, 18, 512)
         '''
-#         im = tflib.run(self.Gs.components.synthesis.get_output_for(z_full))
         im = self.Gs.components.synthesis.run(z_full, **self.Gs_kwargs)
-        return im #get_transformed_im(im)
+        return im
         
     def gen_full_old(self, z_full):
         '''Generate image from full latent
