@@ -60,7 +60,7 @@ class Generator:
         z: np.ndarray
             (batch_size, 512)
         '''        
-        return self.Gs.run(z, **self.Gs_kwargs) # [minibatch, height, width, channel]
+        return self.Gs.run(z, None, **self.Gs_kwargs) # [minibatch, height, width, channel]
     
     def gen_full(self, z_full):
         '''Generate image from full latent
