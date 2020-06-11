@@ -6,19 +6,16 @@ import ganwrapper
 import imageio
 from argparse import ArgumentParser
 import pandas as pd
+from os.path import join as oj
 
 def main(config):
 
     # Linear models
     model_dir = "./data/latent-models/"
 
-    # Latent codes to use
-    seed_path = "./data/annotation-data/W.npy"
-    W_all = np.load(seed_path)
-
     # Output dir
-    save_dir_base  = "./results6/"
-    save_dir  = save_dir_base + "ims"
+    save_dir_base  = config.save_dir
+    save_dir  = oj(save_dir_base, "ims")
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
     Ws_all = []
@@ -33,6 +30,13 @@ def main(config):
     # Get GAN
     G = ganwrapper.GANWrapper(image_size=512)
     z_dim = G.Gs.input_shape[1]
+    
+    # Latent codes to use
+    if not config.randomize_seeds:
+        seed_path = "./data/annotation-data/W.npy"
+        W_all = np.load(seed_path)
+    else:
+        W_all = G.getStyle(np.random.randn(config.N, 512))    
 
     # Attributes coded by letters
     all_attrs = 'HAGCBMSEW'
@@ -92,7 +96,8 @@ def main(config):
         print(ex_num, n_batch, flush=True)
    
         # Project onto intersection of attribute hyperplanes
-        W0 = projectToBoundary(W_all[ex_num, ...], grid_planes)
+        W_seed = W_all[ex_num, ...]
+        W0 = projectToBoundary(W_seed, grid_planes)
 
         for j, delta in enumerate(deltas):
             W = W0 + delta
@@ -119,11 +124,22 @@ def main(config):
             
             
     # save
-    pd.DataFrame.from_dict(attrs_all).to_csv(save_dir_base + 'attrs.csv')
-    np.save(save_dir_base + 'Ws.npy', np.array(Ws_all))
+    pd.DataFrame.from_dict(attrs_all).to_csv(oj(save_dir_base, 'attrs.csv'))
+    np.save(oj(save_dir_base, 'Ws.npy'), np.array(Ws_all))
 
 
 def projectToBoundary(X, planes, n_iter=100):
+    '''
+    Params
+    ------
+    X: np.ndarray (1, 512)
+        point to be projected
+    planes: sklearn linear models with .coef_ and .intercept)
+        ws: np.ndarray (512, n_attributes)
+            coefficients for different linear models
+        bs: array_like (n_attributes)
+            intercepts for linear model
+    '''    
     n_planes = len(planes)
 
     if n_planes == 1:
@@ -138,6 +154,16 @@ def projectToBoundary(X, planes, n_iter=100):
 
 
 def projectToPlane(X, w, b):
+    '''
+    Params
+    ------
+    X: np.ndarray (1, 512)
+        point to be projected
+    w: np.ndarray (512)
+        coefficients for linear model
+    b: scalar
+        intercept for linear model
+    '''    
     w, b = w.copy(), b.copy()
 
     # Get and normalize coefficients
@@ -182,8 +208,11 @@ if __name__ == "__main__":
     parser.add_argument('--version', type=int, default=1)
     parser.add_argument('--orth', type=int, default=1)
     parser.add_argument('--N', type=int)
+    parser.add_argument('--save_dir', type=str, default='results')
+    parser.add_argument('--randomize_seeds', default=False, action='store_true')
 
     config = parser.parse_args()
 
     np.random.seed(2)
+    print(config)
     main(config)

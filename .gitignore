@@ -11,3 +11,6 @@ data
 **.weights
 data_processed
 **tmp*
+**.npy
+**.csv
+**.jpg
