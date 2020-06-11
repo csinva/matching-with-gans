@@ -8,35 +8,43 @@ from argparse import ArgumentParser
 import pandas as pd
 from os.path import join as oj
 
-def main(config):
-
-    # Linear models
-    model_dir = "./data/latent-models/"
-
+def make_transects(config,
+                   G,
+                   attr,
+                   N_IMS_LIST: list,
+                   LIMS_LIST: list,
+                   N: int=10,
+                   save_dir: str='results',
+                   randomize_seeds: bool=False,
+                   model_dir: str="./data/latent-models/",
+                   seed_path: str="./data/annotation-data/W.npy"):
+    '''
+    Params
+    ------
+    N
+        Number of transects to generate
+    N_IMS_LIST
+        List of number of images to generate in each direction
+    '''
+    
     # Output dir
-    save_dir_base  = config.save_dir
+    save_dir_base  = save_dir
     save_dir  = oj(save_dir_base, "ims")
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
     Ws_all = []
     attrs_all = {
-        a: [] for a in config.attr
+        a: [] for a in attr
     }
     
-
     # Set up gpu
 #     os.environ["CUDA_VISIBLE_DEVICES"] = str(config.gpu)
-
-    # Get GAN
-    G = ganwrapper.GANWrapper(image_size=512)
-    z_dim = G.Gs.input_shape[1]
     
     # Latent codes to use
     if not config.randomize_seeds:
-        seed_path = "./data/annotation-data/W.npy"
         W_all = np.load(seed_path)
     else:
-        W_all = G.getStyle(np.random.randn(config.N, 512))    
+        W_all = G.getStyle(np.random.randn(N, 512))    
 
     # Attributes coded by letters
     all_attrs = 'HAGCBMSEW'
@@ -60,8 +68,8 @@ def main(config):
     points = [] # Distances from hyperplanes to query
     grid_planes = [] # Hyperplanes for grid attributes
 
-    for i in range( len(config.attr) ):
-        idx = all_attrs.index( config.attr[i] )
+    for i in range( len(attr) ):
+        idx = all_attrs.index( attr[i] )
         plane = planes[idx]
         v = normalize(plane.coef_)
         norm = np.linalg.norm(plane.coef_)
@@ -74,7 +82,7 @@ def main(config):
             scale = 1
             dirs.append(v)
 
-        dists = np.linspace(config.lims[i*2], config.lims[i*2+1], config.L[i]) 
+        dists = np.linspace(LIMS_LIST[i * 2], LIMS_LIST[i * 2 + 1], N_IMS_LIST[i]) 
         points.append([ (t/norm) / scale for t in dists ])
         grid_planes.append(plane)
 
@@ -89,10 +97,10 @@ def main(config):
     deltas = np.reshape(deltas, (-1, z_dim), 'F')
 
     batch_size = 1 
-    n_batch = config.N//batch_size
+    n_batch = N//batch_size
 
     # Transect creation loop.
-    for ex_num in range(config.N):
+    for ex_num in range(N):
         print(ex_num, n_batch, flush=True)
    
         # Project onto intersection of attribute hyperplanes
@@ -103,21 +111,19 @@ def main(config):
             W = W0 + delta
             Ws_all.append(W)
             
-            idx = np.unravel_index(j, config.L, 'F')
+            idx = np.unravel_index(j, N_IMS_LIST, 'F')
             
             # save the attributes
-            for a,b in zip(config.attr, idx):
+            for a,b in zip(attr, idx):
                 attrs_all[a].append(int(b))
                 
             # generate and save the images
             img = G.generateImageFromStyle(W)
-            img = (img*255).astype(np.uint8)
+            img = (img * 255).astype(np.uint8)
 
-            # Filename: version + seed face + attrs
-            fname = '%s/%.2d_%.4d' % (save_dir, config.version, ex_num)
-            
-
-            for a,b in zip(config.attr, idx):
+            # Filename: seed face + attrs
+            fname = f'{save_dir}/{ex_num:04d}'
+            for a,b in zip(attr, idx):
                 fname += '_' + a + str(int(b))
 
             imageio.imwrite(fname + '.jpg', img[0, ...])           
@@ -201,18 +207,28 @@ def proj(u, v):
 if __name__ == "__main__":
 
     parser = ArgumentParser()
-    parser.add_argument('--gpu', type=int)
     parser.add_argument('--attr', type=str, nargs='+')
     parser.add_argument('--L', type=int, nargs='+')
     parser.add_argument('--lims', type=float, nargs='+')
-    parser.add_argument('--version', type=int, default=1)
     parser.add_argument('--orth', type=int, default=1)
     parser.add_argument('--N', type=int)
     parser.add_argument('--save_dir', type=str, default='results')
     parser.add_argument('--randomize_seeds', default=False, action='store_true')
-
+        
+    # not used
+    parser.add_argument('--gpu', type=int)    
+    parser.add_argument('--version', type=int, default=1) # not used
     config = parser.parse_args()
-
+    
+    # Get GAN
     np.random.seed(2)
-    print(config)
-    main(config)
+    G = ganwrapper.GANWrapper(image_size=512)
+    z_dim = G.Gs.input_shape[1]
+    make_transects(config, G,
+         N_IMS_LIST=config.L,
+         attr=config.attr,
+         N=config.N,
+         LIMS_LIST=config.lims,
+         save_dir=config.save_dir,
+         randomize_seeds=config.randomize_seeds
+        )
