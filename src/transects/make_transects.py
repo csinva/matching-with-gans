@@ -29,6 +29,7 @@ def make_transects(G,
         
     latents
         Numpy of array to start making latents
+        Either (N, 512) or (N, 18, 512)
     randomize_seeds
         If this is true and latents not passed, generate random latents
     seed_path
@@ -52,6 +53,7 @@ def make_transects(G,
 #     os.environ["CUDA_VISIBLE_DEVICES"] = str(config.gpu)
     
     # Latent codes to use (should end up (N, 512) or (N, 18, 512))
+    # If it is (N, 18, 512), will manipulate it along each dimension
     if latents is not None:
         W_all = latents
     elif randomize_seeds:
@@ -119,8 +121,11 @@ def make_transects(G,
         print(ex_num, n_batch, flush=True)
    
         # Project onto intersection of attribute hyperplanes
-        W_seed = W_all[ex_num, ...]
-        W0 = projectToBoundary(W_seed, grid_planes)
+        if len(W_all.shape) == 3: # We have a real image, (N, 18, 512)
+            W0 = W_all[0]
+        else:
+            W_seed = W_all[ex_num, ...]
+            W0 = projectToBoundary(W_seed, grid_planes)
 
         for j, delta in enumerate(deltas):
             W = W0 + delta
@@ -133,7 +138,10 @@ def make_transects(G,
                 attrs_all[a].append(int(b))
                 
             # generate and save the images
-            img = G.generateImageFromStyle(W)
+            if len(W.shape) == 3:
+                img = G.generateImageFromStyleFull(W)
+            else:
+                img = G.generateImageFromStyle(W)
             img = (img * 255).astype(np.uint8)
 
             # Filename: seed face + attrs

@@ -26,7 +26,20 @@ class GANWrapper(object):
 
 
     def generateImageFromStyle(self, w):
+        '''
+        w
+            (N, 512)
+        '''
         w = np.tile(np.expand_dims(w, 1), (1, 18, 1))
+        img = self.Gs.components.synthesis.run(w, is_validation=True, randomize_noise=False, 
+                                               output_transform=self.fmt)
+        return self.processImage(img)
+    
+    def generateImageFromStyleFull(self, w):
+        '''
+        w
+            (N, 18, 512)
+        '''
         img = self.Gs.components.synthesis.run(w, is_validation=True, randomize_noise=False, 
                                                output_transform=self.fmt)
         return self.processImage(img)
