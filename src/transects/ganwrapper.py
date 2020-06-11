@@ -1,7 +1,8 @@
 import numpy as np
 import cv2
 import sys
-sys.path.append('./stylegan2')
+sys.path.append('../../models/stylegan2')
+# sys.path.append('./stylegan2')
 import dnnlib
 import dnnlib.tflib as tflib
 import pretrained_networks
@@ -11,8 +12,9 @@ class GANWrapper(object):
     def __init__(self, image_size=512):
 
         tflib.init_tf()
-        path = './stylegan2/cache/stylegan2-ffhq-config-f.pkl'
-        _, _, Gs = pretrained_networks.load_networks(path)
+        network_pkl = 'gdrive:networks/stylegan2-ffhq-config-f.pkl'
+#         path = './stylegan2/cache/stylegan2-ffhq-config-f.pkl'
+        _, _, Gs = pretrained_networks.load_networks(network_pkl)
 
         self.Gs = Gs
         self.image_size = image_size

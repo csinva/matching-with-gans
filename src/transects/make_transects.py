@@ -5,7 +5,7 @@ import numpy as np
 import ganwrapper
 import imageio
 from argparse import ArgumentParser
-
+import pandas as pd
 
 def main(config):
 
@@ -17,12 +17,18 @@ def main(config):
     W_all = np.load(seed_path)
 
     # Output dir
-    save_dir  = "./results"
+    save_dir_base  = "./results6/"
+    save_dir  = save_dir_base + "ims"
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
+    Ws_all = []
+    attrs_all = {
+        a: [] for a in config.attr
+    }
+    
 
     # Set up gpu
-    os.environ["CUDA_VISIBLE_DEVICES"] = str(config.gpu)
+#     os.environ["CUDA_VISIBLE_DEVICES"] = str(config.gpu)
 
     # Get GAN
     G = ganwrapper.GANWrapper(image_size=512)
@@ -90,18 +96,31 @@ def main(config):
 
         for j, delta in enumerate(deltas):
             W = W0 + delta
-
+            Ws_all.append(W)
+            
+            idx = np.unravel_index(j, config.L, 'F')
+            
+            # save the attributes
+            for a,b in zip(config.attr, idx):
+                attrs_all[a].append(int(b))
+                
+            # generate and save the images
             img = G.generateImageFromStyle(W)
             img = (img*255).astype(np.uint8)
 
             # Filename: version + seed face + attrs
             fname = '%s/%.2d_%.4d' % (save_dir, config.version, ex_num)
-            idx = np.unravel_index(j, config.L, 'F')
+            
 
             for a,b in zip(config.attr, idx):
                 fname += '_' + a + str(int(b))
 
-            imageio.imwrite(fname + '.jpg', img[0, ...]) 
+            imageio.imwrite(fname + '.jpg', img[0, ...])           
+            
+            
+    # save
+    pd.DataFrame.from_dict(attrs_all).to_csv(save_dir_base + 'attrs.csv')
+    np.save(save_dir_base + 'Ws.npy', np.array(Ws_all))
 
 
 def projectToBoundary(X, planes, n_iter=100):
