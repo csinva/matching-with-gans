@@ -24,6 +24,28 @@ def plot_row(images, suptitle=''):
     plt.subplot(1, N_IMS, N_IMS // 2 + 1)
     plt.title(suptitle)
     plt.tight_layout()
+    
+def plot_grid(images, suptitle=''):
+    '''
+    Params
+    ------
+    images: np.ndarray
+        (R, C, H, W, C)
+    '''
+    if type(images) == list:
+        images = np.array(images)
+    N_IMS = images.shape[0]
+    R = images.shape[0]
+    C = images.shape[1]
+    plt.figure(figsize=(N_IMS * 3, 3))
+    for r in range(R):
+        for c in range(C):
+            plt.subplot(R, C, i + 1)
+            imshow(images[i])
+    
+    plt.subplot(R, C, N_IMS // 2 + 1)
+    plt.title(suptitle)
+    plt.tight_layout()
 
 def norm(im):
     '''Normalize to [0, 1]
