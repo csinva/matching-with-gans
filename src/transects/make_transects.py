@@ -8,6 +8,22 @@ from argparse import ArgumentParser
 import pandas as pd
 from os.path import join as oj
 
+def get_directions(model_dir, all_attrs='HAGCBMSEW'):
+    coefs = []
+    intercepts = []
+    if model_dir is not None:
+        for a in all_attrs:
+            filename = os.path.join(model_dir, a + "_W.pkl")
+            with open(filename, 'rb') as pickle_file:
+                data = pickle.load(pickle_file)
+                # LinearSVC and RidgeCV save hyperplanes slightly differently
+                if len(data.coef_.shape) == 1:
+                    data.coef_ = np.expand_dims(data.coef_, 0)
+                    data.intercept_ = np.expand_dims(data.intercept_, 0)
+                coefs.append(data.coef_)
+                intercepts.append(data.intercept_)
+    return coefs, intercepts
+
 def make_transects(G,
                    attr: list=['A', 'C', 'H', 'G'],
                    N_IMS_LIST: list=[1, 2, 2, 2],
@@ -66,33 +82,16 @@ def make_transects(G,
     all_attrs = 'HAGCBMSEW'
 
     # Load models
-#     planes = []
-    coefs = []
-    intercepts = []
-    for a in all_attrs:
-        filename = os.path.join(model_dir, a + "_W.pkl")
-        with open(filename, 'rb') as pickle_file:
-            data = pickle.load(pickle_file)
-
-            # LinearSVC and RidgeCV save hyperplanes slightly differently
-            if len(data.coef_.shape) == 1:
-                data.coef_ = np.expand_dims(data.coef_, 0)
-                data.intercept_ = np.expand_dims(data.intercept_, 0)
-
-#             planes.append(data)
-            coefs.append(data.coef_)
-            intercepts.append(data.intercept_)
+    coefs, intercepts = get_directions(model_dir, all_attrs)
 
     # Get attribute normal vectors and step sizes
     dirs = []  # Direction vectors
     points = [] # Distances from hyperplanes to query
-#     grid_planes = [] # Hyperplanes for grid attributes
     grid_coefs = [] # Hyperplanes for grid attributes
     grid_intercepts = [] # Hyperplanes for grid attributes
 
     for i in range(len(attr)):
         idx = all_attrs.index( attr[i] )
-#         plane = planes[idx]
         v = normalize(coefs[idx])
         norm = np.linalg.norm(coefs[idx])
 
@@ -100,7 +99,6 @@ def make_transects(G,
             coefs_other = coefs[0:idx] + coefs[idx+1:]
             intercepts_other = intercepts[0:idx] + intercepts[idx+1:]
             
-#             planes[0:idx] + planes[idx+1:]
             v_orth = orthogonalize(v, coefs_other)
             scale = np.sum(v * v_orth) # Need to change point spacing to account for altered direction.
             dirs.append(v_orth)
@@ -110,7 +108,6 @@ def make_transects(G,
 
         dists = np.linspace(LIMS_LIST[i * 2], LIMS_LIST[i * 2 + 1], N_IMS_LIST[i]) 
         points.append([ (t/norm) / scale for t in dists ])
-#         grid_planes.append(plane)
         grid_coefs.append(coefs[idx])
         grid_intercepts.append(intercepts[idx])
 
@@ -138,11 +135,8 @@ def make_transects(G,
         else:
             W_seed = W_all[ex_num, ...]
             W0 = projectToBoundary(W_seed, grid_coefs, grid_intercepts) #grid_planes)
-#         print('W0.shape', W0.shape)
         for j, delta in enumerate(deltas):
             W = W0 + delta
-#             W = W0
-            print(np.linalg.norm(W))
             Ws_all.append(W)
             
             idx = np.unravel_index(j, N_IMS_LIST, 'F')
@@ -179,10 +173,13 @@ def projectToBoundary(X, coefs, intercepts, n_iter=100):
         point to be projected
     coefs: array_like (n_attributes, 512)
         coefficients for different linear models
-    intercepts: array_like (n_attributes)
+    intercepts: array_like (n_attributes, 1)
         intercepts for linear model
-    '''    
-    n_planes = len(coefs)
+    '''   
+    try:
+        n_planes = len(coefs)
+    except:
+        n_planes = coefs.shape[0]
 
     if n_planes == 1:
         return projectToPlane(X, coefs[0], intercepts[0])
@@ -210,7 +207,7 @@ def projectToPlane(X, w, b):
     w, b = w.copy(), b.copy()
 
     # Get and normalize coefficients
-    b = b/np.linalg.norm(w)
+    b = b / np.linalg.norm(w)
     w = normalize(w)
 
     # Project points back to hyperplane, decision value = 0
