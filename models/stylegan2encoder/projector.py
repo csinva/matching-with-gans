@@ -151,6 +151,53 @@ class Projector:
         self._opt.register_gradients(self._loss, [self._dlatents_var] + self._noise_vars)
         self._opt_step = self._opt.apply_updates()
 
+    def get_vgg_loss(self, target_images, latents):
+        '''
+        target_images: np.ndarray
+            (1, H, W, C)
+        latents: np.ndarray
+            (1, H, W, C)
+        '''
+        # Prepare target images.
+        self._info('Preparing target images...')
+        target_images = np.asarray(target_images, dtype='float32')
+        print(target_images.shape)
+        target_images = (target_images + 1) * (255 / 2)
+        sh = target_images.shape
+        assert sh[0] == self._minibatch_size
+#         print('target shahpe', self._target_images_var.shape)
+        if sh[2] > self._target_images_var.shape[2]:
+            factor = sh[2] // self._target_images_var.shape[2]
+            target_images = np.reshape(target_images, [-1, sh[1], sh[2] // factor, factor, sh[3] // factor, factor]).mean((3, 5))
+#         print('targ im shpae', target_images.shape)
+            
+        # Initialize optimization state.
+        self._info('Initializing optimization state...')
+        tflib.set_vars({self._target_images_var: target_images,
+                        self._dlatents_var: np.tile(self._dlatent_avg, [self._minibatch_size, 1, 1])})
+        tflib.run(self._noise_init_op)
+#         self._opt.reset_optimizer_state()
+#         self._cur_step = 0
+        
+        self._dlatents_expr = tf.convert_to_tensor(latents)
+        self._images_expr = self._Gs.components.synthesis.get_output_for(self._dlatents_expr, randomize_noise=False)
+#         print(self._images_expr.shape)
+        # Downsample image to 256x256 if it's larger than that. VGG was built for 224x224 images.
+        proc_images_expr = (self._images_expr + 1) * (255 / 2)
+        sh = proc_images_expr.shape.as_list()
+#         print('sh', sh)
+        if sh[2] > 256:
+            factor = sh[2] // 256
+            proc_images_expr = tf.reduce_mean(tf.reshape(proc_images_expr, [-1, sh[1], sh[2] // factor, factor, sh[2] // factor, factor]), axis=[3,5])
+            
+        self._info('Building loss graph...')
+        if self._lpips is None:
+            self._lpips = misc.load_pkl(self.vgg16_pkl) # vgg16_zhang_perceptual.pkl
+        self._dist = self._lpips.get_output_for(proc_images_expr, self._target_images_var)
+        self._loss = tf.reduce_sum(self._dist)
+        return tflib.run(self._loss)
+        
+        
     def run(self, target_images):
         # Run to completion.
         self.start(target_images)
