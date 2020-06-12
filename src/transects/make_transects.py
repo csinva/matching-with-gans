@@ -122,13 +122,14 @@ def make_transects(G,
    
         # Project onto intersection of attribute hyperplanes
         if len(W_all.shape) == 3: # We have a real image, (N, 18, 512)
-            W0 = W_all[0]
+            W0 = W_all[ex_num: ex_num + 1]
         else:
             W_seed = W_all[ex_num, ...]
             W0 = projectToBoundary(W_seed, grid_planes)
-
+#         print('W0.shape', W0.shape)
         for j, delta in enumerate(deltas):
             W = W0 + delta
+#             W = W0
             Ws_all.append(W)
             
             idx = np.unravel_index(j, N_IMS_LIST, 'F')

@@ -25,7 +25,7 @@ def plot_row(images, suptitle=''):
     plt.title(suptitle)
     plt.tight_layout()
     
-def plot_grid(images, suptitle=''):
+def plot_grid(images, ylabs=[]):
     '''
     Params
     ------
@@ -37,14 +37,19 @@ def plot_grid(images, suptitle=''):
     N_IMS = images.shape[0]
     R = images.shape[0]
     C = images.shape[1]
-    plt.figure(figsize=(N_IMS * 3, 3))
+    i = 0
+    plt.figure(figsize=(C * 3, R * 3))
     for r in range(R):
         for c in range(C):
             plt.subplot(R, C, i + 1)
-            imshow(images[i])
+            imshow(images[r, c])
+            
+            if c == 0:
+                plt.title(ylabs[r])
+            
+            i += 1
     
     plt.subplot(R, C, N_IMS // 2 + 1)
-    plt.title(suptitle)
     plt.tight_layout()
 
 def norm(im):

@@ -13,8 +13,8 @@
 
 # python project_images.py ../../data/celeba-hq/ims/ ../../data_processed/celeba-hq/generated_images_0/ --regularize_mean_deviation_weight 0
 
-# python project_images.py ../../data/celeba-hq/ims/ ../../data_processed/celeba-hq/generated_images_10000/ --regularize_mean_deviation_weight 10000
+python project_images.py ../../data/celeba-hq/ims/ ../../data_processed/celeba-hq/generated_images_10000/ --regularize_mean_deviation_weight 10000
 
-python project_images.py ../../data/celeba-hq/ims/ ../../data_processed/celeba-hq/generated_images_1/ --regularize_mean_deviation_weight 1
+# python project_images.py ../../data/celeba-hq/ims/ ../../data_processed/celeba-hq/generated_images_1/ --regularize_mean_deviation_weight 1
 
 # python project_images.py ../../data/celeba-hq/ims/ ../../data_processed/celeba-hq/generated_images_0.1/ --regularize_mean_deviation_weight 0.1
