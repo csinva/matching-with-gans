@@ -66,7 +66,9 @@ def make_transects(G,
     all_attrs = 'HAGCBMSEW'
 
     # Load models
-    planes = []
+#     planes = []
+    coefs = []
+    intercepts = []
     for a in all_attrs:
         filename = os.path.join(model_dir, a + "_W.pkl")
         with open(filename, 'rb') as pickle_file:
@@ -77,21 +79,29 @@ def make_transects(G,
                 data.coef_ = np.expand_dims(data.coef_, 0)
                 data.intercept_ = np.expand_dims(data.intercept_, 0)
 
-            planes.append(data)
+#             planes.append(data)
+            coefs.append(data.coef_)
+            intercepts.append(data.intercept_)
 
     # Get attribute normal vectors and step sizes
     dirs = []  # Direction vectors
     points = [] # Distances from hyperplanes to query
-    grid_planes = [] # Hyperplanes for grid attributes
+#     grid_planes = [] # Hyperplanes for grid attributes
+    grid_coefs = [] # Hyperplanes for grid attributes
+    grid_intercepts = [] # Hyperplanes for grid attributes
 
-    for i in range( len(attr) ):
+    for i in range(len(attr)):
         idx = all_attrs.index( attr[i] )
-        plane = planes[idx]
-        v = normalize(plane.coef_)
-        norm = np.linalg.norm(plane.coef_)
+#         plane = planes[idx]
+        v = normalize(coefs[idx])
+        norm = np.linalg.norm(coefs[idx])
 
         if orth:
-            v_orth = orthogonalize(v, planes[0:idx] + planes[idx+1:])
+            coefs_other = coefs[0:idx] + coefs[idx+1:]
+            intercepts_other = intercepts[0:idx] + intercepts[idx+1:]
+            
+#             planes[0:idx] + planes[idx+1:]
+            v_orth = orthogonalize(v, coefs_other)
             scale = np.sum(v * v_orth) # Need to change point spacing to account for altered direction.
             dirs.append(v_orth)
         else:
@@ -100,7 +110,9 @@ def make_transects(G,
 
         dists = np.linspace(LIMS_LIST[i * 2], LIMS_LIST[i * 2 + 1], N_IMS_LIST[i]) 
         points.append([ (t/norm) / scale for t in dists ])
-        grid_planes.append(plane)
+#         grid_planes.append(plane)
+        grid_coefs.append(coefs[idx])
+        grid_intercepts.append(intercepts[idx])
 
 
     # Create the ND-grid. Need to reverse x,y ordering...I forget exactly why.
@@ -125,11 +137,12 @@ def make_transects(G,
             W0 = W_all[ex_num: ex_num + 1]
         else:
             W_seed = W_all[ex_num, ...]
-            W0 = projectToBoundary(W_seed, grid_planes)
+            W0 = projectToBoundary(W_seed, grid_coefs, grid_intercepts) #grid_planes)
 #         print('W0.shape', W0.shape)
         for j, delta in enumerate(deltas):
             W = W0 + delta
 #             W = W0
+            print(np.linalg.norm(W))
             Ws_all.append(W)
             
             idx = np.unravel_index(j, N_IMS_LIST, 'F')
@@ -158,27 +171,27 @@ def make_transects(G,
     np.save(oj(save_dir_base, 'Ws.npy'), np.array(Ws_all))
 
 
-def projectToBoundary(X, planes, n_iter=100):
+def projectToBoundary(X, coefs, intercepts, n_iter=100):
     '''
     Params
     ------
     X: np.ndarray (1, 512)
         point to be projected
-    planes: sklearn linear models with .coef_ and .intercept)
-        ws: np.ndarray (512, n_attributes)
-            coefficients for different linear models
-        bs: array_like (n_attributes)
-            intercepts for linear model
+    coefs: array_like (n_attributes, 512)
+        coefficients for different linear models
+    intercepts: array_like (n_attributes)
+        intercepts for linear model
     '''    
-    n_planes = len(planes)
+    n_planes = len(coefs)
 
     if n_planes == 1:
-        return projectToPlane(X, planes[0].coef_, planes[0].intercept_)
+        return projectToPlane(X, coefs[0], intercepts[0])
 
     # Iterative procedure for getting to boundary
     for i in range(n_iter):
-        plane = planes[i % n_planes]
-        X = projectToPlane(X, plane.coef_, plane.intercept_)
+        idx = i % n_planes
+        # plane = planes[]
+        X = projectToPlane(X, coefs[idx], intercepts[idx])
 
     return X   
 
@@ -206,15 +219,15 @@ def projectToPlane(X, w, b):
     return X - w * np.expand_dims(d, 1)
 
 
-def orthogonalize(v0, planes):
+def orthogonalize(v0, coefs):
 
-    A = np.zeros((max(v0.shape), len(planes)))
-    for i,h in enumerate(planes):
-        A[:, i] = h.coef_
+    A = np.zeros((max(v0.shape), len(coefs)))
+    for i, coef in enumerate(coefs):
+        A[:, i] = coef #h.coef_
     Q,R = np.linalg.qr(A)
 
     u = v0.copy()
-    for i in range(len(planes)):
+    for i in range(len(coefs)):
         u -= proj(Q[:,i], u)
 
     return normalize(u)
