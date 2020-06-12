@@ -8,7 +8,16 @@ from argparse import ArgumentParser
 import pandas as pd
 from os.path import join as oj
 
-def get_directions(model_dir, all_attrs='HAGCBMSEW'):
+def get_directions(model_dir="transects/data/latent-models/", all_attrs='HAGCBMSEW'):
+    '''
+    Returns
+    -------
+    coefs: list
+        (N_attributes, 1, 512)
+    intercepts: list
+        (N_attributes, 1)
+    '''
+    
     coefs = []
     intercepts = []
     if model_dir is not None:
@@ -43,8 +52,8 @@ def make_transects(G,
     N_IMS_LIST
         List of number of images to generate in each direction
         
-    latents
-        Numpy of array to start making latents
+    latents: array_like
+        Array to start making latents
         Either (N, 512) or (N, 18, 512)
     randomize_seeds
         If this is true and latents not passed, generate random latents
@@ -71,6 +80,7 @@ def make_transects(G,
     # Latent codes to use (should end up (N, 512) or (N, 18, 512))
     # If it is (N, 18, 512), will manipulate it along each dimension
     if latents is not None:
+        latents = np.array(latents)
         W_all = latents
     elif randomize_seeds:
         W_all = G.getStyle(np.random.randn(N, 512))    

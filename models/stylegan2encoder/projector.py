@@ -161,7 +161,7 @@ class Projector:
         # Prepare target images.
         self._info('Preparing target images...')
         target_images = np.asarray(target_images, dtype='float32')
-        print(target_images.shape)
+#         print(target_images.shape)
         target_images = (target_images + 1) * (255 / 2)
         sh = target_images.shape
         assert sh[0] == self._minibatch_size
