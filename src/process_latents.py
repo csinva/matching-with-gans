@@ -35,31 +35,6 @@ attr_map = {
     }
 ks = sorted(attr_map.keys())
 
-def load_labs(celeba_labs_fname='../data/celeba-hq/Anno/list_attr_celeba.txt'):
-    labs_full = pd.read_csv(celeba_labs_fname, delim_whitespace=True, skiprows=1)
-    labs = pd.DataFrame()
-    # print(labs.keys())
-    # print(labs_full.keys())
-
-    # large is more male
-    labs['gender'] = labs_full['Male']
-
-    # larger is longer
-    labs['hair-length'] = -1 * labs_full['Bald'] # Bangs, Receding_Hairline
-
-    # larger is more
-    labs['facial-hair'] = labs_full['Mustache'] # Goatee, Mustache, No_Beard, 5_o_Clock_Shadow
-
-    # higher is more
-    labs['makeup'] = labs_full['Heavy_Makeup'] # Wearing_Lipstick
-
-    # higher is darker
-    labs['skin-color'] = labs_full['Pale_Skin'] * -1
-
-    # older is more positive
-    labs['age'] = labs_full['Young'] * -1
-    return labs
-
 if __name__ == '__main__':
     network_pkl = 'gdrive:networks/stylegan2-ffhq-config-f.pkl'
     _, _, Gs = pretrained_networks.load_networks(network_pkl)
@@ -73,8 +48,6 @@ if __name__ == '__main__':
     coefs, intercepts = make_transects.get_directions(all_attrs=all_attrs)
     coefs = np.array(coefs).squeeze()
     intercepts = np.array(intercepts).flatten()
-
-    labs = load_labs()
 
     # want df where each row is an (image, reg_param) set
     # columns represent different measure statistics
@@ -113,6 +86,6 @@ if __name__ == '__main__':
             preds = preds.flatten()
             for i, a in enumerate(all_attrs):
                 r[f'pred_{a}'].append(preds[i])
-                r[f'lab_{a}'].append(labs.iloc[im_num + 1][attr_map[a]])
+#                 r[f'lab_{a}'].append(labs.iloc[im_num + 1][attr_map[a]])
     df = pd.DataFrame.from_dict(r)
     df.to_pickle('processed/09_df_100.pkl')

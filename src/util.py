@@ -44,7 +44,7 @@ def plot_grid(images, ylabs=[]):
             plt.subplot(R, C, i + 1)
             imshow(images[r, c])
             
-            if c == 0:
+            if c == 0 and len(ylabs) > r:
                 plt.title(ylabs[r])
             
             i += 1
