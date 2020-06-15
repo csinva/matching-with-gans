@@ -25,7 +25,7 @@
 
 # python project_images.py ../../data/celeba-hq/ims/ ../../data_processed/celeba-hq/generated_images_0.01/ --regularize_mean_deviation_weight 0.01
 
-# python project_images.py ../../data/celeba-hq/ims/ ../../data_processed/celeba-hq/generated_images_0.1/ --regularize_mean_deviation_weight 0.1
+python project_images.py ../../data/celeba-hq/ims/ ../../data_processed/celeba-hq/generated_images_0.1/ --regularize_mean_deviation_weight 0.1
 
 # python project_images.py ../../data/celeba-hq/ims/ ../../data_processed/celeba-hq/generated_images_1/ --regularize_mean_deviation_weight 1
 
@@ -42,8 +42,14 @@
 
 # project real ims #############################
 
-python project_images.py ../../data_processed/pilot-our-images/G2P2/ ../../data_processed/pilot-our-images/G2P2_proj/ --regularize_mean_deviation_weight 0.1
+# python project_images.py ../../data_processed/pilot-our-images/G2P2/ ../../data_processed/pilot-our-images/G2P2_proj/ --regularize_mean_deviation_weight 0.1
 
-python project_images.py ../../data_processed/pilot-our-images/KFS/ ../../data_processed/pilot-our-images/KFS_proj/ --regularize_mean_deviation_weight 0.1
+# python project_images.py ../../data_processed/pilot-our-images/KFS/ ../../data_processed/pilot-our-images/KFS_proj/ --regularize_mean_deviation_weight 0.1
 
-python project_images.py ../../data_processed/pilot-our-images/PPP/ ../../data_processed/pilot-our-images/PPP_proj/ --regularize_mean_deviation_weight 0.1
+# python project_images.py ../../data_processed/pilot-our-images/PPP/ ../../data_processed/pilot-our-images/PPP_proj/ --regularize_mean_deviation_weight 0.1
+
+# python project_images.py ../../data_processed/pilot-our-images/G2P2/ ../../data_processed/pilot-our-images/G2P2_proj_0/ --regularize_mean_deviation_weight 0
+
+# python project_images.py ../../data_processed/pilot-our-images/KFS/ ../../data_processed/pilot-our-images/KFS_proj_0/ --regularize_mean_deviation_weight 0
+
+# python project_images.py ../../data_processed/pilot-our-images/PPP/ ../../data_processed/pilot-our-images/PPP_proj_0/ --regularize_mean_deviation_weight 0

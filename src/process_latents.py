@@ -24,7 +24,7 @@ from transects import make_transects, ganwrapper
 
 
 IM_NUMS = np.arange(1, 99)
-regs = [0, 0.1, 1, 10000]
+regs = [0, 0.01, 0.1, 1, 10000]
 attr_map = {
         'A': 'age',
         'B': 'facial-hair',
