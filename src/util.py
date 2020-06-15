@@ -56,6 +56,8 @@ def plot_grid(images, ylabs=[]):
                 plt.title(ylabs[r])
             
             i += 1
+            if i >= images.shape[0]:
+                break
     
     plt.tight_layout()
 

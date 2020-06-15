@@ -23,6 +23,7 @@ sys.path.append('transects')
 from transects import make_transects, ganwrapper
 
 
+out_fname = 'processed/09_df_99.pkl'
 IM_NUMS = np.arange(1, 99)
 regs = [0, 0.01, 0.1, 1, 10000]
 attr_map = {
@@ -48,14 +49,15 @@ if __name__ == '__main__':
     coefs, intercepts = make_transects.get_directions(all_attrs=all_attrs)
     coefs = np.array(coefs).squeeze()
     intercepts = np.array(intercepts).flatten()
+    
 
     # want df where each row is an (image, reg_param) set
     # columns represent different measure statistics
     r = {
         k: []
         for k in ['perceptual_loss', 'mean_abs_corr', 'im_num', 'reg_param'] +
-        [f'pred_{a}' for a in all_attrs] +
-        [f'lab_{a}' for a in all_attrs]
+        [f'pred_{a}' for a in all_attrs]
+#         [f'lab_{a}' for a in all_attrs]
     }
 
     for im_num in tqdm(IM_NUMS):
@@ -87,5 +89,7 @@ if __name__ == '__main__':
             for i, a in enumerate(all_attrs):
                 r[f'pred_{a}'].append(preds[i])
 #                 r[f'lab_{a}'].append(labs.iloc[im_num + 1][attr_map[a]])
-    df = pd.DataFrame.from_dict(r)
-    df.to_pickle('processed/09_df_100.pkl')
+
+        if im_num % 15 == 0:
+            df = pd.DataFrame.from_dict(r)
+            df.to_pickle(out_fname)
