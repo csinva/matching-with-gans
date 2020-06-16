@@ -2,7 +2,7 @@ import argparse
 import os
 import shutil
 import numpy as np
-
+from os.path import join as oj
 import dnnlib
 import dnnlib.tflib as tflib
 import pretrained_networks
@@ -10,10 +10,17 @@ import projector
 import dataset_tool
 from training import dataset
 from training import misc
+import matplotlib.image as mpimg
 
 
 def project_image(proj, src_file, dst_dir, tmp_dir, video=False):
-
+    '''
+    Returns
+    -------
+    latents
+        (18, 512)
+    image
+    '''
     data_dir = '%s/dataset' % tmp_dir
     if os.path.exists(data_dir):
         shutil.rmtree(data_dir)
@@ -35,18 +42,23 @@ def project_image(proj, src_file, dst_dir, tmp_dir, video=False):
         video_dir = '%s/video' % tmp_dir
         os.makedirs(video_dir, exist_ok=True)
     while proj.get_cur_step() < proj.num_steps:
-        # print('\r%d / %d ... ' % (proj.get_cur_step(), proj.num_steps), end='', flush=True)
+        print('\r%d / %d ... ' % (proj.get_cur_step(), proj.num_steps), end='', flush=True)
         proj.step()
         if video:
             filename = '%s/%08d.png' % (video_dir, proj.get_cur_step())
             misc.save_image_grid(proj.get_images(), filename, drange=[-1,1])
     # print('\r%-30s\r' % '', end='', flush=True)
-
-    os.makedirs(dst_dir, exist_ok=True)
-    filename = os.path.join(dst_dir, os.path.basename(src_file)[:-4] + '.png')
-    misc.save_image_grid(proj.get_images(), filename, drange=[-1,1])
-    filename = os.path.join(dst_dir, os.path.basename(src_file)[:-4] + '.npy')
-    np.save(filename, proj.get_dlatents()[0])
+    
+    # save things
+    if dst_dir is not None:
+        os.makedirs(dst_dir, exist_ok=True)
+        filename = os.path.join(dst_dir, os.path.basename(src_file)[:-4] + '.png')
+        misc.save_image_grid(proj.get_images(), filename, drange=[-1,1])
+        filename = os.path.join(dst_dir, os.path.basename(src_file)[:-4] + '.npy')
+        np.save(filename, proj.get_dlatents()[0])
+    tmp_img = oj(tmp_dir, 'tmp.png')
+    misc.save_image_grid(proj.get_images(), tmp_img, drange=[-1,1])
+    return proj.get_dlatents()[0], mpimg.imread(tmp_img)
 
 
 def render_video(src_file, dst_dir, tmp_dir, num_frames, mode, size, fps, codec, bitrate):
