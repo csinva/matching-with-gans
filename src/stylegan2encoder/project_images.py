@@ -35,12 +35,12 @@ def project_image(proj, src_file, dst_dir, tmp_dir, video=False):
         video_dir = '%s/video' % tmp_dir
         os.makedirs(video_dir, exist_ok=True)
     while proj.get_cur_step() < proj.num_steps:
-        print('\r%d / %d ... ' % (proj.get_cur_step(), proj.num_steps), end='', flush=True)
+        # print('\r%d / %d ... ' % (proj.get_cur_step(), proj.num_steps), end='', flush=True)
         proj.step()
         if video:
             filename = '%s/%08d.png' % (video_dir, proj.get_cur_step())
             misc.save_image_grid(proj.get_images(), filename, drange=[-1,1])
-    print('\r%-30s\r' % '', end='', flush=True)
+    # print('\r%-30s\r' % '', end='', flush=True)
 
     os.makedirs(dst_dir, exist_ok=True)
     filename = os.path.join(dst_dir, os.path.basename(src_file)[:-4] + '.png')
@@ -74,6 +74,10 @@ def render_video(src_file, dst_dir, tmp_dir, num_frames, mode, size, fps, codec,
     video_clip = moviepy.editor.VideoClip(render_frame, duration=duration)
     video_clip.write_videofile(filename, fps=fps, codec=codec, bitrate=bitrate)
 
+
+def project_from_fname(proj):
+    return
+    
 
 def main():
 
