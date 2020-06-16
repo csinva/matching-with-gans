@@ -7,8 +7,10 @@ import imageio
 from argparse import ArgumentParser
 import pandas as pd
 from os.path import join as oj
+sys.path.append('..')
+import config
 
-def get_directions(model_dir="transects/data/latent-models/", all_attrs='HAGCBMSEW'):
+def get_directions(model_dir="./linear_models/latent-models/", all_attrs=config.ALL_ATTRS):
     '''
     Returns
     -------
@@ -41,9 +43,9 @@ def make_transects(G,
                    orth: bool=False,
                    save_dir: str='results',
                    randomize_seeds: bool=False,
-                   model_dir: str="./data/latent-models/",
+                   model_dir: str="./linear_models/latent-models/",
                    latents: np.ndarray=None,
-                   seed_path: str="./data/annotation-data/W.npy"):
+                   seed_path: str="./linear_models/annotation-data/W.npy"):
     '''
     Params
     ------
@@ -89,7 +91,7 @@ def make_transects(G,
     N = min(N, W_all.shape[0])
 
     # Attributes coded by letters
-    all_attrs = 'HAGCBMSEW'
+    all_attrs = config.ALL_ATTRS
 
     # Load models
     coefs, intercepts = get_directions(model_dir, all_attrs)

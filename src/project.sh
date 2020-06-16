@@ -1,8 +1,5 @@
 # celeba generated
-# python align_images.py ../../data/celeba-hq-guha/images ../../data_processed/celeba-hq/aligned_images
-# python project_images.py ../../data/celeba-hq/images/ ../../data_processed/celeba-hq/generated_images/
-
-PROJECT="python stylegan2encoder/project_images.py"
+PROJECT="python stylegan2/project_images.py"
 
 
 

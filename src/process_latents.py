@@ -21,20 +21,13 @@ import pretrained_networks
 import projector
 sys.path.append('transects')
 from transects import make_transects, ganwrapper
-
+import config
+from config import ALL_ATTRS
 
 out_fname = 'processed/09_df_99.pkl'
 IM_NUMS = np.arange(1, 99)
 regs = [0, 0.01, 0.1, 1, 10000]
-attr_map = {
-        'A': 'age',
-        'B': 'facial-hair',
-        'C': 'skin-color',
-        'G': 'gender',
-        'H': 'hair-length',
-        'M': 'makeup',
-    }
-ks = sorted(attr_map.keys())
+ks = sorted(ALL_ATTRS)
 
 if __name__ == '__main__':
     network_pkl = 'gdrive:networks/stylegan2-ffhq-config-f.pkl'
@@ -45,8 +38,7 @@ if __name__ == '__main__':
     DIR_ORIG = '../data/celeba-hq/ims/'
     DIRS_GEN = '../data_processed/celeba-hq/'
 
-    all_attrs = ''.join(ks)
-    coefs, intercepts = make_transects.get_directions(all_attrs=all_attrs)
+    coefs, intercepts = make_transects.get_directions(all_attrs=ALL_ATTRS)
     coefs = np.array(coefs).squeeze()
     intercepts = np.array(intercepts).flatten()
     
@@ -56,8 +48,8 @@ if __name__ == '__main__':
     r = {
         k: []
         for k in ['perceptual_loss', 'mean_abs_corr', 'im_num', 'reg_param'] +
-        [f'pred_{a}' for a in all_attrs]
-#         [f'lab_{a}' for a in all_attrs]
+        [f'pred_{a}' for a in ALL_ATTRS]
+#         [f'lab_{a}' for a in ALL_ATTRS]
     }
 
     for im_num in tqdm(IM_NUMS):
@@ -86,7 +78,7 @@ if __name__ == '__main__':
     #         preds = (preds > 0) * 1
     #         preds[preds == 0] = -1
             preds = preds.flatten()
-            for i, a in enumerate(all_attrs):
+            for i, a in enumerate(ALL_ATTRS):
                 r[f'pred_{a}'].append(preds[i])
 #                 r[f'lab_{a}'].append(labs.iloc[im_num + 1][attr_map[a]])
 

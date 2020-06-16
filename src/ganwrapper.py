@@ -1,8 +1,7 @@
 import numpy as np
 import cv2
 import sys
-sys.path.append('../../models/stylegan2')
-# sys.path.append('./stylegan2')
+sys.path.append('stylegan2')
 import dnnlib
 import dnnlib.tflib as tflib
 import pretrained_networks

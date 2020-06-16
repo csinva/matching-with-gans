@@ -44,23 +44,24 @@ def project_image(proj, src_file, dst_dir, tmp_dir, video=False):
         video_dir = '%s/video' % tmp_dir
         os.makedirs(video_dir, exist_ok=True)
     while proj.get_cur_step() < proj.num_steps:
-        print('\r%d / %d ... ' % (proj.get_cur_step(), proj.num_steps), end='', flush=True)
+        # print('\r%d / %d ... ' % (proj.get_cur_step(), proj.num_steps), end='', flush=True)
         proj.step()
         if video:
             filename = '%s/%08d.png' % (video_dir, proj.get_cur_step())
             misc.save_image_grid(proj.get_images(), filename, drange=[-1,1])
     # print('\r%-30s\r' % '', end='', flush=True)
     
-    # save things
-    if dst_dir is not None:
+    if dst_dir is not None: # save things
         os.makedirs(dst_dir, exist_ok=True)
         filename = os.path.join(dst_dir, os.path.basename(src_file)[:-4] + '.png')
         misc.save_image_grid(proj.get_images(), filename, drange=[-1,1])
         filename = os.path.join(dst_dir, os.path.basename(src_file)[:-4] + '.npy')
         np.save(filename, proj.get_dlatents()[0])
-    tmp_img = oj(tmp_dir, 'tmp.png')
-    misc.save_image_grid(proj.get_images(), tmp_img, drange=[-1,1])
-    return proj.get_dlatents()[0], mpimg.imread(tmp_img)
+        return
+    else: # return things
+        tmp_img = oj(tmp_dir, 'tmp.png')
+        misc.save_image_grid(proj.get_images(), tmp_img, drange=[-1,1])
+        return proj.get_dlatents()[0], mpimg.imread(tmp_img)
 
 
 def render_video(src_file, dst_dir, tmp_dir, num_frames, mode, size, fps, codec, bitrate):
@@ -111,12 +112,15 @@ def main():
     parser.add_argument('--video-fps', type=int, default=25, help='Video framerate')
     parser.add_argument('--video-codec', default='libx264', help='Video codec')
     parser.add_argument('--video-bitrate', default='5M', help='Video bitrate')
+#     parser.add_argument('--skip_ims', type=int, default=0, help='Number of image in directory to skip')
 
     
     
     parser.add_argument('--regularize_mean_deviation_weight', type=float, default=0, help='Penalize different w vectors to be the same')
     args = parser.parse_args()
 
+    
+    
     print('Loading networks from "%s"...' % args.network_pkl)
     _G, _D, Gs = pretrained_networks.load_networks(args.network_pkl)
     proj = projector.Projector(
@@ -128,8 +132,8 @@ def main():
         regularize_mean_deviation_weight = args.regularize_mean_deviation_weight
     )
     proj.set_network(Gs)
-
     src_files = sorted([os.path.join(args.src_dir, f) for f in os.listdir(args.src_dir) if f[0] not in '._'])
+    src_files = src_files[args.skip_ims:]
     for src_file in src_files:
         # check if file already exists and skip
         filename = os.path.join(args.dst_dir, os.path.basename(src_file)[:-4] + '.png')
@@ -143,7 +147,8 @@ def main():
                 )
             shutil.rmtree(args.tmp_dir)
         else:
-            print('skipping', filename)
+            pass
+            # print('skipping', filename)
 
 
 if __name__ == '__main__':
