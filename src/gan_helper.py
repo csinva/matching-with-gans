@@ -1,6 +1,7 @@
 import tensorflow as tf
 import sys
-sys.path.append('../models/stylegan2')
+sys.path.append('stylegan2')
+import project_images, projector
 import dnnlib
 import dnnlib.tflib as tflib
 from run_generator import generate_images
@@ -81,59 +82,45 @@ class Generator:
         '''
         im = tflib.run(self.Gs.components.synthesis.get_output_for(z_full))
         return get_transformed_im(im)        
-        
     
-    def project(self, im: np.ndarray, image_prefix='im0', num_steps=50, num_snapshots=3, lr=0.1):
-        '''Projects an image into the latent space
+    def initialize_projector(self,
+                             vgg16_pkl='https://drive.google.com/uc?id=1N2-m9qszOeVC9Tq77WxsLnuWwOedQiD2',
+                                num_steps=1000,
+                                initial_learning_rate=0.1,
+                                initial_noise_factor=0.05,
+                                verbose=False,
+                                regularize_mean_deviation_weight=0.1):
+        '''Sets self.proj
+        '''
+        self.proj = projector.Projector(
+            vgg16_pkl             = vgg16_pkl,
+            num_steps             = num_steps,
+            initial_learning_rate = initial_learning_rate,
+            initial_noise_factor  = initial_noise_factor,
+            verbose               = verbose,
+            regularize_mean_deviation_weight = regularize_mean_deviation_weight
+        )
+        self.proj.set_network(self.Gs)
         
+    def project(self, fname):
+        '''Project an image given a filename (assumes projector was initialized)
         Params
         ------
-        im
-            (1, H, W, channels)
-            
+        fname: str
+            path to the image to be projected
+        
         Returns
         -------
         latents
-            (batch_dim, 18, 512)
+            (18, 512)
         image: np.ndarray
-            (batch_dim, 1024, 1024, 3)
+            (1024, 1024, 3)
             
-        also saves a bunch of things to the projections folder...
-        '''            
-            
-        # adjust image range to [-1, 1]
-        if np.max(im) > 1:
-            im = (im - np.min(im)) / (np.max(im) - np.min(im)) # converts range to [0, 1]
-            im = (2 * im) - 1
-
-        # transpose everything but batch dimension
-        targets = np.expand_dims(im[0].transpose(), 0)
-
-        # set some more params
-        print('writing to', f'projections/{image_prefix}')
-        png_prefix = dnnlib.make_run_dir_path(f'projections/{image_prefix}_%04d-' % 0)
-        self.proj.num_steps = num_steps
-        self.proj.initial_learning_rate = lr
-        
-        # run projection
-        snapshot_steps = set(self.proj.num_steps - np.linspace(0, self.proj.num_steps,
-                                                          num_snapshots, endpoint=False, dtype=int))
-        self.proj.start(targets)
-        ims_list = []
-        while self.proj.get_cur_step() < self.proj.num_steps:
-            print('\r%d / %d ... ' % (self.proj.get_cur_step(), self.proj.num_steps), end='', flush=True)
-            self.proj.step()
-            if self.proj.get_cur_step() in snapshot_steps:
-                misc.save_image_grid(self.proj.get_images(),
-                                     png_prefix + f'step{self.proj.get_cur_step():04d}.png',
-                                     drange=[-1, 1])
-                im_latent = self.proj.get_images()
-                ims_list.append(get_transformed_im(im_latent))
-        print('\r%-30s\r' % '', end='', flush=True)
-
-        
-        
-        return self.proj.get_dlatents(), ims_list
+        also saves a little bit to 'tmp' directory
+        '''
+        latents, im_rec = project_images.project_image(self.proj, src_file=fname, dst_dir=None, tmp_dir='tmp', video=False)
+        return latents, im_rec
+  
     
     
 def get_transformed_im(im):
