@@ -141,7 +141,7 @@ def main():
         filename = os.path.join(args.dst_dir, os.path.basename(src_file)[:-4] + '.png')
         if not os.path.exists(filename):
 
-            project_image(proj, src_file, args.dst_dir, args.tmp_dir, video=args.video)
+            project_image(proj, src_file, args.dst_dir, args.tmp_dir + os.path.basename(src_file)[:-4], video=args.video)
             if args.video:
                 render_video(
                     src_file, args.dst_dir, args.tmp_dir, args.num_steps, args.video_mode,
