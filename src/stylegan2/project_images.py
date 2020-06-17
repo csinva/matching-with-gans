@@ -114,6 +114,7 @@ def main():
     parser.add_argument('--video-bitrate', default='5M', help='Video bitrate')
     parser.add_argument('--start_num', type=int, default=0, help='Number of image in directory to skip')
     parser.add_argument('--end_num', type=int, default=int(1e6), help='Number of image in directory to skip')
+    parser.add_argument('--gpu', type=int, default=0, help='Which gpu?')
 
     
     
@@ -121,6 +122,8 @@ def main():
     args = parser.parse_args()
 
     print('Loading networks from "%s"...' % args.network_pkl)
+
+    os.environ["CUDA_VISIBLE_DEVICES"] = str(args.gpu)
     _G, _D, Gs = pretrained_networks.load_networks(args.network_pkl)
     proj = projector.Projector(
         vgg16_pkl             = args.vgg16_pkl,
