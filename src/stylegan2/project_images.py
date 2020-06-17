@@ -112,15 +112,14 @@ def main():
     parser.add_argument('--video-fps', type=int, default=25, help='Video framerate')
     parser.add_argument('--video-codec', default='libx264', help='Video codec')
     parser.add_argument('--video-bitrate', default='5M', help='Video bitrate')
-#     parser.add_argument('--skip_ims', type=int, default=0, help='Number of image in directory to skip')
+    parser.add_argument('--start_num', type=int, default=0, help='Number of image in directory to skip')
+    parser.add_argument('--end_num', type=int, default=int(1e6), help='Number of image in directory to skip')
 
     
     
     parser.add_argument('--regularize_mean_deviation_weight', type=float, default=0, help='Penalize different w vectors to be the same')
     args = parser.parse_args()
 
-    
-    
     print('Loading networks from "%s"...' % args.network_pkl)
     _G, _D, Gs = pretrained_networks.load_networks(args.network_pkl)
     proj = projector.Projector(
@@ -133,7 +132,7 @@ def main():
     )
     proj.set_network(Gs)
     src_files = sorted([os.path.join(args.src_dir, f) for f in os.listdir(args.src_dir) if f[0] not in '._'])
-    src_files = src_files[args.skip_ims:]
+    src_files = src_files[args.start_num: args.end_num]
     for src_file in src_files:
         # check if file already exists and skip
         filename = os.path.join(args.dst_dir, os.path.basename(src_file)[:-4] + '.png')

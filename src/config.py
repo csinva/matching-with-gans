@@ -10,12 +10,18 @@ GENERATING_LATENTS_DIR = '../data/annotation-dataset-stylegan2/data'
 ATTRS = ['age', 'facial-hair', 'skin-color', 'gender', 'hair-length', 'makeup']
 ALL_ATTRS = 'HAGCBMSEW' # 'HAGCBMSEW'
 LABELS = {
-    'C': 'Skin color',
-    'H': 'Hair length',
-    'G': 'Gender',
-    'A': 'Age',
-    'M': 'Makeup',
-    'B': 'Facial Hair',    
+    'C': 'skin-color',
+    'H': 'hair-length',
+    'G': 'gender',
+    'A': 'age',
+    'M': 'makeup',
+    'B': 'facial-hair',    
+    'S': 'smiling',
+    'E': 'eyeglasses',
+    'W': 'earrings', # wearing earrings
+}
+ATTR_TO_INDEX = {
+    LABELS[ALL_ATTRS[i]]: i for i in range(len(ALL_ATTRS))
 }
 
 # running things

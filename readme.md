@@ -3,6 +3,7 @@
 - pick AMI that supported tensorflow 1.15.2
   - just run source activate tensorflow_p36
   - stylegan2 code works here
+- pip install tensorflow-gpu==1.14.0
 
 
 ```
