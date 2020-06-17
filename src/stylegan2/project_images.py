@@ -147,7 +147,7 @@ def main():
                     src_file, args.dst_dir, args.tmp_dir, args.num_steps, args.video_mode,
                     args.video_size, args.video_fps, args.video_codec, args.video_bitrate
                 )
-            shutil.rmtree(args.tmp_dir)
+            shutil.rmtree(args.tmp_dir + os.path.basename(src_file)[:-4])
         else:
             pass
             # print('skipping', filename)
