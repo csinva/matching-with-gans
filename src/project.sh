@@ -20,8 +20,8 @@ PROJECT="python stylegan2/project_images.py"
 
 # $PROJECT ../../data/celeba-hq/ims/ ../../data_processed/celeba-hq/generated_images_0.01/ --regularize_mean_deviation_weight 0.01
 
-# $PROJECT ../data/celeba-hq/ims/ ../data_processed/celeba-hq/generated_images_0.1/ --regularize_mean_deviation_weight 0.1 > out_2k.log --start_num 2000 --end_num 3000
 
+$PROJECT ../data/celeba-hq/ims/ ../data_processed/celeba-hq/generated_images_0.1/ --regularize_mean_deviation_weight 0.1
 
 for i in 0 1 2 3 4 5 6 7
 do
