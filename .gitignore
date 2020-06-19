@@ -16,3 +16,5 @@ data_processed
 **.csv
 **.jpg
 **.json
+**.zip
+**.pt
