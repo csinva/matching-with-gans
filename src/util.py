@@ -5,7 +5,7 @@ from copy import deepcopy
 import scipy.stats
 import matplotlib.pyplot as plt
 
-def plot_row(images, suptitle=''):
+def plot_row(images, suptitle='', dpi=100):
     '''
     Params
     ------
@@ -17,7 +17,7 @@ def plot_row(images, suptitle=''):
     else:
         N_IMS = images.shape[0]
     
-    plt.figure(figsize=(N_IMS * 3, 3))
+    plt.figure(figsize=(N_IMS * 3, 3), dpi=dpi)
     for i in range(N_IMS):
         
         plt.subplot(1, N_IMS, i + 1)
