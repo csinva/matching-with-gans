@@ -16,18 +16,18 @@ from tqdm import tqdm
 import figs
 import matplotlib.image as mpimg
 
-sys.path.append('../models/stylegan2encoder')
+sys.path.append('stylegan2')
 import pretrained_networks
 import projector
-sys.path.append('transects')
+# sys.path.append('transects')
 from transects import make_transects, ganwrapper
 import config
-from config import ALL_ATTRS
+from config import ATTRS_MEASURED
 
 out_fname = 'processed/09_df_99.pkl'
 IM_NUMS = np.arange(1, 99)
 regs = [0, 0.01, 0.1, 1, 10000]
-ks = sorted(ALL_ATTRS)
+ks = sorted(ATTRS_MEASURED)
 
 if __name__ == '__main__':
     network_pkl = 'gdrive:networks/stylegan2-ffhq-config-f.pkl'

@@ -8,6 +8,7 @@ GENERATING_LATENTS_DIR = '../data/annotation-dataset-stylegan2/data'
 
 # attrs
 ATTRS = ['age', 'facial-hair', 'skin-color', 'gender', 'hair-length', 'makeup']
+ATTRS_MEASURED = 'HAGCBM'
 ALL_ATTRS = 'HAGCBMSEW' # 'HAGCBMSEW'
 LABELS = {
     'C': 'skin-color',
@@ -16,6 +17,7 @@ LABELS = {
     'A': 'age',
     'M': 'makeup',
     'B': 'facial-hair',    
+     # these are ones we don't have explicit labels for
     'S': 'smiling',
     'E': 'eyeglasses',
     'W': 'earrings', # wearing earrings
