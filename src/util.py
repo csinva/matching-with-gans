@@ -13,8 +13,10 @@ def plot_row(images, suptitle=''):
         (num_images, H, W, C)
     '''
     if type(images) == list:
-        images = np.array(images)
-    N_IMS = images.shape[0]
+        N_IMS = len(images)
+    else:
+        N_IMS = images.shape[0]
+    
     plt.figure(figsize=(N_IMS * 3, 3))
     for i in range(N_IMS):
         
