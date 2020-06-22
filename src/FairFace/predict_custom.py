@@ -2,6 +2,7 @@ from __future__ import print_function, division
 import warnings
 warnings.filterwarnings("ignore")
 import os.path
+from os.path import join as oj
 import pandas as pd
 import torch
 import torch.nn as nn
@@ -10,37 +11,13 @@ import torchvision
 from torchvision import datasets, models, transforms
 import dlib
 import os
+from tqdm import tqdm
 import argparse
 
-def detect_face(image_paths,  SAVE_DETECTED_AT, size = 300, padding = 0.25):
-    cnn_face_detector = dlib.cnn_face_detection_model_v1('dlib_models/mmod_human_face_detector.dat')
-    sp = dlib.shape_predictor('dlib_models/shape_predictor_5_face_landmarks.dat')
-    base = 2000  # largest width and height
-    for index, image_path in enumerate(image_paths):
-        if index % 1000 == 0:
-            print('---%d/%d---' %(index, len(image_paths)))
-
-        img = dlib.load_rgb_image(image_path)
-        img = dlib.resize_image(img, 628, 628)
-        dets = cnn_face_detector(img, 1)
-        num_faces = len(dets)
-        if num_faces == 0:
-            print("Sorry, there were no faces found in '{}'".format(image_path))
-            continue
-        # Find the 5 face landmarks we need to do the alignment.
-        faces = dlib.full_object_detections()
-        for detection in dets:
-            rect = detection.rect
-            faces.append(sp(img, rect))
-        images = dlib.get_face_chips(img, faces, size=size, padding = padding)
-        for idx, image in enumerate(images):
-            img_name = image_path.split("/")[-1]
-            path_sp = img_name.split(".")
-            face_name = os.path.join(SAVE_DETECTED_AT,  path_sp[0] + "_" + "face" + str(idx) + "." + path_sp[-1])
-            dlib.save_image(image, face_name)
-
-def predidct_age_gender_race(save_prediction_at, imgs_path = 'cropped_faces/'):
-    img_names = [os.path.join(imgs_path, x) for x in os.listdir(imgs_path)]
+def predict_age_gender_race(OUT_DIR, imgs_path = 'cropped_faces/'):
+    img_names = [os.path.join(imgs_path, x)
+                 for x in sorted(os.listdir(imgs_path)) 
+                 if '.jpg' in x] #[:20]
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
     model_fair_7 = torchvision.models.resnet34(pretrained=True)
@@ -73,7 +50,7 @@ def predidct_age_gender_race(save_prediction_at, imgs_path = 'cropped_faces/'):
     race_scores_fair_4 = []
     race_preds_fair_4 = []
 
-    for index, img_name in enumerate(img_names):
+    for index, img_name in tqdm(enumerate(img_names)):
         if index % 1000 == 0:
             print("Predicting... {}/{}".format(index, len(img_names)))
 
@@ -167,28 +144,31 @@ def predidct_age_gender_race(save_prediction_at, imgs_path = 'cropped_faces/'):
     result.loc[result['age_preds_fair'] == 7, 'age'] = '60-69'
     result.loc[result['age_preds_fair'] == 8, 'age'] = '70+'
 
-    result[['face_name_align',
+    
+    # save
+    os.makedirs(OUT_DIR, exist_ok=True)
+    result['img_names'] = img_names
+    r = result[['face_name_align',
             'race', 'race4',
             'gender', 'age',
             'race_scores_fair', 'race_scores_fair_4',
-            'gender_scores_fair', 'age_scores_fair']].to_csv(save_prediction_at, index=False)
+            'gender_scores_fair', 'age_scores_fair', 'img_names']]
+    r.to_csv(oj(OUT_DIR, 'preds.csv'), index=False)
+    r.to_pickle(oj(OUT_DIR, 'preds.pkl'))
 
-    print("saved results at ", save_prediction_at)
-
-
-def ensure_dir(directory):
-    if not os.path.exists(directory):
-        os.makedirs(directory)
+    print("saved results at ", OUT_DIR)
 
 
 
 if __name__ == "__main__":
-        
+    
     print("using CUDA?: %s" % dlib.DLIB_USE_CUDA)
-    args = parser.parse_args()
-    SAVE_DETECTED_AT = "detected_faces"
-    ensure_dir(SAVE_DETECTED_AT)
-    imgs = pd.read_csv(args.input_csv)['img_path']
-    detect_face(imgs, SAVE_DETECTED_AT)
-    print("detected faces are saved at ", SAVE_DETECTED_AT)
-    predidct_age_gender_race("test_outputs.csv", SAVE_DETECTED_AT)
+#     args = parser.parse_args()
+    # SAVE_DETECTED_AT = "detected_faces"
+    # os.makedirs(SAVE_DETECTED_AT, exist_ok=True)
+    # imgs = pd.read_csv(args.input_csv)['img_path']
+    #detect_face(imgs, SAVE_DETECTED_AT)
+    IM_DIR = '../../data/celeba-hq/ims/'
+    OUT_DIR = '../../data_processed/celeba-hq/attr_preds'
+    print("loading faces from ", IM_DIR)
+    predict_age_gender_race(OUT_DIR, IM_DIR)
