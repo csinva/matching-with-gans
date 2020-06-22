@@ -39,7 +39,7 @@ def detect_face(image_paths,  SAVE_DETECTED_AT, size = 300, padding = 0.25):
             face_name = os.path.join(SAVE_DETECTED_AT,  path_sp[0] + "_" + "face" + str(idx) + "." + path_sp[-1])
             dlib.save_image(image, face_name)
 
-def predict_age_gender_race(save_prediction_at, imgs_path = 'cropped_faces/'):
+def predidct_age_gender_race(save_prediction_at, imgs_path = 'cropped_faces/'):
     img_names = [os.path.join(imgs_path, x) for x in os.listdir(imgs_path)]
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
@@ -183,9 +183,7 @@ def ensure_dir(directory):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--csv', dest='input_csv', action='store',
-                        help='csv file of image path where col name for image path is "img_path')
+        
     print("using CUDA?: %s" % dlib.DLIB_USE_CUDA)
     args = parser.parse_args()
     SAVE_DETECTED_AT = "detected_faces"
