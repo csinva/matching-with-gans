@@ -34,14 +34,14 @@ if __name__ == '__main__':
     fname_nps = [f for f in sorted(os.listdir(DIR_GEN)) if 'npy' in f]
     fname_ids = np.array([f[:-4] for f in fname_nps])
     n = fname_ids.size
-    dists_facial = np.ones((n, n)) * 1e2
-    for i in tqdm(range(n)):
+    dists_facial = np.ones((n, n)) * 1e3
+    for i in tqdm(range(n - 1)):
         im1 = mpimg.imread(oj(DIR_ORIG, f'{fname_ids[i]}.jpg'))
         encoding1 = face_recognition.face_encodings(im1, model='cnn')
         if len(encoding1) == 0: # skip this image
             continue
         encoding1 = encoding1[0]
-        for j in range(i):
+        for j in tqdm(range(i + 1, n)):
             im2 = mpimg.imread(oj(DIR_ORIG, f'{fname_ids[j]}.jpg'))
             encoding2 = face_recognition.face_encodings(im2, model='cnn')
             if len(encoding2) == 0: # skip this image

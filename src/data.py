@@ -3,6 +3,21 @@ from os.path import join as oj
 import os
 import numpy as np
 
+def load_all_labs(preds_file='../data_processed/celeba-hq/attr_preds/preds.pkl'):
+    print('loading labels...')
+    df = load_ids()
+    labs, labs_full = load_labs(preds_file)
+    pred_labs = pd.read_pickle()
+    for k in labs.keys():
+        df[k] = labs[k].values
+    for k in labs_full.keys():
+        df[k] = labs_full[k].values
+    for k in pred_labs.keys():
+        df[k] = pred_labs[k].values
+    df['fname_id'] = df['fname_final'].str.slice(stop=-4)
+    print('done loading!')
+    return df
+
 def load_labs(N_IMS=30000):
     '''Load labels for celeba-hq
     '''
