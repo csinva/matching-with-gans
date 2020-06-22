@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 def get_lat(latents):
     lat = latents.mean(axis=1) # match in style space
-    # lat = latents.reshape(latents.shape[0], -1) # match in extended style space
+#     lat = latents.reshape(latents.shape[0], -1) # match in extended style space
     return lat
     
 def get_dists(lat):
