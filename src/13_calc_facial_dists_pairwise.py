@@ -5,13 +5,10 @@ import matplotlib.pyplot as plt
 from os.path import join as oj
 import pandas as pd
 import pickle as pkl
-import sklearn.model_selection
-import sklearn.metrics
 import models
 import util
 import os
 import config
-from config import ATTR_TO_INDEX
 import viz
 import scipy.stats
 from tqdm import tqdm
@@ -22,31 +19,55 @@ import data
 import face_recognition
 
 
+
 if __name__ == '__main__':
     DIR_ORIG = '../data/celeba-hq/ims/'
+    DIR_ENCODINGS = '../data_processed/celeba-hq/encodings_dlib/'
     out_fname = 'processed/13_facial_dists_pairwise.pkl'
+    os.makedirs(DIR_ENCODINGS, exist_ok=True)
     
-    DIRS_GEN = '../data_processed/celeba-hq/'
-    reg = 0.1
-    DIR_GEN = oj(DIRS_GEN, f'generated_images_{reg}')
-
     # get fnames
-    fname_nps = [f for f in sorted(os.listdir(DIR_GEN)) if 'npy' in f]
-    fname_ids = np.array([f[:-4] for f in fname_nps])
-    n = fname_ids.size
+    fnames = sorted([f for f in os.listdir(DIR_ORIG) if '.jpg' in f])
+    n = len(fnames)
+    
+    
+    # calc encodings
+    for i in tqdm(range(n)):
+        fname_out = oj(DIR_ENCODINGS, fnames[i][:-4]) + '.npy'
+        if not os.path.exists(fname_out):
+            im = mpimg.imread(oj(DIR_ORIG, fnames[i]))
+            encoding = face_recognition.face_encodings(im, model='cnn')
+            if len(encoding) > 0:
+                encoding = encoding[0]
+                np.save(open(fname_out, 'wb'), encoding)
+            else:
+                np.save(open(fname_out, 'wb'), np.zeros(128))
+                
+    # calc failures
+    FAILURES_FILE = oj(DIR_ENCODINGS, 'failures.npy')
+    if not os.path.exists(FAILURES_FILE):
+        failures = []
+        for i in tqdm(range(n)):
+            fname_out = oj(DIR_ENCODINGS, fnames[i][:-4]) + '.npy'
+            encoding = np.load(open(fname_out, 'rb'))
+            if not np.any(encoding):
+                failures.append(i)
+        np.save(open(FAILURES_FILE, 'wb'), np.array(failures))
+    else:
+        failures = np.load(open(FAILURES_FILE, 'rb'))
+    
+    # calc dists
     dists_facial = np.ones((n, n)) * 1e3
     for i in tqdm(range(n - 1)):
-        im1 = mpimg.imread(oj(DIR_ORIG, f'{fname_ids[i]}.jpg'))
-        encoding1 = face_recognition.face_encodings(im1, model='cnn')
-        if len(encoding1) == 0: # skip this image
+        if i in failures:
             continue
-        encoding1 = encoding1[0]
+        fname_out = oj(DIR_ENCODINGS, fnames[i][:-4]) + '.npy'
+        encoding1 = np.load(open(fname_out, 'rb'))
         for j in tqdm(range(i + 1, n)):
-            im2 = mpimg.imread(oj(DIR_ORIG, f'{fname_ids[j]}.jpg'))
-            encoding2 = face_recognition.face_encodings(im2, model='cnn')
-            if len(encoding2) == 0: # skip this image
+            if j in failures:
                 continue
-            encoding2 = encoding2[0]
+            fname_out = oj(DIR_ENCODINGS, fnames[j][:-4]) + '.npy'
+            encoding2 = np.load(open(fname_out, 'rb'))
             facial_dist = face_recognition.face_distance([encoding1], encoding2)[0]
             dists_facial[i, j] = facial_dist
             dists_facial[j, i] = facial_dist
