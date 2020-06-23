@@ -82,14 +82,16 @@ def plot_mse_vs_corrs():
         df = pd.read_pickle(oj(PROCESSED_DIR, k))
         df = df.iloc[1:]
 #         plt.plot(df['spearman'], df['indep_corr'], 'o:', label=v + ' (Test)', color=style.cs[i])
-        plt.plot(df['mse'], df['indep_corr'], 'o:', label=v + ' (Train)', color=style.cs[i], alpha=0.5)
-        plt.xlabel('Mean-squared error')
-        plt.ylabel('Mean absolute\ninter-attribute correlation')
+#         plt.plot(df['mse'], df['indep_corr'], 'o:', label=v + ' (Train)', color=style.cs[i], alpha=0.5)
+        plt.xlabel('Mean-squared error (Test)')
+        plt.ylabel('Mean absolute\ninter-attribute correlation (Test)')
 
-        plt.plot(df['mse_test'], df['indep_corr_test'], 'o-', label=v + ' (Test)', color=style.cs[i])
+#         plt.plot(df['mse_test'], df['indep_corr_test'], 'o-', label=v + ' (Test)', color=style.cs[i])
+        plt.plot(df['mse_test'], df['indep_corr_test'], 'o-', label=v, color=style.cs[i])
 #         plt.plot(df['spearman_test'], df['indep_corr_test'], 'o-', label=v + ' (Test)', color=style.cs[i])
         plt.xlabel('Mean squared-error')
-    plt.xlim((0, 0.7))
+#     plt.xlim((0, 0.7))
+    plt.xlim((0.2, 0.7))
     
     # grid
     ax = plt.subplot(R, C, 1)

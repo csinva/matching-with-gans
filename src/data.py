@@ -6,14 +6,14 @@ import numpy as np
 def load_all_labs(preds_file='../data_processed/celeba-hq/attr_preds/preds.pkl'):
     print('loading labels...')
     df = load_ids()
-    labs, labs_full = load_labs(preds_file)
-    pred_labs = pd.read_pickle()
+    labs, labs_full = load_labs()
+    pred_labs = pd.read_pickle(preds_file)
     for k in labs.keys():
         df[k] = labs[k].values
     for k in labs_full.keys():
         df[k] = labs_full[k].values
     for k in pred_labs.keys():
-        df[k] = pred_labs[k].values
+        df[k + '_pred'] = pred_labs[k].values
     df['fname_id'] = df['fname_final'].str.slice(stop=-4)
     print('done loading!')
     return df
@@ -24,6 +24,7 @@ def load_labs(N_IMS=30000):
     celeba_labs_fname='../data/celeba-hq/Anno/list_attr_celeba.txt'
     remap = pd.read_csv('../data/celeba-hq/mapping.txt', delim_whitespace=True)
     labs_full = pd.read_csv(celeba_labs_fname, delim_whitespace=True, skiprows=1)
+    
     labs_full = labs_full.loc[[remap.iloc[i]['orig_file'] for i in range(N_IMS)]] #for i in range(labs_full.shape[0])]
     labs_full = labs_full == 1
     # print(labs_full.head())

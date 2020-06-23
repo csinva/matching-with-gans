@@ -72,6 +72,6 @@ if __name__ == '__main__':
             dists_facial[i, j] = facial_dist
             dists_facial[j, i] = facial_dist
         if i % 1000 == 999:
-            pkl.dump({'facial_dists': dists_facial, 'ids': fname_ids}, open(out_fname, 'wb'))
+            pkl.dump({'facial_dists': dists_facial}, open(out_fname, 'wb'))
     dists_facial[np.eye(n).astype(bool)] = 1e3 # don't pick same point
     pkl.dump({'facial_dists': dists_facial, 'ids': fname_ids}, open(out_fname, 'wb'))
