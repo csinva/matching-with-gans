@@ -23,7 +23,7 @@ import face_recognition
 if __name__ == '__main__':
     DIR_ORIG = '../data/celeba-hq/ims/'
     DIR_ENCODINGS = '../data_processed/celeba-hq/encodings_dlib/'
-    out_fname = 'processed/13_facial_dists_pairwise.pkl'
+    out_fname = 'processed/13_facial_dists_pairwise.npy'
     os.makedirs(DIR_ENCODINGS, exist_ok=True)
     
     # get fnames
@@ -32,6 +32,7 @@ if __name__ == '__main__':
     
     
     # calc encodings
+    '''
     for i in tqdm(range(n)):
         fname_out = oj(DIR_ENCODINGS, fnames[i][:-4]) + '.npy'
         if not os.path.exists(fname_out):
@@ -42,7 +43,8 @@ if __name__ == '__main__':
                 np.save(open(fname_out, 'wb'), encoding)
             else:
                 np.save(open(fname_out, 'wb'), np.zeros(128))
-                
+    '''
+    
     # calc failures
     FAILURES_FILE = oj(DIR_ENCODINGS, 'failures.npy')
     if not os.path.exists(FAILURES_FILE):
@@ -58,20 +60,23 @@ if __name__ == '__main__':
     
     # calc dists
     dists_facial = np.ones((n, n)) * 1e3
-    for i in tqdm(range(n - 1)):
+    print('loading encodings...')
+    encodings = [np.load(open(oj(DIR_ENCODINGS, fnames[i][:-4]) + '.npy', 'rb'))
+                 for i in range(n)]
+    for i in tqdm(range(n)):
         if i in failures:
             continue
-        fname_out = oj(DIR_ENCODINGS, fnames[i][:-4]) + '.npy'
-        encoding1 = np.load(open(fname_out, 'rb'))
-        for j in tqdm(range(i + 1, n)):
+        encoding1 = encodings[i]
+        for j in range(i):
             if j in failures:
                 continue
-            fname_out = oj(DIR_ENCODINGS, fnames[j][:-4]) + '.npy'
-            encoding2 = np.load(open(fname_out, 'rb'))
+            encoding2 = encodings[j]
             facial_dist = face_recognition.face_distance([encoding1], encoding2)[0]
             dists_facial[i, j] = facial_dist
             dists_facial[j, i] = facial_dist
-        if i % 1000 == 999:
-            pkl.dump({'facial_dists': dists_facial}, open(out_fname, 'wb'))
+        # if i % 1000 == 999:
+            # np.save(open(out_fname, 'wb'), dists_facial)
+            # pkl.dump({'facial_dists': dists_facial}, )
     dists_facial[np.eye(n).astype(bool)] = 1e3 # don't pick same point
-    pkl.dump({'facial_dists': dists_facial, 'ids': fname_ids}, open(out_fname, 'wb'))
+    np.save(open(out_fname, 'wb'), dists_facial)
+    # pkl.dump({'facial_dists': dists_facial, 'ids': fname_ids}, open(out_fname, 'wb'))

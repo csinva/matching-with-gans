@@ -5,7 +5,7 @@ from copy import deepcopy
 import scipy.stats
 import matplotlib.pyplot as plt
 
-def plot_row(images, suptitle='', dpi=100):
+def plot_row(images, suptitle='', annot_list=[], dpi=100):
     '''
     Params
     ------
@@ -21,7 +21,7 @@ def plot_row(images, suptitle='', dpi=100):
     for i in range(N_IMS):
         
         plt.subplot(1, N_IMS, i + 1)
-        imshow(images[i])
+        imshow(images[i], annot=annot_list[i])
     
     plt.subplot(1, N_IMS, N_IMS // 2 + 1)
     plt.title(suptitle)
@@ -68,7 +68,14 @@ def norm(im):
     '''
     return (im - np.min(im)) / (np.max(im) - np.min(im)) # converts range to [0, 1]
     
-def imshow(im):
+def imshow(im, annot: str=None):
+    '''
+    Params
+    ------
+    annot
+        str to put in top-right corner
+    '''
+    
     # if 4d, take first image
     if len(im.shape) > 3:
         im = im[0]
@@ -77,8 +84,21 @@ def imshow(im):
     if im.shape[0] == 3 and len(im.shape) == 3:
         im = im.transpose()
     
-    plt.imshow(im)
-    plt.axis('off')
+    ax = plt.gca()
+    ax.imshow(im)
+    ax.axis('off')
+    
+    if annot is not None:
+        padding = 5
+        ax.annotate(
+            s=annot,
+            fontsize=12,
+            xy=(0, 0), 
+            xytext=(padding-1, -(padding-1)), 
+            textcoords = 'offset pixels',
+            bbox=dict(facecolor='white', alpha=1, pad=padding),
+            va='top',
+            ha='left')
 
 def detach(tensor):
     return tensor.detach().cpu().numpy()
