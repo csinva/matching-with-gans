@@ -21,6 +21,8 @@ import torchvision
 from copy import deepcopy
 from PIL import Image
 import torchvision.transforms.functional as TF
+import h5py
+import sklearn.metrics
 
 class VGGPerceptualLoss(torch.nn.Module):
     def __init__(self, resize=True):
@@ -41,13 +43,19 @@ class VGGPerceptualLoss(torch.nn.Module):
     
     def encode(self, x):
         x = (x - self.mean) / self.std
-        x = self.transform(x, mode='bilinear', size=(224, 224), align_corners=False)
+        x = self.transform(x, mode='bilinear', size=(112, 112), align_corners=False)
+        # x = self.transform(x, mode='bilinear', size=(224, 224), align_corners=False)
+        '''
         encodings = []
         for block in self.blocks:
             x = block(x)
             encodings.append(deepcopy(x.cpu().detach().numpy().flatten()))
-        # print(encodings[0].shape, encodings[1].shape, encodings[2].shape)
         return np.hstack(encodings).flatten()
+        '''
+        x = self.blocks[0](x)
+        return deepcopy(x.cpu().detach().numpy().flatten())
+        # print(encodings[0].shape, encodings[1].shape, encodings[2].shape, encodings[1].shape)
+        
         
     def forward(self, encoding1, encoding2):
         return torch.nn.functional.l1_loss(encoding1, encoding2)
@@ -56,16 +64,16 @@ class VGGPerceptualLoss(torch.nn.Module):
 
 if __name__ == '__main__':
     DIR_ORIG = '../data/celeba-hq/ims/'
-    DIR_ENCODINGS = '../data_processed/celeba-hq/encodings_vgg/'
-    out_fname = 'processed/13_facial_dists_pairwise_vgg.npy'
+    DIR_ENCODINGS = '../data_processed/celeba-hq/encodings_vgg_small/'
+    out_fname = 'processed/13_facial_dists_pairwise_vgg_small.h5'
     os.makedirs(DIR_ENCODINGS, exist_ok=True)
     
     # get fnames
     fnames = sorted([f for f in os.listdir(DIR_ORIG) if '.jpg' in f])
     n = len(fnames)
     
-    
     # calc encodings
+    '''
     m = VGGPerceptualLoss()
     for i in tqdm(range(n)):
         fname_out = oj(DIR_ENCODINGS, fnames[i][:-4]) + '.npy'
@@ -74,48 +82,43 @@ if __name__ == '__main__':
             x = TF.to_tensor(image)
             x.unsqueeze_(0)
             encoding = m.encode(x)
-#             im = mpimg.imread(oj(DIR_ORIG, fnames[i]))
-#             encoding = face_recognition.face_encodings(im, model='cnn')
-#             if len(encoding) > 0:
-#                 encoding = encoding[0]
             np.save(open(fname_out, 'wb'), encoding)
     
-
-    # calc failures
-    FAILURES_FILE = oj(DIR_ENCODINGS, 'failures_vgg.npy')
-    if not os.path.exists(FAILURES_FILE):
-        failures = []
-        for i in tqdm(range(n)):
-            fname_out = oj(DIR_ENCODINGS, fnames[i][:-4]) + '.npy'
-            encoding = np.load(open(fname_out, 'rb'))
-            if not np.any(encoding):
-                failures.append(i)
-        np.save(open(FAILURES_FILE, 'wb'), np.array(failures))
-    else:
-        failures = np.load(open(FAILURES_FILE, 'rb'))
+    # initial write
+    f = h5py.File(out_fname, 'w')
+    dset = f.create_dataset("dists", (n, n), dtype='f')
+    dset[:] = 0
+    '''
     
-    # calc dists
-    def l1_loss(x1, x2):
-        return np.sum(np.abs(x1 - x2))
+    # append
+    dset = h5py.File(out_fname, 'a')['dists']
     
-    dists_facial = np.ones((n, n)) * 1e3
     print('loading encodings...')
-    encodings_fnames = [oj(DIR_ENCODINGS, fnames[i][:-4]) + '.npy' for i in range(n)]
-    encodings = [oj(DIR_ENCODINGS, fnames[i][:-4]) + '.npy', 'rb'))
-                 for i in range(n)]
-    for i in tqdm(range(n)):
-        if i in failures:
-            continue
-        encoding1 = np.load(open(encodings_fnames[i], 'rb'))
+    encoding_fnames = [oj(DIR_ENCODINGS, fnames[i][:-4]) + '.npy' for i in range(n)]
+    BLOCK_SIZE = 10
+    blocks_computed = 0
+    total_blocks = int((n // BLOCK_SIZE) ** 2 / 2)
+    for block_num_i in tqdm(range(n // BLOCK_SIZE)):
+        encodings_i = np.vstack([np.load(open(f, 'rb'))
+                                for f in encoding_fnames[block_num_i * BLOCK_SIZE: (block_num_i + 1) * BLOCK_SIZE]])
+        for block_num_j in range(block_num_i + 1):
+            encodings_j = np.vstack([np.load(open(f, 'rb'))
+                   for f in encoding_fnames[block_num_j * BLOCK_SIZE: (block_num_j + 1) * BLOCK_SIZE]])
+            
+            # check if this block has been written
+            blocks_computed += 1
+            if dset[block_num_i * BLOCK_SIZE, block_num_j * BLOCK_SIZE] == 0:
+                # print(encodings_i.shape, encodings_i[0].shape, encodings_j.shape)
+                facial_dists = sklearn.metrics.pairwise_distances(encodings_i, encodings_j, metric='l1', n_jobs=4)
+                dset[block_num_i * BLOCK_SIZE: (block_num_i + 1) * BLOCK_SIZE,
+                     block_num_j * BLOCK_SIZE: (block_num_j + 1) * BLOCK_SIZE] = deepcopy(facial_dists)
+                # print(blocks_computed, '/', total_blocks, 'computed')
+            # else:
+                # print(blocks_computed, '/', total_blocks, 'skipped')
+
+    # still need to copy top-right to bot-left
+    dset[np.eye(n).astype(bool)] = 1e3 # don't pick same point
+    for i in range(n):
         for j in range(i):
-            if j in failures:
-                continue
-            encoding2 = np.load(open(encodings_fnames[j], 'rb'))
-            facial_dist = l1_loss(encoding1, encoding2)
-            dists_facial[i, j] = facial_dist
-            dists_facial[j, i] = facial_dist
-    dists_facial[np.eye(n).astype(bool)] = 1e3 # don't pick same point
-    np.save(open(out_fname, 'wb'), dists_facial)
-    # pkl.dump({'facial_dists': dists_facial, 'ids': fname_ids}, open(out_fname, 'wb'))
-    
-    
+            dset[j, i] = dset[i, j]
+

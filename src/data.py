@@ -2,8 +2,13 @@ import pandas as pd
 from os.path import join as oj
 import os
 import numpy as np
+from tqdm import tqdm
 
-def load_all_labs(preds_file='../data_processed/celeba-hq/attr_preds/preds.pkl'):
+def load_all_labs(preds_file='../data_processed/celeba-hq/attr_preds/preds.pkl', cached_file='processed/df.pkl'):
+    if cached_file is not None and os.path.exists(cached_file):
+        print('loading cached labels')
+        return pd.read_pickle(cached_file)
+    
     print('loading labels...')
     df = load_ids()
     labs, labs_full = load_labs()
@@ -15,7 +20,18 @@ def load_all_labs(preds_file='../data_processed/celeba-hq/attr_preds/preds.pkl')
     for k in pred_labs.keys():
         df[k + '_pred'] = pred_labs[k].values
     df['fname_id'] = df['fname_final'].str.slice(stop=-4)
-    print('done loading!')
+    
+    # clean up some labels
+    # replace value for some attributes by the mode over all images with this id
+    attrs = ['gender']
+    for attr in attrs:
+        for i in tqdm(df.id.unique()):
+            idxs = df.id == i
+            mode = df[idxs][attr].mode().values[0] # get mode if there is disagreement
+            df.loc[idxs, attr] = mode
+
+    # cache the dataframe
+    df.to_pickle(cached_file)
     return df
 
 def load_labs(N_IMS=30000):
