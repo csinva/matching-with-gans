@@ -5,17 +5,22 @@ from copy import deepcopy
 import scipy.stats
 import matplotlib.pyplot as plt
 
-def plot_row(images, suptitle='', annot_list=[], dpi=100):
+def plot_row(images, suptitle: str='', annot_list: list=None, dpi: int=100):
     '''
     Params
     ------
     images: np.ndarray
         (num_images, H, W, C)
     '''
+    
+    # deal with inputs
     if type(images) == list:
         N_IMS = len(images)
     else:
         N_IMS = images.shape[0]
+    if annot_list is None:
+        annot_list = [None] * N_IMS
+    
     
     plt.figure(figsize=(N_IMS * 3, 3), dpi=dpi)
     for i in range(N_IMS):

@@ -83,8 +83,11 @@ if __name__ == '__main__':
             x.unsqueeze_(0)
             encoding = m.encode(x)
             np.save(open(fname_out, 'wb'), encoding)
+    '''
     
     # initial write
+    '''
+    print('initial write...')
     f = h5py.File(out_fname, 'w')
     dset = f.create_dataset("dists", (n, n), dtype='f')
     dset[:] = 0
@@ -95,7 +98,7 @@ if __name__ == '__main__':
     
     print('loading encodings...')
     encoding_fnames = [oj(DIR_ENCODINGS, fnames[i][:-4]) + '.npy' for i in range(n)]
-    BLOCK_SIZE = 10
+    BLOCK_SIZE = 100
     blocks_computed = 0
     total_blocks = int((n // BLOCK_SIZE) ** 2 / 2)
     for block_num_i in tqdm(range(n // BLOCK_SIZE)):

@@ -3,8 +3,8 @@ import sklearn.metrics
 import matplotlib.pyplot as plt
 
 def get_lat(latents):
-    lat = latents.mean(axis=1) # match in style space
-#     lat = latents.reshape(latents.shape[0], -1) # match in extended style space
+#     lat = latents.mean(axis=1) # match in style space
+    lat = latents.reshape(latents.shape[0], -1) # match in extended style space
     return lat
     
 def get_dists(lat):
@@ -12,7 +12,7 @@ def get_dists(lat):
     '''
     # calculate distances: (points, points)
 #     dists = sklearn.metrics.pairwise_distances(lat, metric='cosine') # cosine dist
-    dists = sklearn.metrics.pairwise_distances(lat, metric='l2') # cosine dist
+    dists = sklearn.metrics.pairwise_distances(lat, metric='l2') # l2 dist
     # sns.clustermap(dists)
     dists[np.eye(dists.shape[0]).astype(bool)] = 1e3 # don't pick same point
     # plt.imshow(dists)
@@ -26,11 +26,11 @@ def join_vecs(preds, lats, weights, discretize=False):
     weights: np.ndarray
         length (N_attr), containing weight for each attr of the predictions
     '''
-    lats_norm = (lats - lats.mean(axis=0)) / lats.std(axis=0)
-    preds_norm = (preds - preds.mean(axis=0)) / preds.std(axis=0)
+    lats_norm = (lats - lats.mean(axis=0)) / (lats.std(axis=0) + 1e-10)
+    preds_norm = (preds - preds.mean(axis=0)) / (preds.std(axis=0) + 1e-10)
     if discretize:
         preds_norm = (preds_norm > 0).astype(int)
-    preds_norm = (preds - preds.mean(axis=0)) / preds.std(axis=0)
+    preds_norm = (preds - preds.mean(axis=0)) / (preds.std(axis=0) + 1e-10)
     preds_norm = preds_norm * weights
     
     vecs = np.hstack((preds_norm, lats_norm))
