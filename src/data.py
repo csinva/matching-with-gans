@@ -5,7 +5,7 @@ import numpy as np
 from tqdm import tqdm
 
 def load_all_labs(preds_file='../data_processed/celeba-hq/attr_preds/preds.pkl', cached_file='processed/df.pkl'):
-    if cached_file is not None and os.path.exists(cached_file):
+    if os.path.exists(cached_file):
         print('loading cached labels')
         return pd.read_pickle(cached_file)
     
@@ -22,14 +22,23 @@ def load_all_labs(preds_file='../data_processed/celeba-hq/attr_preds/preds.pkl',
     df['fname_id'] = df['fname_final'].str.slice(stop=-4)
     
     # clean up some labels
+    # remove id errors (can eventually move this into data.py)
+    # fix wrongly split ids
+    IDS_TO_MERGE = {
+        6329: 491 # same image, has different ids
+    }
+    for i in IDS_TO_MERGE:
+        df.loc[df.id == i, 'id'] = IDS_TO_MERGE[i]
+    
+    
     # replace value for some attributes by the mode over all images with this id
-    attrs = ['gender']
+    attrs = ['gender', 'race_pred', 'race4_pred']
     for attr in attrs:
         for i in tqdm(df.id.unique()):
             idxs = df.id == i
             mode = df[idxs][attr].mode().values[0] # get mode if there is disagreement
             df.loc[idxs, attr] = mode
-
+            
     # cache the dataframe
     df.to_pickle(cached_file)
     return df
