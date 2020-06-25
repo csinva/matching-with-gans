@@ -5,7 +5,8 @@ from copy import deepcopy
 import scipy.stats
 import matplotlib.pyplot as plt
 
-def plot_row(images, suptitle: str='', annot_list: list=None, dpi: int=100):
+def plot_row(images, annot_list: list=None, dpi: int=100,
+             suptitle: str=None, ylab: str=None):
     '''
     Params
     ------
@@ -22,14 +23,17 @@ def plot_row(images, suptitle: str='', annot_list: list=None, dpi: int=100):
         annot_list = [None] * N_IMS
     
     
-    plt.figure(figsize=(N_IMS * 3, 3), dpi=dpi)
+    fig = plt.figure(figsize=(N_IMS * 3, 3), dpi=dpi)
     for i in range(N_IMS):
         
         plt.subplot(1, N_IMS, i + 1)
         imshow(images[i], annot=annot_list[i])
     
-    plt.subplot(1, N_IMS, N_IMS // 2 + 1)
-    plt.title(suptitle)
+    if suptitle is not None:
+        plt.subplot(1, N_IMS, N_IMS // 2 + 1)
+        plt.title(suptitle)
+    if ylab is not None:
+        fig.text(0, 0.5, ylab, rotation=90, va='center')
     plt.tight_layout()
     
 def plot_grid(images, ylabs=[]):

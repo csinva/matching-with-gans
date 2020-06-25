@@ -64,7 +64,7 @@ def load_labs(N_IMS=30000):
     labs['hair-length'] = ~(labs_full['Bald'] | labs_full['Receding_Hairline']) # Bangs, Receding_Hairline
 
     # larger is more
-    labs['facial-hair'] = ~(~(labs_full['No_Beard']) |  labs_full['Mustache'] | labs_full['Goatee']) # labs_full['Mustache'] # Goatee, Mustache, No_Beard, 5_o_Clock_Shadow
+    labs['facial-hair'] = (~(labs_full['No_Beard']) |  labs_full['Mustache'] | labs_full['Goatee']) # labs_full['Mustache'] # Goatee, Mustache, No_Beard, 5_o_Clock_Shadow
 
     # higher is more
     labs['makeup'] = labs_full['Heavy_Makeup'] # | labs_full['Wearing_Lipstick'] # Wearing_Lipstick
