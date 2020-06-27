@@ -135,16 +135,16 @@ def make_transects(G,
     deltas = np.reshape(deltas, (-1, z_dim), 'F')
 
     batch_size = 1 
-    n_batch = N//batch_size
+    n_batch = N // batch_size
 
     # Transect creation loop.
     for ex_num in range(N):
         print(ex_num, n_batch, flush=True)
    
         # Project onto intersection of attribute hyperplanes
-        if len(W_all.shape) == 3: # We have a real image, (N, 18, 512)
+        if len(W_all.shape) == 3: # W_all contains latents in expanded space (N, 18, 512)
             W0 = W_all[ex_num: ex_num + 1]
-        else:
+        else: # W_all contains latents in original space (N, 512)
             W_seed = W_all[ex_num, ...]
             W0 = projectToBoundary(W_seed, grid_coefs, grid_intercepts) #grid_planes)
         for j, delta in enumerate(deltas):

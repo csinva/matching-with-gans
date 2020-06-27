@@ -32,6 +32,10 @@ RESULTS_DIR = 'results'
 PROCESSED_DIR = 'processed'
 
 # data
-FILES_DIR = '/home/ubuntu/face-disentanglement/'
-DIR_CELEBA_IMS = oj(FILES_DIR, 'data/celeba-hq/ims/')
-DIRS_CELEBA_GEN = oj(FILES_DIR, 'data_processed/celeba-hq/')
+REPO_DIR = '/home/ubuntu/face-disentanglement/'
+DIR_CELEBA_IMS = oj(REPO_DIR, 'data/celeba-hq/ims/')
+DIRS_CELEBA_GEN = oj(REPO_DIR, 'data_processed/celeba-hq/')
+
+
+# lib paths
+LIB_PATH = oj(REPO_DIR, 'lib')
