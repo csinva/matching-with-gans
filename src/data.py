@@ -4,22 +4,41 @@ import os
 import numpy as np
 from tqdm import tqdm
 
-def load_all_labs(preds_file='../data_processed/celeba-hq/attr_preds/preds.pkl', cached_file='processed/df.pkl'):
+def load_all_labs(cached_file='processed/df.pkl',
+                  CELEB_IMS_DIR = '../data/celeba-hq/ims/',
+                  CELEB_ANNO_DIR = '../data/celeba-hq/Anno/',
+                  celeba_labs_fname='../data/celeba-hq/Anno/list_attr_celeba.txt',
+                  mapping_file='../data/celeba-hq/mapping.txt',
+                  race_preds_file='../data_processed/celeba-hq/attr_preds/preds.pkl',
+                  quality_scores_file='/home/ubuntu/face-disentanglement/data_processed/celeba-hq/quality_scores.pkl',
+                  background_stats_file='processed/15_background_stats.pkl'):
     if os.path.exists(cached_file):
         print('loading cached labels')
         return pd.read_pickle(cached_file)
     
     print('loading labels...')
-    df = load_ids()
-    labs, labs_full = load_labs()
-    pred_labs = pd.read_pickle(preds_file)
+    df = load_ids(CELEB_IMS_DIR, CELEB_ANNO_DIR)
+    labs, labs_full = load_labs(celeba_labs_fname, mapping_file)
+    
+    
+    # load in auxilary properties
+    race_pred_labs = pd.read_pickle(race_preds_file)
+    quality = pd.read_pickle(quality_scores_file)
+    background = pd.read_pickle(background_stats_file)
+    
+    
     for k in labs.keys():
         df[k] = labs[k].values
     for k in labs_full.keys():
         df[k] = labs_full[k].values
-    for k in pred_labs.keys():
-        df[k + '_pred'] = pred_labs[k].values
+    for k in race_pred_labs.keys():
+        df[k + '_pred'] = race_pred_labs[k].values
+    for k in background.keys():
+        df['background_' + k] = background[k].values
+    df['quality'] = [s[0, 0] for s in quality['scores']]
     df['fname_id'] = df['fname_final'].str.slice(stop=-4)
+    for i, race in enumerate(['White', 'Black', 'Asian', 'Indian']):
+        df[race + '_prob'] = [x[i] for x in df['race_scores_fair_4_pred'].values]
     
     # clean up some labels
     # remove id errors (can eventually move this into data.py)
@@ -43,11 +62,10 @@ def load_all_labs(preds_file='../data_processed/celeba-hq/attr_preds/preds.pkl',
     df.to_pickle(cached_file)
     return df
 
-def load_labs(N_IMS=30000):
+def load_labs(celeba_labs_fname, mapping_file, N_IMS=30000):
     '''Load labels for celeba-hq
     '''
-    celeba_labs_fname='../data/celeba-hq/Anno/list_attr_celeba.txt'
-    remap = pd.read_csv('../data/celeba-hq/mapping.txt', delim_whitespace=True)
+    remap = pd.read_csv(mapping_file, delim_whitespace=True)
     labs_full = pd.read_csv(celeba_labs_fname, delim_whitespace=True, skiprows=1)
     
     labs_full = labs_full.loc[[remap.iloc[i]['orig_file'] for i in range(N_IMS)]] #for i in range(labs_full.shape[0])]
@@ -81,8 +99,7 @@ def load_labs(N_IMS=30000):
     
     return labs, labs_full
 
-def load_ids(CELEB_IMS_DIR = '../data/celeba-hq/ims/',
-             CELEB_ANNO_DIR = '../data/celeba-hq/Anno/'):
+def load_ids(CELEB_IMS_DIR, CELEB_ANNO_DIR):
     '''Load IDs for celeba-hq
     '''
     ids_orig = pd.read_csv(oj(CELEB_ANNO_DIR, 'identity_CelebA.txt'), delim_whitespace=True, header=None)
