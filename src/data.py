@@ -3,7 +3,7 @@ from os.path import join as oj
 import os
 import numpy as np
 from tqdm import tqdm
-
+import scipy.special
 def load_all_labs(cached_file='processed/df.pkl',
                   CELEB_IMS_DIR = '../data/celeba-hq/ims/',
                   CELEB_ANNO_DIR = '../data/celeba-hq/Anno/',
@@ -11,7 +11,9 @@ def load_all_labs(cached_file='processed/df.pkl',
                   mapping_file='../data/celeba-hq/mapping.txt',
                   race_preds_file='../data_processed/celeba-hq/attr_preds/preds.pkl',
                   quality_scores_file='/home/ubuntu/face-disentanglement/data_processed/celeba-hq/quality_scores.pkl',
-                  background_stats_file='processed/15_background_stats.pkl'):
+                  background_stats_file='processed/15_background_stats.pkl',
+                  pose_file='/home/ubuntu/face-disentanglement/data_processed/celeba-hq/pose.pkl'
+                 ):
     if os.path.exists(cached_file):
         print('loading cached labels')
         return pd.read_pickle(cached_file)
@@ -25,6 +27,7 @@ def load_all_labs(cached_file='processed/df.pkl',
     race_pred_labs = pd.read_pickle(race_preds_file)
     quality = pd.read_pickle(quality_scores_file)
     background = pd.read_pickle(background_stats_file)
+    pose = pd.read_pickle(pose_file)
     
     
     for k in labs.keys():
@@ -35,6 +38,17 @@ def load_all_labs(cached_file='processed/df.pkl',
         df[k + '_pred'] = race_pred_labs[k].values
     for k in background.keys():
         df['background_' + k] = background[k].values
+        
+    # process and add head pose angles
+    angles = np.array([ang for ang in range(66)])
+    for k_new, k_orig in zip(['yaw', 'pitch', 'roll'], ['yaws', 'pitches', 'rolls']):
+        vals = []
+        for i in tqdm(range(df.shape[0])):
+            arr = pose.iloc[i][k_orig].flatten()
+            preds = scipy.special.softmax(arr)
+            vals.append(np.sum(preds * angles) * 3 - 99)
+        df[k_new] = vals
+    
     df['quality'] = [s[0, 0] for s in quality['scores']]
     df['fname_id'] = df['fname_final'].str.slice(stop=-4)
     for i, race in enumerate(['White', 'Black', 'Asian', 'Indian']):
