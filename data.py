@@ -10,8 +10,8 @@ from config import *
 
 def load_all_labs(cached_file=oj(DIR_CELEBA, 'df.pkl'),
                   dir_ims=oj(DIR_CELEBA, 'ims'),
-                  dir_anno=oj(DIR_CELEBA, 'Anno'),
-                  celeba_labs_fname=oj(DIR_CELEBA, 'Anno', 'list_attr_celeba.txt'),
+                  celeba_id_fname=oj(DIR_CELEBA, 'Anno', 'identity_CelebA.txt'),
+                  celeba_attr_fname=oj(DIR_CELEBA, 'Anno', 'list_attr_celeba.txt'),
                   mapping_file=oj(DIR_CELEBA, 'mapping.txt'),
                   race_preds_file=oj(DIR_PROCESSED, 'race.pkl'),
                   quality_scores_file=oj(DIR_PROCESSED, 'quality_scores.pkl'),
@@ -23,8 +23,8 @@ def load_all_labs(cached_file=oj(DIR_CELEBA, 'df.pkl'),
         return pd.read_pickle(cached_file)
 
     print('loading labels...')
-    df = load_ids(dir_ims, dir_anno, mapping_file)
-    labs, labs_full = load_labs(celeba_labs_fname, mapping_file)
+    df = load_ids(dir_ims, celeba_id_fname, mapping_file)
+    labs, labs_full = load_labs(celeba_attr_fname, mapping_file)
 
     # load in auxilary properties
     race_pred_labs = pd.read_pickle(race_preds_file)
@@ -78,7 +78,7 @@ def load_all_labs(cached_file=oj(DIR_CELEBA, 'df.pkl'),
     return df
 
 
-def load_labs(celeba_labs_fname, mapping_file, N_IMS=30000):
+def load_labs(celeba_attr_fname, mapping_file, N_IMS=30000):
     '''Load labels for celeba-hq
     '''
     remap = pd.read_csv(mapping_file, delim_whitespace=True)
@@ -117,10 +117,10 @@ def load_labs(celeba_labs_fname, mapping_file, N_IMS=30000):
     return labs, labs_full
 
 
-def load_ids(dir_ims, dir_anno, mapping_file):
+def load_ids(dir_ims, celeba_id_fname, mapping_file):
     '''Load IDs for celeba-hq
     '''
-    ids_orig = pd.read_csv(oj(dir_anno, 'identity_CelebA.txt'), delim_whitespace=True, header=None)
+    ids_orig = pd.read_csv(celeba_id_fname, delim_whitespace=True, header=None)
     ids_orig = ids_orig.rename(columns={0: 'orig_file', 1: 'id'})
     remap = pd.read_csv(mapping_file, delim_whitespace=True)
 
