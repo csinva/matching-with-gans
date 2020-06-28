@@ -1,11 +1,10 @@
-import sys
 import os
 import pickle
-import numpy as np
+from argparse import ArgumentParser
+
 import ganwrapper
 import imageio
-import itertools
-from argparse import ArgumentParser
+import numpy as np
 
 
 def main(config):

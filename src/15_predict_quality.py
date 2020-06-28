@@ -1,17 +1,19 @@
-from keras.models import load_model
-import numpy as np
 import os
-import cv2
-import pandas as pd
-from tqdm import tqdm
 import sys
+
+import cv2
+import numpy as np
+import pandas as pd
+from keras.models import load_model
+from tqdm import tqdm
+
 sys.path.append('../lib/FaceQnet/src')
 
 image_path = "/home/ubuntu/face-disentanglement/data/celeba-hq/ims/"
 fname_out = '/home/ubuntu/face-disentanglement/data_processed/celeba-hq/quality_scores.pkl'
 
 fnames = sorted([fname for fname in os.listdir(image_path)
-               if 'jpg' in fname])
+                 if 'jpg' in fname])
 print('fnames', len(fnames), fnames[:5], '...', fnames[-5:])
 model = load_model('FaceQnet_v1.h5')
 scores = []

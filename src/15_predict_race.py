@@ -1,5 +1,7 @@
 from __future__ import print_function, division
+
 import warnings
+
 warnings.filterwarnings("ignore")
 import os.path
 from os.path import join as oj
@@ -8,17 +10,17 @@ import torch
 import torch.nn as nn
 import numpy as np
 import torchvision
-from torchvision import datasets, models, transforms
+from torchvision import transforms
 import dlib
 import os
 from tqdm import tqdm
-import argparse
 import config
 
-def predict_age_gender_race(OUT_DIR, imgs_path = 'cropped_faces/'):
+
+def predict_age_gender_race(OUT_DIR, imgs_path='cropped_faces/'):
     img_names = [os.path.join(imgs_path, x)
-                 for x in sorted(os.listdir(imgs_path)) 
-                 if '.jpg' in x] #[:20]
+                 for x in sorted(os.listdir(imgs_path))
+                 if '.jpg' in x]  # [:20]
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
     model_fair_7 = torchvision.models.resnet34(pretrained=True)
@@ -145,26 +147,23 @@ def predict_age_gender_race(OUT_DIR, imgs_path = 'cropped_faces/'):
     result.loc[result['age_preds_fair'] == 7, 'age'] = '60-69'
     result.loc[result['age_preds_fair'] == 8, 'age'] = '70+'
 
-    
     # save
     os.makedirs(OUT_DIR, exist_ok=True)
     result['img_names'] = img_names
     r = result[['face_name_align',
-            'race', 'race4',
-            'gender', 'age',
-            'race_scores_fair', 'race_scores_fair_4',
-            'gender_scores_fair', 'age_scores_fair', 'img_names']]
+                'race', 'race4',
+                'gender', 'age',
+                'race_scores_fair', 'race_scores_fair_4',
+                'gender_scores_fair', 'age_scores_fair', 'img_names']]
     r.to_csv(oj(OUT_DIR, 'race.csv'), index=False)
     r.to_pickle(oj(OUT_DIR, 'race.pkl'))
 
     print("saved results at ", OUT_DIR)
 
 
-
 if __name__ == "__main__":
-    
     print("using CUDA?: %s" % dlib.DLIB_USE_CUDA)
-#     IM_DIR = DIR_IMS #'../../data/celeba-hq/ims/'
-#     OUT_DIR = DIR_CELEBA #'../../data_processed/celeba-hq/attr_preds'
+    #     IM_DIR = DIR_IMS #'../../data/celeba-hq/ims/'
+    #     OUT_DIR = DIR_CELEBA #'../../data_processed/celeba-hq/attr_preds'
     print("loading faces from ", IM_DIR)
     predict_age_gender_race(config.DIR_IMS, config.DIR_CELEBA)

@@ -1,23 +1,26 @@
+import matplotlib.pyplot as plt
 import numpy as np
 import sklearn.metrics
-import matplotlib.pyplot as plt
+
 
 def get_lat(latents):
-#     lat = latents.mean(axis=1) # match in style space
-    lat = latents.reshape(latents.shape[0], -1) # match in extended style space
+    #     lat = latents.mean(axis=1) # match in style space
+    lat = latents.reshape(latents.shape[0], -1)  # match in extended style space
     return lat
-    
+
+
 def get_dists(lat):
     '''Get distances
     '''
     # calculate distances: (points, points)
-#     dists = sklearn.metrics.pairwise_distances(lat, metric='cosine') # cosine dist
-    dists = sklearn.metrics.pairwise_distances(lat, metric='l2') # l2 dist
+    #     dists = sklearn.metrics.pairwise_distances(lat, metric='cosine') # cosine dist
+    dists = sklearn.metrics.pairwise_distances(lat, metric='l2')  # l2 dist
     # sns.clustermap(dists)
-    dists[np.eye(dists.shape[0]).astype(bool)] = 1e3 # don't pick same point
+    dists[np.eye(dists.shape[0]).astype(bool)] = 1e3  # don't pick same point
     # plt.imshow(dists)
     # dists_min = np.argmin(dists, axis=1)
     return dists
+
 
 def join_vecs(preds, lats, weights, discretize=False):
     '''Joins preds and lat with equal weight, optionally weighting preds
@@ -32,9 +35,10 @@ def join_vecs(preds, lats, weights, discretize=False):
         preds_norm = (preds_norm > 0).astype(int)
     preds_norm = (preds - preds.mean(axis=0)) / (preds.std(axis=0) + 1e-10)
     preds_norm = preds_norm * weights
-    
+
     vecs = np.hstack((preds_norm, lats_norm))
     return vecs
+
 
 def calc_matches(dists, fname_ids):
     '''
@@ -43,8 +47,9 @@ def calc_matches(dists, fname_ids):
     fname_ids: np.ndarray
         fnames ids corresponding to dists
     '''
-    closest_matches = np.argsort(dists) #dists[im_num - 1])
+    closest_matches = np.argsort(dists)  # dists[im_num - 1])
     return dists[closest_matches], fname_ids[closest_matches]
+
 
 def show_matches(dists, DIR_ORIG, DIR_GEN, fname_ids, im_nums=range(60, 70)):
     # pick the image
@@ -62,7 +67,7 @@ def show_matches(dists, DIR_ORIG, DIR_GEN, fname_ids, im_nums=range(60, 70)):
         util.imshow(im_rec)
         plt.title('reconstruction', fontsize=10)
 
-    #     print(dists[im_num - 1][closest_matches])
+        #     print(dists[im_num - 1][closest_matches])
         plt.subplot(R, C, 3)
         plt.title('closest matches...', fontsize=10)
         for i in range(C - 2):

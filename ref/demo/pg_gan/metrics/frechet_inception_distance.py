@@ -38,11 +38,9 @@ from __future__ import absolute_import, division, print_function
 import numpy as np
 import scipy as sp
 import os
-import gzip, pickle
 import tensorflow as tf
 from scipy.misc import imread
 import pathlib
-import urllib
 
 
 class InvalidFIDException(Exception):

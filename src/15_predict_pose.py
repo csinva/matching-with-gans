@@ -1,16 +1,11 @@
-import sys, os, argparse
-import numpy as np
-import matplotlib.pyplot as plt
+import os
 import torch
-import torch.nn as nn
-from torch.autograd import Variable
-from torch.utils.data import DataLoader
 from torchvision import transforms
 import torchvision
-import torch.nn.functional as F
 import sys
+
 sys.path.append('../lib/deep_head_pose/code/')
-import hopenet, utils # datasets, hopelessnet
+import hopenet, utils  # datasets, hopelessnet
 from PIL import Image
 import pandas as pd
 from tqdm import tqdm
@@ -20,7 +15,7 @@ if __name__ == '__main__':
     fname_out = '/home/ubuntu/face-disentanglement/data_processed/celeba-hq/pose.pkl'
     device = 'cpu'
     snapshot_path = '/home/ubuntu/face-disentanglement/lib/deep_head_pose/models/hopenet_resnet18.pkl'
-    
+
     print('Loading snapshot.')
     model = hopenet.Hopenet(
         torchvision.models.resnet.BasicBlock, [2, 2, 2, 2], 66)
@@ -31,16 +26,16 @@ if __name__ == '__main__':
     print('Loading data.')
     transformations = transforms.Compose([
         transforms.Resize(224),
-        transforms.CenterCrop(224), 
+        transforms.CenterCrop(224),
         transforms.ToTensor(),
         transforms.Normalize(
             mean=[0.485, 0.456, 0.406],
             std=[0.229, 0.224, 0.225])
     ])
-    
+
     fnames = sorted([fname for fname in os.listdir(image_path)
                      if 'jpg' in fname])
-    
+
     yaws = []
     pitches = []
     rolls = []

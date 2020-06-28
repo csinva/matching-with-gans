@@ -1,28 +1,15 @@
-import sys
-import numpy as np
-import PIL.Image
-import matplotlib.pyplot as plt
-from os.path import join as oj
-import pandas as pd
 import pickle as pkl
-import sklearn.model_selection
-import sklearn.metrics
-import models
-import util
-import os
-import config
-from config import ATTR_TO_INDEX
-import viz
-import scipy.stats
-from tqdm import tqdm
-import figs
+from os.path import join as oj
+
 import matplotlib.image as mpimg
-import seaborn as sns
+import numpy as np
+from tqdm import tqdm
+
 import data
+
 CELEB_IMS_DIR = '../data/celeba-hq/ims/'
 CELEB_ANNO_DIR = '../data/celeba-hq/Anno/'
 import face_recognition
-
 
 if __name__ == '__main__':
     # load and merge all the data
@@ -52,5 +39,6 @@ if __name__ == '__main__':
             ids_working.append(i)
             facial_dists.append(facial_dist)
         except:
-            pkl.dump({'facial_dists': facial_dists, 'ids': ids_working}, open(out_fname, 'wb')) # just randomly save sometimes
+            pkl.dump({'facial_dists': facial_dists, 'ids': ids_working},
+                     open(out_fname, 'wb'))  # just randomly save sometimes
     pkl.dump({'facial_dists': facial_dists, 'ids': ids_working}, open(out_fname, 'wb'))

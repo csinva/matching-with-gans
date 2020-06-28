@@ -1,36 +1,20 @@
-import sys
-import numpy as np
-import PIL.Image
-import matplotlib.pyplot as plt
-from os.path import join as oj
-import pandas as pd
-import pickle as pkl
-import models
-import util
 import os
-import config
-import viz
-import scipy.stats
-from tqdm import tqdm
-import figs
-import matplotlib.image as mpimg
-import seaborn as sns
-import data
+from os.path import join as oj
+
 import face_recognition
-
-
+import numpy as np
+from tqdm import tqdm
 
 if __name__ == '__main__':
     DIR_ORIG = '../data/celeba-hq/ims/'
     DIR_ENCODINGS = '../data_processed/celeba-hq/encodings_dlib/'
     out_fname = 'processed/13_facial_dists_pairwise.npy'
     os.makedirs(DIR_ENCODINGS, exist_ok=True)
-    
+
     # get fnames
     fnames = sorted([f for f in os.listdir(DIR_ORIG) if '.jpg' in f])
     n = len(fnames)
-    
-    
+
     # calc encodings
     '''
     for i in tqdm(range(n)):
@@ -44,7 +28,7 @@ if __name__ == '__main__':
             else:
                 np.save(open(fname_out, 'wb'), np.zeros(128))
     '''
-    
+
     # calc failures
     FAILURES_FILE = oj(DIR_ENCODINGS, 'failures.npy')
     if not os.path.exists(FAILURES_FILE):
@@ -57,7 +41,7 @@ if __name__ == '__main__':
         np.save(open(FAILURES_FILE, 'wb'), np.array(failures))
     else:
         failures = np.load(open(FAILURES_FILE, 'rb'))
-    
+
     # calc dists
     dists_facial = np.ones((n, n)) * 1e3
     print('loading encodings...')
@@ -75,8 +59,8 @@ if __name__ == '__main__':
             dists_facial[i, j] = facial_dist
             dists_facial[j, i] = facial_dist
         # if i % 1000 == 999:
-            # np.save(open(out_fname, 'wb'), dists_facial)
-            # pkl.dump({'facial_dists': dists_facial}, )
-    dists_facial[np.eye(n).astype(bool)] = 1e3 # don't pick same point
+        # np.save(open(out_fname, 'wb'), dists_facial)
+        # pkl.dump({'facial_dists': dists_facial}, )
+    dists_facial[np.eye(n).astype(bool)] = 1e3  # don't pick same point
     np.save(open(out_fname, 'wb'), dists_facial)
     # pkl.dump({'facial_dists': dists_facial, 'ids': fname_ids}, open(out_fname, 'wb'))
