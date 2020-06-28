@@ -1,6 +1,6 @@
 # celeba generated
 PROJECT="python ../lib/stylegan2/project_images.py"
-
+ALIGN="python ../lib/stylegan2/align_images.py"
 
 
 
@@ -23,6 +23,7 @@ PROJECT="python ../lib/stylegan2/project_images.py"
 
 $PROJECT ../data/celeba-hq/ims/ ../data_processed/celeba-hq/generated_images_0.1/ --regularize_mean_deviation_weight 0.1
 
+
 # $PROJECT ../data/celeba-hq/ims/ ../data_processed/celeba-hq/generated_images_1/ --regularize_mean_deviation_weight 1
 
 # $PROJECT ../../data/celeba-hq/ims/ ../../data_processed/celeba-hq/generated_images_10/ --regularize_mean_deviation_weight 10 # not really worth it
@@ -33,6 +34,13 @@ $PROJECT ../data/celeba-hq/ims/ ../data_processed/celeba-hq/generated_images_0.1
 #do
 #	nohup $PROJECT ../data/celeba-hq/ims/ ../data_processed/celeba-hq/generated_images_0.1/ --regularize_mean_deviation_weight 0.1 --start_num $((3000 + $i * 3000)) --end_num $((6000 + $i * 3000)) --gpu $i > "proj_$i.log" &
 #done
+
+
+
+# align personal images ###################################
+# $ALIGN ../data/personal-images/ ../data/personal-images/aligned
+
+# $PROJECT ../data/personal-images/aligned ../data_processed/personal-images --regularize_mean_deviation_weight 0.1
 
 
 
