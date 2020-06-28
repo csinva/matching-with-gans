@@ -3,9 +3,20 @@ import numpy as np
 import numpy.linalg as npl
 import scipy.stats
 import torch
+from os.path import join as oj
+import os
 
 import style
+from config import *
 
+def savefig(fname):
+    if '.' in fname:
+        print('filename should not contain extension!')
+    if not fname.startswith('fig_'):
+        fname = 'fig_' + fname
+    os.makedirs(DIR_FIGS, exist_ok=True)
+    plt.savefig(oj(DIR_FIGS, fname) + '.pdf')
+    # plt.savefig(oj(DIR_FIGS, fname) + '.svg')
 
 def corrplot(corrs):
     mask = np.triu(np.ones_like(corrs, dtype=np.bool))

@@ -8,7 +8,7 @@ from tqdm import tqdm
 from config import *
 
 
-def load_all_labs(cached_file=oj(DIR_CELEBA, 'df.pkl'),
+def load_all_labs(cached_file=oj(DIR_PROCESSED, 'df.pkl'),
                   dir_ims=oj(DIR_CELEBA, 'ims'),
                   celeba_id_fname=oj(DIR_CELEBA, 'Anno', 'identity_CelebA.txt'),
                   celeba_attr_fname=oj(DIR_CELEBA, 'Anno', 'list_attr_celeba.txt'),
@@ -73,8 +73,19 @@ def load_all_labs(cached_file=oj(DIR_CELEBA, 'df.pkl'),
             mode = df[idxs][attr].mode().values[0]  # get mode if there is disagreement
             df.loc[idxs, attr] = mode
 
+    # remove some unnecesary keys
+    df.columns = df.columns.str.lower()
+    df = df[[k for k in df.keys()
+             if not 'md5' in k and not 'scores' in k
+             and not 'idx' in k and not 'orig_file' in k
+             and not 'img_names_pred' in k
+             and not 'face_name_align_pred' in k]]
+    df.keys()
+            
+            
     # cache the dataframe
     df.to_pickle(cached_file)
+    df.to_csv(cached_file[:-4] + '.csv')
     return df
 
 
@@ -82,7 +93,7 @@ def load_labs(celeba_attr_fname, mapping_file, N_IMS=30000):
     '''Load labels for celeba-hq
     '''
     remap = pd.read_csv(mapping_file, delim_whitespace=True)
-    labs_full = pd.read_csv(celeba_labs_fname, delim_whitespace=True, skiprows=1)
+    labs_full = pd.read_csv(celeba_attr_fname, delim_whitespace=True, skiprows=1)
 
     labs_full = labs_full.loc[[remap.iloc[i]['orig_file'] for i in range(N_IMS)]]  # for i in range(labs_full.shape[0])]
     labs_full = labs_full == 1
@@ -98,8 +109,8 @@ def load_labs(celeba_attr_fname, mapping_file, N_IMS=30000):
     labs['hair-length'] = ~(labs_full['Bald'] | labs_full['Receding_Hairline'])  # Bangs, Receding_Hairline
 
     # larger is more
-    labs['facial-hair'] = (~(labs_full['No_Beard']) | labs_full['Mustache'] | labs_full[
-        'Goatee'])  # labs_full['Mustache'] # Goatee, Mustache, No_Beard, 5_o_Clock_Shadow
+    labs['facial-hair'] = ~(labs_full['No_Beard']) | labs_full['Mustache'] | labs_full['Goatee'] 
+    # labs_full['Mustache'] # Goatee, Mustache, No_Beard, 5_o_Clock_Shadow
 
     # higher is more
     labs['makeup'] = labs_full['Heavy_Makeup']  # | labs_full['Wearing_Lipstick'] # Wearing_Lipstick
