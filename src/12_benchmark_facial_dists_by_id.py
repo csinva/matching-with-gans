@@ -1,14 +1,12 @@
 import pickle as pkl
-from os.path import join as oj
 
 import matplotlib.image as mpimg
 import numpy as np
 from tqdm import tqdm
 
 import data
+from config import *
 
-CELEB_IMS_DIR = '../data/celeba-hq/ims/'
-CELEB_ANNO_DIR = '../data/celeba-hq/Anno/'
 import face_recognition
 
 if __name__ == '__main__':
@@ -31,7 +29,7 @@ if __name__ == '__main__':
     for i in tqdm(ids):
         try:
             ids = df[df.id == i][:2]
-            ims = np.array([mpimg.imread(oj(CELEB_IMS_DIR, fname))
+            ims = np.array([mpimg.imread(oj(DIR_IMS, fname))
                             for fname in ids.fname_final.values])
             encoding1 = face_recognition.face_encodings(ims[0])[0]
             encoding2 = face_recognition.face_encodings(ims[1])[0]

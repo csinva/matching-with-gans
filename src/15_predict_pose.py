@@ -4,17 +4,17 @@ from torchvision import transforms
 import torchvision
 import sys
 
-sys.path.append('../lib/deep_head_pose/code/')
-import hopenet, utils  # datasets, hopelessnet
+sys.path.append(oj(DIR_LIB, 'deep_head_pose/code/'))
+import hopenet, utils
 from PIL import Image
 import pandas as pd
 from tqdm import tqdm
+from config import *
 
 if __name__ == '__main__':
-    image_path = "/home/ubuntu/face-disentanglement/data/celeba-hq/ims/"
-    fname_out = '/home/ubuntu/face-disentanglement/data_processed/celeba-hq/pose.pkl'
+    fname_out = oj(DIR_CELEBA, 'pose.pkl')
+    snapshot_path = oj(DIR_LIB, 'deep_head_pose/models/hopenet_resnet18.pkl')
     device = 'cpu'
-    snapshot_path = '/home/ubuntu/face-disentanglement/lib/deep_head_pose/models/hopenet_resnet18.pkl'
 
     print('Loading snapshot.')
     model = hopenet.Hopenet(
@@ -33,14 +33,14 @@ if __name__ == '__main__':
             std=[0.229, 0.224, 0.225])
     ])
 
-    fnames = sorted([fname for fname in os.listdir(image_path)
+    fnames = sorted([fname for fname in os.listdir(DIR_IMS)
                      if 'jpg' in fname])
 
     yaws = []
     pitches = []
     rolls = []
     for fname in tqdm(fnames):
-        fname_full = os.path.join(image_path, fname)
+        fname_full = os.path.join(DIR_IMS, fname)
         image = Image.open(fname_full)
         im_t = transformations(image).unsqueeze(0)
         # print(model(im_t))

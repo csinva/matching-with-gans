@@ -1,6 +1,11 @@
+from os.path import join as oj
+
+import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
 import numpy as np
 import sklearn.metrics
+
+import util
 
 
 def get_lat(latents):
@@ -51,7 +56,7 @@ def calc_matches(dists, fname_ids):
     return dists[closest_matches], fname_ids[closest_matches]
 
 
-def show_matches(dists, DIR_ORIG, DIR_GEN, fname_ids, im_nums=range(60, 70)):
+def show_matches(closest_matches, DIR_ORIG, DIR_GEN, im_nums=range(60, 70)):
     # pick the image
     for im_num in im_nums:
         R, C = 1, 7

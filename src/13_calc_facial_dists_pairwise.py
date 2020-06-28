@@ -6,13 +6,12 @@ import numpy as np
 from tqdm import tqdm
 
 if __name__ == '__main__':
-    DIR_ORIG = '../data/celeba-hq/ims/'
     DIR_ENCODINGS = '../data_processed/celeba-hq/encodings_dlib/'
     out_fname = 'processed/13_facial_dists_pairwise.npy'
     os.makedirs(DIR_ENCODINGS, exist_ok=True)
 
     # get fnames
-    fnames = sorted([f for f in os.listdir(DIR_ORIG) if '.jpg' in f])
+    fnames = sorted([f for f in os.listdir(DIR_IMS) if '.jpg' in f])
     n = len(fnames)
 
     # calc encodings
@@ -20,7 +19,7 @@ if __name__ == '__main__':
     for i in tqdm(range(n)):
         fname_out = oj(DIR_ENCODINGS, fnames[i][:-4]) + '.npy'
         if not os.path.exists(fname_out):
-            im = mpimg.imread(oj(DIR_ORIG, fnames[i]))
+            im = mpimg.imread(oj(DIR_IMS, fnames[i]))
             encoding = face_recognition.face_encodings(im, model='cnn')
             if len(encoding) > 0:
                 encoding = encoding[0]

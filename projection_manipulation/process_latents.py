@@ -11,7 +11,7 @@ import pretrained_networks
 import projector
 # sys.path.append('transects')
 from transects import make_transects
-from config import ATTRS_MEASURED
+from config import *
 
 out_fname = 'processed/09_df_99.pkl'
 IM_NUMS = np.arange(1, 99)
@@ -23,9 +23,6 @@ if __name__ == '__main__':
     _, _, Gs = pretrained_networks.load_networks(network_pkl)
     proj = projector.Projector()
     proj.set_network(Gs)
-
-    DIR_ORIG = '../data/celeba-hq/ims/'
-    DIRS_GEN = '../data_processed/celeba-hq/'
 
     coefs, intercepts = make_transects.get_directions(all_attrs=ALL_ATTRS)
     coefs = np.array(coefs).squeeze()
@@ -42,7 +39,7 @@ if __name__ == '__main__':
 
     for im_num in tqdm(IM_NUMS):
         # load original image
-        im_orig = mpimg.imread(oj(DIR_ORIG, f'{im_num:05}.jpg'))
+        im_orig = mpimg.imread(oj(DIR_IMS, f'{im_num:05}.jpg'))
         im_orig = np.expand_dims(np.transpose(im_orig, (2, 0, 1)), 0)  # (1, 3, 1024, 1024)
 
         for reg in regs:
@@ -53,7 +50,7 @@ if __name__ == '__main__':
             # load latents
             folder = f'generated_images_{reg}'
             # im_gen_fname = oj(DIRS_GEN, folder, f'{im_num:05}.png')        
-            latents = np.load(oj(DIRS_GEN, folder, f'{im_num:05}.npy'))
+            latents = np.load(oj(DIR_PROCESSED, folder, f'{im_num:05}.npy'))
             latents = np.expand_dims(latents, 0)  # (1, 18, 512)
 
             # calculate losses

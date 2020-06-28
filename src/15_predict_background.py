@@ -15,9 +15,7 @@ import util
 sys.path.append(config.LIB_PATH)
 from face_segmentation.models import LinkNet34
 import config
-
-DIR_ORIG = '../data/celeba-hq/ims/'
-DIR_GEN = oj('../data_processed/celeba-hq/generated_images_0.1')
+from config import *
 
 if __name__ == '__main__':
     # df contains filenames, ids, and attributes
@@ -68,7 +66,7 @@ if __name__ == '__main__':
     # test on one image
     '''
     for i in range(3):
-        fname = oj(DIR_ORIG, df.iloc[i].fname_final)
+        fname = oj(DIR_IMS, df.iloc[i].fname_final)
         file_path = oj(fname)
         model.eval()
         mask, img = get_mask(file_path) # mask is True for face, false otherwise
@@ -80,8 +78,8 @@ if __name__ == '__main__':
         k: [] for k in ['mean', 'std']
     }
     for i in tqdm(range(df.shape[0])):
-        fname = oj(DIR_ORIG, df.iloc[i].fname_final)
-        mask, img = get_mask(file_path, plot=False)  # mask is True for face, false otherwise
+        fname = oj(DIR_IMS, df.iloc[i].fname_final)
+        mask, img = get_mask(fname, plot=False)  # mask is True for face, false otherwise
         background = img[~mask]
         r['mean'].append(background.mean())
         r['std'].append(background.std())

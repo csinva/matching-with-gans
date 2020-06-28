@@ -15,6 +15,7 @@ import dlib
 import os
 from tqdm import tqdm
 import config
+from config import *
 
 
 def predict_age_gender_race(OUT_DIR, imgs_path='cropped_faces/'):
@@ -165,5 +166,5 @@ if __name__ == "__main__":
     print("using CUDA?: %s" % dlib.DLIB_USE_CUDA)
     #     IM_DIR = DIR_IMS #'../../data/celeba-hq/ims/'
     #     OUT_DIR = DIR_CELEBA #'../../data_processed/celeba-hq/attr_preds'
-    print("loading faces from ", IM_DIR)
+    print("loading faces from ", DIR_IMS)
     predict_age_gender_race(config.DIR_IMS, config.DIR_CELEBA)
