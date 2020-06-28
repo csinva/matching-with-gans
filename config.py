@@ -40,4 +40,4 @@ DIR_GEN = oj(DIR_PROCESSED, 'generated_images_0.1')
 
 # lib paths
 DIR_LIB = oj(DIR_REPO, 'lib')
-DIR_STYLEGAN = oj(LIB_PATH, 'stylegan2')
+DIR_STYLEGAN = oj(DIR_LIB, 'stylegan2')

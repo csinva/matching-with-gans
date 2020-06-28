@@ -4,7 +4,7 @@ import sys
 from argparse import ArgumentParser
 from os.path import join as oj
 
-import ganwrapper
+from ganwrapper import Generator
 import imageio
 import numpy as np
 import pandas as pd
@@ -12,6 +12,7 @@ import pandas as pd
 sys.path.append('..')
 import config
 from copy import deepcopy
+from tqdm import tqdm
 
 
 def get_directions(model_dir=config.DIR_LINEAR_DIRECTIONS, all_attrs=config.ALL_ATTRS):
@@ -48,10 +49,12 @@ def make_transects(G,
                    orth: bool = False,
                    save_dir: str = 'results',
                    randomize_seeds: bool = False,
-                   model_dir: str = "./linear_models/latent-models/",
+                   model_dir: str = config.DIR_LINEAR_DIRECTIONS,
                    latents: np.ndarray = None,
                    seed_path: str = "./linear_models/annotation-data/W.npy",
-                   return_ims: bool = False):
+                   return_ims: bool = False,
+                   force_project_to_boundary: bool = False,
+                   return_project_to_boundary: bool = False):
     '''
     Params
     ------
@@ -68,6 +71,8 @@ def make_transects(G,
     seed_path
         If latents is None and randomize_seeds is False, then
         generate using seeds at this path
+    force_project_to_boundary
+        Whether to force project something in the expanded latent space
         
     '''
 
@@ -139,17 +144,18 @@ def make_transects(G,
     z_dim = G.Gs.input_shape[1]
     deltas = np.reshape(deltas, (-1, z_dim), 'F')
 
-    batch_size = 1
-    n_batch = N // batch_size
 
-    # Transect creation loop.
+    # Transect creation loop
     ims = []
-    for ex_num in range(N):
-        print(ex_num, n_batch, flush=True)
+    for ex_num in tqdm(range(N)):
 
         # Project onto intersection of attribute hyperplanes
         if len(W_all.shape) == 3:  # W_all contains latents in expanded space (N, 18, 512)
             W0 = W_all[ex_num: ex_num + 1]
+            if force_project_to_boundary:
+                W_mean = np.mean(W0, axis=1)
+                W0_proj = projectToBoundary(W_mean, grid_coefs, grid_intercepts)  # grid_planes)
+                W0 = W0 - W_mean  + W0_proj
         else:  # W_all contains latents in original space (N, 512)
             W_seed = W_all[ex_num, ...]
             W0 = projectToBoundary(W_seed, grid_coefs, grid_intercepts)  # grid_planes)
@@ -166,6 +172,8 @@ def make_transects(G,
             # generate and save the images
             if len(W.shape) == 3:
                 img = G.generateImageFromStyleFull(W)
+                if return_project_to_boundary:
+                    return img
             else:
                 img = G.generateImageFromStyle(W)
             img = (img * 255).astype(np.uint8)
@@ -278,7 +286,7 @@ if __name__ == "__main__":
 
     # Get GAN
     np.random.seed(2)
-    G = ganwrapper.GANWrapper(image_size=512)
+    G = Generator(image_size=512)
     make_transects(G,
                    N_IMS_LIST=config.L,
                    attr=config.attr,

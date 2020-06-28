@@ -10,7 +10,7 @@ import dnnlib.tflib as tflib
 import pretrained_networks
 
 
-class GANWrapper(object):
+class Generator(object):
     def __init__(self, image_size=512):
 
         tflib.init_tf()

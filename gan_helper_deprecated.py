@@ -13,13 +13,13 @@ import util
 
 
 class Generator:
-    def __init__(self):
+    def __init__(self, image_size=512, truncation_psi=0.5):
         network_pkl = 'gdrive:networks/stylegan2-ffhq-config-f.pkl'
-        truncation_psi = 0.5
 
         # load the networks
+        tflib.init_tf()
         print('Loading networks from "%s"...' % network_pkl)
-        _G, _D, Gs = pretrained_networks.load_networks(network_pkl)
+        _, _, Gs = pretrained_networks.load_networks(network_pkl)
         Gs_kwargs = dnnlib.EasyDict()
         Gs_kwargs.output_transform = dict(func=tflib.convert_images_to_uint8, nchw_to_nhwc=True)
         Gs_kwargs.randomize_noise = False
@@ -29,6 +29,8 @@ class Generator:
         # store generator
         self.Gs = Gs
         self.Gs_kwargs = Gs_kwargs
+        self.image_size = image_size
+        self.fmt = dict(func=tflib.convert_images_to_uint8, nchw_to_nhwc=True)
 
         # object for projecting real images
         self.proj = projector.Projector()
@@ -78,7 +80,43 @@ class Generator:
         '''
         im = tflib.run(self.Gs.components.synthesis.get_output_for(z_full))
         return get_transformed_im(im)
+    
+####################################### Redundant functions ###################    
+    
+    def generateImageFromStyle(self, w):
+        '''
+        w
+            (N, 512)
+        '''
+        w = np.tile(np.expand_dims(w, 1), (1, 18, 1))
+        img = self.Gs.components.synthesis.run(w, is_validation=True, randomize_noise=False, 
+                                               output_transform=self.fmt)
+        return self.processImage(img)
+    
+    def generateImageFromStyleFull(self, w):
+        '''
+        w
+            (N, 18, 512)
+        '''
+        img = self.Gs.components.synthesis.run(w, is_validation=True, randomize_noise=False, 
+                                               output_transform=self.fmt)
+        return self.processImage(img)    
 
+    def generateImageFromLatents(self, z):
+        img = self.Gs.run(z, None, is_validation=True, randomize_noise=False, 
+                          output_transform=self.fmt)
+        return self.processImage(img)
+
+
+    def processImage(self, img):
+        img_resize = np.zeros((img.shape[0], self.image_size, self.image_size, 3))
+        for j in range(img.shape[0]):
+            img_resize[j, ...] = cv2.resize(img[j, ...], (self.image_size, self.image_size))
+        img = img_resize/255.0
+        return img
+
+####################################### PROJECTION ###################
+    
     def initialize_projector(self,
                              vgg16_pkl='https://drive.google.com/uc?id=1N2-m9qszOeVC9Tq77WxsLnuWwOedQiD2',
                              num_steps=1000,
