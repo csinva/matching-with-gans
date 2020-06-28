@@ -4,15 +4,16 @@ import os
 import numpy as np
 from tqdm import tqdm
 import scipy.special
+from config import *
 def load_all_labs(cached_file='processed/df.pkl',
                   CELEB_IMS_DIR = '../data/celeba-hq/ims/',
                   CELEB_ANNO_DIR = '../data/celeba-hq/Anno/',
                   celeba_labs_fname='../data/celeba-hq/Anno/list_attr_celeba.txt',
                   mapping_file='../data/celeba-hq/mapping.txt',
-                  race_preds_file='../data_processed/celeba-hq/attr_preds/preds.pkl',
-                  quality_scores_file='/home/ubuntu/face-disentanglement/data_processed/celeba-hq/quality_scores.pkl',
-                  background_stats_file='processed/15_background_stats.pkl',
-                  pose_file='/home/ubuntu/face-disentanglement/data_processed/celeba-hq/pose.pkl'
+                  race_preds_file=oj(DIR_PROCESSED, 'race.pkl'),
+                  quality_scores_file=oj(DIR_PROCESSED, 'quality_scores.pkl'),
+                  background_stats_file=oj(DIR_PROCESSED, 'background_stats.pkl'),
+                  pose_file=oj(DIR_PROCESSED, 'pose.pkl'),
                  ):
     if os.path.exists(cached_file):
         print('loading cached labels')

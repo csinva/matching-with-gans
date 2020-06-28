@@ -1,7 +1,8 @@
 import numpy as np
 import cv2
 import sys
-sys.path.append('stylegan2')
+from config import DIR_STYLEGAN
+sys.path.append(DIR_STYLEGAN)
 import dnnlib
 import dnnlib.tflib as tflib
 import pretrained_networks

@@ -1,6 +1,7 @@
 import tensorflow as tf
 import sys
-sys.path.append('stylegan2')
+from config import *
+sys.path.append(DIR_STYLEGAN)
 import project_images, projector
 import dnnlib
 import dnnlib.tflib as tflib

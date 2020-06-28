@@ -1,10 +1,11 @@
 from os.path import join as oj
+DIR_REPO = '/home/ubuntu/face-disentanglement/'
 
 # for fitting the linear models
 BEST_MODEL = '07_relu_retrain_3lay_noise_big'
-REAL_LATENT_ENCODINGS_DIR = '../models/stylegan2encoder/generated_images'
-DIRECTIONS_DIR = '../data/annotation-dataset-stylegan2/linear_models/new' # path to many datasets, includes on directory before the below dirs
-GENERATING_LATENTS_DIR = '../data/annotation-dataset-stylegan2/data'
+# REAL_LATENT_ENCODINGS_DIR = oj(REPO_DIR, 'models/stylegan2encoder/generated_images')
+DIR_LINEAR_DIRECTIONS = oj(DIR_REPO, 'data/annotation-dataset-stylegan2/linear_models/new') # path to many datasets, includes on directory before the below dirs
+DIR_GENERATING_LATENTS = oj(DIR_REPO, 'data/annotation-dataset-stylegan2/data')
 
 # attrs
 ATTRS = ['age', 'facial-hair', 'skin-color', 'gender', 'hair-length', 'makeup']
@@ -28,14 +29,14 @@ ATTR_TO_INDEX = {
 }
 
 # running things
-RESULTS_DIR = 'results'
-PROCESSED_DIR = 'processed'
+RESULTS_DIR = oj(DIR_REPO, 'src', 'results')
+PROCESSED_DIR = oj(DIR_REPO, 'src', 'processed')
 
 # data
-REPO_DIR = '/home/ubuntu/face-disentanglement/'
-DIR_CELEBA_IMS = oj(REPO_DIR, 'data/celeba-hq/ims/')
-DIRS_CELEBA_GEN = oj(REPO_DIR, 'data_processed/celeba-hq/')
-
+DIR_IMS = oj(DIR_REPO, 'data/celeba-hq/ims/')
+DIR_PROCESSED = oj(DIR_REPO, 'data_processed/celeba-hq/')
+DIR_GEN = oj(DIR_REPO, 'data_processed/celeba-hq/generated_images_0.1')
 
 # lib paths
-LIB_PATH = oj(REPO_DIR, 'lib')
+LIB_PATH = oj(DIR_REPO, 'lib')
+DIR_STYLEGAN = oj(LIB_PATH, 'stylegan2')

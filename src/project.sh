@@ -1,5 +1,5 @@
 # celeba generated
-PROJECT="python stylegan2/project_images.py"
+PROJECT="python ../lib/stylegan2/project_images.py"
 
 
 

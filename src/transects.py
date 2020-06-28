@@ -9,8 +9,9 @@ import pandas as pd
 from os.path import join as oj
 sys.path.append('..')
 import config
+from copy import deepcopy
 
-def get_directions(model_dir="./linear_models/latent-models/", all_attrs=config.ALL_ATTRS):
+def get_directions(model_dir=config.DIR_LINEAR_DIRECTIONS, all_attrs=config.ALL_ATTRS):
     '''
     Returns
     -------
@@ -45,7 +46,8 @@ def make_transects(G,
                    randomize_seeds: bool=False,
                    model_dir: str="./linear_models/latent-models/",
                    latents: np.ndarray=None,
-                   seed_path: str="./linear_models/annotation-data/W.npy"):
+                   seed_path: str="./linear_models/annotation-data/W.npy",
+                   return_ims: bool=False):
     '''
     Params
     ------
@@ -138,6 +140,7 @@ def make_transects(G,
     n_batch = N // batch_size
 
     # Transect creation loop.
+    ims = []
     for ex_num in range(N):
         print(ex_num, n_batch, flush=True)
    
@@ -169,12 +172,17 @@ def make_transects(G,
             for a,b in zip(attr, idx):
                 fname += '_' + a + str(int(b))
             attrs_all['fnames'].append(fname)
-            imageio.imwrite(fname + '.jpg', img[0, ...])           
-            
-            
+            imageio.imwrite(fname + '.jpg', img[0, ...])     
+            if return_ims:
+                ims.append(deepcopy(img[0]))
+
     # save
-    pd.DataFrame.from_dict(attrs_all).to_csv(oj(save_dir_base, 'attrs.csv'))
+    attr_df = pd.DataFrame.from_dict(attrs_all)
+    attr_df.to_csv(oj(save_dir_base, 'attrs.csv'))
     np.save(oj(save_dir_base, 'Ws.npy'), np.array(Ws_all))
+    
+    if return_ims:
+        return ims, attr_df
 
 
 def projectToBoundary(X, coefs, intercepts, n_iter=100):
