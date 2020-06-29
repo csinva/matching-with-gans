@@ -27,7 +27,7 @@ DIR_GENERATING_LATENTS = oj(DIR_REPO, 'data/annotation-dataset-stylegan2/data')
 ATTRS = ['age', 'facial-hair', 'skin-color', 'gender', 'hair-length', 'makeup']
 ATTRS_MEASURED = 'HAGCBM'
 ALL_ATTRS = 'HAGCBMSEW' # 'HAGCBMSEW'
-LABELS = {
+ATTR_LABELS = {
     'C': 'skin-color',
     'H': 'hair-length',
     'G': 'gender\n(perceived)',
@@ -41,5 +41,5 @@ LABELS = {
     'W': 'earrings', # wearing earrings
 }
 ATTR_TO_INDEX = {
-    LABELS[ALL_ATTRS[i]]: i for i in range(len(ALL_ATTRS))
+    ATTR_LABELS[ALL_ATTRS[i]]: i for i in range(len(ALL_ATTRS))
 }

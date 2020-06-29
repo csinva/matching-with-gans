@@ -57,12 +57,14 @@ def plot_row(images, annot_list: list = None, dpi: int = 100,
     plt.tight_layout()
 
 
-def plot_grid(images, ylabs=[], suptitle=None):
+def plot_grid(images, ylabs=[], suptitle=None, emphasize_col: int=None):
     '''
     Params
     ------
     images: np.ndarray
         (R, C, H, W, C)
+    emphasize_col
+        which column to emphasize (by not removing black border)
     '''
     if type(images) == list:
         images = np.array(images)
@@ -81,7 +83,7 @@ def plot_grid(images, ylabs=[], suptitle=None):
     fig = plt.figure(figsize=(C * 3, R * 3))
     for r in range(R):
         for c in range(C):
-            plt.subplot(R, C, i + 1)
+            ax = plt.subplot(R, C, i + 1)
             imshow(images[r * C + c])
 
             if c == 0 and len(ylabs) > r:
@@ -91,10 +93,24 @@ def plot_grid(images, ylabs=[], suptitle=None):
             i += 1
             if i >= images.shape[0]:
                 break
+                
+            if c == emphasize_col:
+                emphasize_box(ax)
+
     if suptitle is not None:
         fig.text(0.5, 1, suptitle,  ha='center')
 
     plt.tight_layout()
+
+def emphasize_box(ax):
+    plt.axis('on')
+    ax.get_yaxis().set_ticks([])
+    ax.get_xaxis().set_ticks([])
+    for x in ['right', 'top', 'bottom', 'left']:
+        ax.spines[x].set_visible(True)
+        ax.spines[x].set_linewidth(3) #['linewidth'] = 10
+#         [i.set_linewidth(0.1) for i in ax.spines.itervalues()]
+#     ax.spines['top'].set_visible(True)
 
 
 def norm(im):
