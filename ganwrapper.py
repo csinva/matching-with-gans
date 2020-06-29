@@ -15,7 +15,6 @@ class Generator(object):
 
         tflib.init_tf()
         network_pkl = 'gdrive:networks/stylegan2-ffhq-config-f.pkl'
-#         path = './stylegan2/cache/stylegan2-ffhq-config-f.pkl'
         _, _, Gs = pretrained_networks.load_networks(network_pkl)
 
         self.Gs = Gs
