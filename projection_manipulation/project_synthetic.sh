@@ -1,16 +1,4 @@
-# celeba generated
 PROJECT="python ../lib/stylegan2/project_images.py"
-
-
-
-# stylegan2 generated #############################
-# $PROJECT ../../data/annotation-dataset-stylegan2/images/ ../../data_processed/stylegan2/generated_images_0/ --regularize_mean_deviation_weight 0
-
-# $PROJECT ../../data/annotation-dataset-stylegan2/images/ ../../data_processed/stylegan2/generated_images_1/ --regularize_mean_deviation_weight 1
-
-# $PROJECT ../../data/annotation-dataset-stylegan2/images/ ../../data_processed/stylegan2/generated_images_10000/ --regularize_mean_deviation_weight 10000
-
-
 
 
 # celeba-hq projections #############################
@@ -33,3 +21,11 @@ $PROJECT ../data/celeba-hq/ims/ ../data_processed/celeba-hq/generated_images_0.1
 #	nohup $PROJECT ../data/celeba-hq/ims/ ../data_processed/celeba-hq/generated_images_0.1/ --regularize_mean_deviation_weight 0.1 --start_num $((3000 + $i * 3000)) --end_num $((6000 + $i * 3000)) --gpu $i > "proj_$i.log" &
 #done
 
+
+
+# stylegan2 generated #############################
+# $PROJECT ../../data/annotation-dataset-stylegan2/images/ ../../data_processed/stylegan2/generated_images_0/ --regularize_mean_deviation_weight 0
+
+# $PROJECT ../../data/annotation-dataset-stylegan2/images/ ../../data_processed/stylegan2/generated_images_1/ --regularize_mean_deviation_weight 1
+
+# $PROJECT ../../data/annotation-dataset-stylegan2/images/ ../../data_processed/stylegan2/generated_images_10000/ --regularize_mean_deviation_weight 10000

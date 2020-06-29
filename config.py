@@ -30,7 +30,7 @@ ALL_ATTRS = 'HAGCBMSEW' # 'HAGCBMSEW'
 LABELS = {
     'C': 'skin-color',
     'H': 'hair-length',
-    'G': 'gender',
+    'G': 'gender\n(perceived)',
     'A': 'age',
     'M': 'makeup',
     'B': 'facial-hair',    
