@@ -15,6 +15,8 @@ def savefig(fname):
     if not fname.startswith('fig_'):
         fname = 'fig_' + fname
     os.makedirs(DIR_FIGS, exist_ok=True)
+    
+    plt.tight_layout()
     plt.savefig(oj(DIR_FIGS, fname) + '.pdf')
     # plt.savefig(oj(DIR_FIGS, fname) + '.svg')
 
