@@ -104,6 +104,6 @@ if __name__ == '__main__':
 
     # still need to copy top-right to bot-left
     dset[np.eye(n).astype(bool)] = 1e3  # don't pick same point
-    for i in range(n):
+    for i in tqdm(range(n)):
         for j in range(i):
             dset[j, i] = dset[i, j]

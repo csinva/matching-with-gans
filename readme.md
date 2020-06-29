@@ -17,3 +17,9 @@
     - run ./project_new and you will get an altered image
     - sample original is here: ![](projection_manipulation/sample_projection/chandan.jpg)
     - result is here: ![](projection_manipulation/sample_projection/manipulated/chandan_01.png)
+    
+    
+# matching / benchmarking
+- [matching_benchmarking](matching_benchmarking) folder contains code for reproducing the matching and benchmarking results obtained here
+    
+# disentangling latent space
