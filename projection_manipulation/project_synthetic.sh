@@ -1,4 +1,4 @@
-PROJECT="python ../lib/stylegan2/project_images.py"
+PROJECT="python 01_project_images.py"
 
 
 # celeba-hq projections #############################

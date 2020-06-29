@@ -1,12 +1,15 @@
+
+
+# specify directories  ###################################
+DIR_ORIG="./sample_projection/" # ../data/test/ # should point to directory of original images (png, jpg, jpeg)
+DIR_ALIGNED="$DIR_ORIG/aligned" # all intermediate dirs will be created
+DIR_PROJECTED="$DIR_ORIG/projected"
+DIR_MANIPULATED="$DIR_ORIG/manipulated"
+
+# commands to be run
 ALIGN="python 00_align_images.py"
 PROJECT="python 01_project_images.py"
 MANIPULATE="python 02_manipulate.py"
-
-# align personal images (intermediate dirs will be created) ###################################
-DIR_ORIG="./sample_projection/" # ../data/test/
-DIR_ALIGNED="$DIR_ORIG/aligned"
-DIR_PROJECTED="$DIR_ORIG/projected"
-DIR_MANIPULATED="$DIR_ORIG/manipulated"
 
 echo "aligning..."
 $ALIGN $DIR_ORIG $DIR_ALIGNED

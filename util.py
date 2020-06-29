@@ -57,7 +57,7 @@ def plot_row(images, annot_list: list = None, dpi: int = 100,
     plt.tight_layout()
 
 
-def plot_grid(images, ylabs=[]):
+def plot_grid(images, ylabs=[], suptitle=None):
     '''
     Params
     ------
@@ -91,6 +91,8 @@ def plot_grid(images, ylabs=[]):
             i += 1
             if i >= images.shape[0]:
                 break
+    if suptitle is not None:
+        fig.text(0.5, 1, suptitle,  ha='center')
 
     plt.tight_layout()
 

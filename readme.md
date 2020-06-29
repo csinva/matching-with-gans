@@ -16,4 +16,4 @@
 - put image into a directory (e.g. projection_manipulation/test)
     - run ./project_new and you will get an altered image
     - sample original is here: ![](projection_manipulation/sample_projection/chandan.jpg)
-    - result is here: ![](projection_manipulation/sample_projection/manipulated/chandan_01.jpg)
+    - result is here: ![](projection_manipulation/sample_projection/manipulated/chandan_01.png)

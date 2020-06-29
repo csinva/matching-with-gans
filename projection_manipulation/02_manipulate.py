@@ -41,8 +41,8 @@ if __name__ == '__main__':
 
         # make 1D transects
         LIMS = {
-            'C': [-1.5, 1.7],
-            'H': [-0.5, 0.0],
+            'C': [-1.5, 1.5],
+            'H': [-0.5, 0.5], # hair-length really shouldn't go beyond 0
             'G': [-1.75, 1.75],
 
             # these are not calibrated
@@ -68,5 +68,5 @@ if __name__ == '__main__':
         # custom latent viz
         ims = np.array([transects_1d[a] for a in ATTRS])
         ims = ims.reshape((len(ATTRS), N_IMS, *ims.shape[2:]))
-        util.plot_grid(ims, ylabs=[config.LABELS[a].capitalize() for a in ATTRS])
+        util.plot_grid(ims, ylabs=[config.LABELS[a].capitalize() for a in ATTRS], suptitle='Original')
         plt.savefig(oj(MANIPULATED_IMAGES_DIR, fname[:-4] + '.png'))

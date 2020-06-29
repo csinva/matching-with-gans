@@ -173,7 +173,7 @@ def make_transects(G,
             if len(W.shape) == 3:
                 img = G.generateImageFromStyleFull(W)
                 if return_project_to_boundary:
-                    return img
+                    return img, W
             else:
                 img = G.generateImageFromStyle(W)
             img = (img * 255).astype(np.uint8)
