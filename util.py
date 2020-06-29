@@ -78,14 +78,15 @@ def plot_grid(images, ylabs=[]):
         # reshape to be (R * C, H, W, C)
         images = images.reshape((R * C, *images.shape[2:]))
     i = 0
-    plt.figure(figsize=(C * 3, R * 3))
+    fig = plt.figure(figsize=(C * 3, R * 3))
     for r in range(R):
         for c in range(C):
             plt.subplot(R, C, i + 1)
             imshow(images[r * C + c])
 
             if c == 0 and len(ylabs) > r:
-                plt.title(ylabs[r])
+                fig.text(0, r / R + 0.5 / R, ylabs[R - 1 - r], rotation=90, va='center')
+#                 plt.ylab(ylabs[r])
 
             i += 1
             if i >= images.shape[0]:

@@ -94,32 +94,7 @@ def project_from_fname(proj):
     return
     
 
-def main():
-
-    parser = argparse.ArgumentParser(description='Project real-world images into StyleGAN2 latent space')
-    parser.add_argument('src_dir', help='Directory with aligned images for projection')
-    parser.add_argument('dst_dir', help='Output directory')
-    parser.add_argument('--tmp-dir', default='.stylegan2-tmp', help='Temporary directory for tfrecords and video frames')
-    parser.add_argument('--network-pkl', default='gdrive:networks/stylegan2-ffhq-config-f.pkl', help='StyleGAN2 network pickle filename')
-    parser.add_argument('--vgg16-pkl', default='https://drive.google.com/uc?id=1N2-m9qszOeVC9Tq77WxsLnuWwOedQiD2', help='VGG16 network pickle filename')
-    parser.add_argument('--num-steps', type=int, default=1000, help='Number of optimization steps')
-    parser.add_argument('--initial-learning-rate', type=float, default=0.1, help='Initial learning rate')
-    parser.add_argument('--initial-noise-factor', type=float, default=0.05, help='Initial noise factor')
-    parser.add_argument('--verbose', type=bool, default=False, help='Verbose output')
-    parser.add_argument('--video', type=bool, default=False, help='Render video of the optimization process')
-    parser.add_argument('--video-mode', type=int, default=1, help='Video mode: 1 for optimization only, 2 for source + optimization')
-    parser.add_argument('--video-size', type=int, default=1024, help='Video size (height in px)')
-    parser.add_argument('--video-fps', type=int, default=25, help='Video framerate')
-    parser.add_argument('--video-codec', default='libx264', help='Video codec')
-    parser.add_argument('--video-bitrate', default='5M', help='Video bitrate')
-    parser.add_argument('--start_num', type=int, default=0, help='Number of image in directory to skip')
-    parser.add_argument('--end_num', type=int, default=int(1e6), help='Number of image in directory to skip')
-    parser.add_argument('--gpu', type=int, default=0, help='Which gpu?')
-
-    
-    
-    parser.add_argument('--regularize_mean_deviation_weight', type=float, default=0, help='Penalize different w vectors to be the same')
-    args = parser.parse_args()
+def main(args):
 
     print('Loading networks from "%s"...' % args.network_pkl)
 
@@ -154,4 +129,28 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser(description='Project real-world images into StyleGAN2 latent space')
+    parser.add_argument('src_dir', help='Directory with aligned images for projection')
+    parser.add_argument('dst_dir', help='Output directory')
+    parser.add_argument('--tmp-dir', default='.stylegan2-tmp', help='Temporary directory for tfrecords and video frames')
+    parser.add_argument('--network-pkl', default='gdrive:networks/stylegan2-ffhq-config-f.pkl', help='StyleGAN2 network pickle filename')
+    parser.add_argument('--vgg16-pkl', default='https://drive.google.com/uc?id=1N2-m9qszOeVC9Tq77WxsLnuWwOedQiD2', help='VGG16 network pickle filename')
+    parser.add_argument('--num-steps', type=int, default=1000, help='Number of optimization steps')
+    parser.add_argument('--initial-learning-rate', type=float, default=0.1, help='Initial learning rate')
+    parser.add_argument('--initial-noise-factor', type=float, default=0.05, help='Initial noise factor')
+    parser.add_argument('--verbose', type=bool, default=False, help='Verbose output')
+    parser.add_argument('--video', type=bool, default=False, help='Render video of the optimization process')
+    parser.add_argument('--video-mode', type=int, default=1, help='Video mode: 1 for optimization only, 2 for source + optimization')
+    parser.add_argument('--video-size', type=int, default=1024, help='Video size (height in px)')
+    parser.add_argument('--video-fps', type=int, default=25, help='Video framerate')
+    parser.add_argument('--video-codec', default='libx264', help='Video codec')
+    parser.add_argument('--video-bitrate', default='5M', help='Video bitrate')
+    parser.add_argument('--start_num', type=int, default=0, help='Number of image in directory to skip')
+    parser.add_argument('--end_num', type=int, default=int(1e6), help='Number of image in directory to skip')
+    parser.add_argument('--gpu', type=int, default=0, help='Which gpu?')
+
+    
+    
+    parser.add_argument('--regularize_mean_deviation_weight', type=float, default=0, help='Penalize different w vectors to be the same')
+    args = parser.parse_args()
+    main(args)
