@@ -1,5 +1,3 @@
-
-
 # specify directories  ###################################
 DIR_ORIG="./sample_projection/" # ../data/test/ # should point to directory of original images (png, jpg, jpeg)
 DIR_ALIGNED="$DIR_ORIG/aligned" # all intermediate dirs will be created

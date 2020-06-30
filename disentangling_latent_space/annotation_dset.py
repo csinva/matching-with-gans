@@ -5,7 +5,8 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy as sy
-import src.style
+# import src.style
+import style
 from PIL import Image
 from matplotlib.backends.backend_pdf import PdfPages
 from scipy.optimize import curve_fit
@@ -69,7 +70,7 @@ class annotationDatabase():
     def displayAnnotatorsWork(self):
         '''plot the number of annotations per annotator'''
         n_annotations = sorted(self.annotations, reverse=True)
-        fig = plt.figure(figsize=src.style.STANDARD_FIG_SIZE)
+        fig = plt.figure(figsize=style.STANDARD_FIG_SIZE)
         plt.plot(range(1, 1 + self.N_ANNOTATORS), n_annotations)
         plt.yscale('log')
         plt.xscale('log')
@@ -86,7 +87,7 @@ class annotationDatabase():
 
         # For each sequence, show images, scatter plot, and boxplots
         for i in range(N_SEQUENCES_TO_SHOW):
-            fig = plt.figure(figsize=src.style.STANDARD_FIG_SIZE)
+            fig = plt.figure(figsize=style.STANDARD_FIG_SIZE)
 
             # Read in images
             imgs = []
@@ -195,7 +196,7 @@ class annotationDatabase():
         self.outPDF = PdfPages(OUT_PDF_FILE_NAME)
 
         # set up figure that will be used to display the opening banner
-        fig = plt.figure(figsize=src.style.STANDARD_FIG_SIZE)
+        fig = plt.figure(figsize=style.STANDARD_FIG_SIZE)
         plt.axis('off')
 
         # stuff to be printed out on the first page of the report

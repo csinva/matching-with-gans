@@ -8,6 +8,17 @@ from tqdm import tqdm
 from config import *
 
 
+def get_dists(dist_type: str='facial'):
+    '''
+    dist_type
+    '''
+    dists_fnames = {
+        'facial': oj(DIR_PROCESSED, 'dists_pairwise_facial.npy'),
+        'vgg': oj(DIR_PROCESSED, 'dists_pairwise_vgg.npy'),
+    }
+    return np.load(open(dists_fnames[dist_type], 'rb'))
+    
+    
 def load_all_labs(cached_file=oj(DIR_PROCESSED, 'df.pkl'),
                   dir_ims=oj(DIR_CELEBA, 'ims'),
                   celeba_id_fname=oj(DIR_CELEBA, 'Anno', 'identity_CelebA.txt'),

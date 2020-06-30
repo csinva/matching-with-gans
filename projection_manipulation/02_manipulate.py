@@ -18,7 +18,7 @@ if __name__ == '__main__':
     ALIGNED_IMAGES_DIR = sys.argv[1]
     MANIPULATED_IMAGES_DIR = sys.argv[2]
     N_IMS = 11
-    ATTRS = 'CHGA' # HAGCBMSEW # CHG
+    ATTRS = 'CAHG' # HAGCBMSEW # CHG
 
     G = Generator(image_size=512)
     os.makedirs(MANIPULATED_IMAGES_DIR, exist_ok=True)
@@ -68,5 +68,5 @@ if __name__ == '__main__':
         # custom latent viz
         ims = np.array([transects_1d[a] for a in ATTRS])
         ims = ims.reshape((len(ATTRS), N_IMS, *ims.shape[2:]))
-        util.plot_grid(ims, ylabs=[config.LABELS[a].capitalize() for a in ATTRS], suptitle='Original')
-        plt.savefig(oj(MANIPULATED_IMAGES_DIR, fname[:-4] + '.png'))
+        util.plot_grid(ims, ylabs=[config.ATTR_LABELS[a].capitalize() for a in ATTRS], suptitle='Original')
+        plt.savefig(oj(MANIPULATED_IMAGES_DIR, fname[:-4] + '.png'), dpi=300)
