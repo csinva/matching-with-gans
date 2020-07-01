@@ -15,6 +15,7 @@ def get_dists(dist_type: str='facial'):
     dists_fnames = {
         'facial': oj(DIR_PROCESSED, 'dists_pairwise_facial.npy'),
         'vgg': oj(DIR_PROCESSED, 'dists_pairwise_vgg.npy'),
+        'gan': oj(DIR_PROCESSED, 'dists_pairwise_gan.npy')
     }
     return np.load(open(dists_fnames[dist_type], 'rb'))
     

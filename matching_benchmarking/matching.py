@@ -14,7 +14,7 @@ def get_lat(latents):
     return lat
 
 
-def get_dists(lat):
+def calc_dists_from_latents(lat):
     '''Get distances
     '''
     # calculate distances: (points, points)
@@ -54,30 +54,3 @@ def calc_matches(dists, fname_ids):
     '''
     closest_matches = np.argsort(dists)  # dists[im_num - 1])
     return dists[closest_matches], fname_ids[closest_matches]
-
-
-def show_matches(closest_matches, DIR_ORIG, DIR_GEN, im_nums=range(60, 70)):
-    # pick the image
-    for im_num in im_nums:
-        R, C = 1, 7
-        plt.figure(figsize=(C * 2, R * 2))
-
-        plt.subplot(R, C, 1)
-        im_orig = mpimg.imread(oj(DIR_ORIG, f'{im_num:05}.jpg'))
-        util.imshow(im_orig)
-        plt.title('original im', fontsize=10)
-
-        plt.subplot(R, C, 2)
-        im_rec = mpimg.imread(oj(DIR_GEN, f'{im_num:05}.png'))
-        util.imshow(im_rec)
-        plt.title('reconstruction', fontsize=10)
-
-        #     print(dists[im_num - 1][closest_matches])
-        plt.subplot(R, C, 3)
-        plt.title('closest matches...', fontsize=10)
-        for i in range(C - 2):
-            plt.subplot(R, C, i + 3)
-            matched_num = closest_matches[i] + 1
-            im = mpimg.imread(oj(DIR_GEN, f'{matched_num:05}.png'))
-            util.imshow(im)
-        plt.show()
