@@ -10,7 +10,7 @@ DIR_FIGS = oj(DIR_REPO, 'figs')
 # data #################################
 DIR_CELEBA = oj(DIR_REPO, 'data/celeba-hq')
 DIR_IMS = oj(DIR_CELEBA, 'ims/')
-DIR_PROCESSED = oj(DIR_REPO, 'data_processed/celeba-hq/')
+DIR_PROCESSED = oj(DIR_REPO, 'data_processed/')
 DIR_GEN = oj(DIR_PROCESSED, 'generated_images_0.1')
 
 # lib paths #################################
@@ -43,3 +43,7 @@ ATTR_LABELS = {
 ATTR_TO_INDEX = {
     ATTR_LABELS[ALL_ATTRS[i]]: i for i in range(len(ALL_ATTRS))
 }
+
+
+# projection experiments
+DIR_PROJ_ANNOTATIONS = oj(DIR_PROCESSED, 'projection_annotations')

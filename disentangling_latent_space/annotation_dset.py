@@ -14,7 +14,7 @@ from scipy.optimize import curve_fit
 
 class annotationDatabase():
 
-    def __init__(self, annotations_file_names, labelScores):
+    def __init__(self, annotations_file_names, labelScores, label_type='crowd-image-classifier'):
         '''Parameters:
         annotations_file_names - list of names of jupyter files where the annotations are saved.
         Each file refers to one image.'''
@@ -37,8 +37,14 @@ class annotationDatabase():
                 for a, ans in enumerate(data['answers']):  # read each annotator's annotation
                     ID = self.addAnnotation(ans['workerId'])  # mark annotation and retrieve ID of annotator
                     annotatorIDs.append(ID)  # take note of which annotator it was
-                    label = data['answers'][a]['answerContent']['crowd-image-classifier']['label']
-                    scores.append(labelScores[label])  # transform label into score
+                    lab_key = 'label'
+                    if label_type == 'crowd-image-classifier-multi-select':
+                        lab_key = 'labels'
+                    label = data['answers'][a]['answerContent'][label_type][lab_key]
+                    if type(label) == list:
+                        scores.append([labelScores[l] for l in label])  # transform label into score
+                    else:
+                        scores.append(labelScores[label])  # transform label into score
 
                 self.imageScores.append(scores)
                 self.imageAnnotators.append(annotatorIDs)
@@ -78,6 +84,7 @@ class annotationDatabase():
         plt.ylabel('n. annotations')
         plt.title('Work of individual annotators')
         self.figList.append(fig)
+        return fig
 
     def displaySequenceAnnotations(self, image_names, label_names, SEQUENCE_LENGTH, IMAGE_PATH, N_SEQUENCES_TO_SHOW=3):
         # Make sure sequence length and number of images are compatible
