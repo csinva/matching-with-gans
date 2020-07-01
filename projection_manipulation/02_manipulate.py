@@ -24,6 +24,12 @@ if __name__ == '__main__':
     os.makedirs(MANIPULATED_IMAGES_DIR, exist_ok=True)
     for fname in sorted([f for f in os.listdir(ALIGNED_IMAGES_DIR)
                          if '.npy' in f]):
+        fname_out = oj(MANIPULATED_IMAGES_DIR, fname[:-4] + '.png')
+        
+        # skip if it already exists
+        if os.path.exists(fname_out):
+            continue
+        
         latents = np.array([np.load(oj(ALIGNED_IMAGES_DIR, fname))])
 
         kwargs = {
@@ -69,4 +75,4 @@ if __name__ == '__main__':
         ims = np.array([transects_1d[a] for a in ATTRS])
         ims = ims.reshape((len(ATTRS), N_IMS, *ims.shape[2:]))
         util.plot_grid(ims, ylabs=[config.ATTR_LABELS[a].capitalize() for a in ATTRS], suptitle='Original')
-        plt.savefig(oj(MANIPULATED_IMAGES_DIR, fname[:-4] + '.png'), dpi=300)
+        plt.savefig(fname_out, dpi=400)
