@@ -18,7 +18,7 @@ def savefig(fname):
     
     plt.tight_layout()
     plt.savefig(oj(DIR_FIGS, fname) + '.pdf')
-    # plt.savefig(oj(DIR_FIGS, fname) + '.svg')
+    plt.savefig(oj(DIR_FIGS, fname) + '.png', dpi=300)
 
 def corrplot(corrs):
     mask = np.triu(np.ones_like(corrs, dtype=np.bool))
