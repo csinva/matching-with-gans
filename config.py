@@ -11,7 +11,7 @@ DIR_FIGS = oj(DIR_REPO, 'figs')
 DIR_CELEBA = oj(DIR_REPO, 'data/celeba-hq')
 DIR_IMS = oj(DIR_CELEBA, 'ims/')
 DIR_PROCESSED = oj(DIR_REPO, 'data_processed/')
-DIR_GEN = oj(DIR_PROCESSED, 'generated_images_0.1')
+DIR_GEN = oj(DIR_PROCESSED, 'gen', 'generated_images_0.1')
 
 # lib paths #################################
 DIR_LIB = oj(DIR_REPO, 'lib')

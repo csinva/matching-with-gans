@@ -20,14 +20,18 @@
 
 
 ## distances
-- analysis here requires distances between 
+- analysis here requires the pairwise distance between all 30k images of 3 types: gan dist, facial-rec dist, vgg dist
+    - we have calculated each of these matrices store in the gdrive folder
+    - they should be placed in the data_processed/ folder
 
 
 # projection / manipulation
 - put image into a directory (e.g. projection_manipulation/test)
 - run ./project_new and you will manipulate the altered image along a few attributes:
 
-<img src="projection_manipulation/sample_projection/chandan.jpg" width="200px">
+<p align="center">
+    <img src="projection_manipulation/sample_projection/chandan.jpg" width="200px" align="center">
+</p>
 
 ![](projection_manipulation/sample_projection/manipulated/chandan_01.png)
     
