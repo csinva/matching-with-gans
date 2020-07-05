@@ -51,6 +51,9 @@ def load_all_labs(cached_file=oj(DIR_PROCESSED, 'df.pkl'),
         df[k + '_pred'] = race_pred_labs[k].values
     for k in background.keys():
         df['background_' + k] = background[k].values
+    df['black_or_white'] = 2 * np.ones(df.shape[0]).astype(int)
+    df['black_or_white'].loc[df['race4_pred'] == 'Black'] = 0
+    df['black_or_white'].loc[df['race4_pred'] == 'White'] = 1
 
     # process and add head pose angles
     angles = np.array([ang for ang in range(66)])

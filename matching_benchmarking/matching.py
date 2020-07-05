@@ -73,11 +73,13 @@ def get_idxs_satisfying_reference_constraints(df, dists_match, dists_ref):
     idxs_orig = pd.Series(1, df.index) #df['bool'] # np.ones(n).astype(bool)
     
     # prune anything for which dists are constant (the code for NaN)
+    print('pruning anything with constant dists...')
     for i in tqdm(range(n)):
         if np.all(dists_match[i] == dists_match[i, 0]) or np.all(dists_ref[i] == dists_ref[i, 0]):
             idxs_orig.iloc[i] = False
     
     # prune things based on reference constraints
+    print('pruning based on reference constraints...')
     for i in tqdm(sorted(df.id.unique())):
         d = df[(df.id == i) & idxs_orig]
 
@@ -101,14 +103,19 @@ def get_idxs_satisfying_reference_constraints(df, dists_match, dists_ref):
     return idxs_orig.values.astype(bool)
 
 
-def get_matches(df, dists_match, dists_ref, pairwise_constraints, attrs_to_vary,
+def get_matches(df, dists_match, dists_ref, attrs_to_vary,
                 NUM_MATCHES, MIN_REF_DIST_THRESH_UPPER, MIN_REF_DIST_THRESH_LOWER):
     '''Run full matching
+    
+    attrs_to_vary: List[str]
+        assumes that each attr is binary (0, 1) with other values ignored
+    
     '''
     
     # first prune to images satisfying constraints
+    n = df.shape[0]
     idxs_orig = get_idxs_satisfying_reference_constraints(df, dists_match, dists_ref)
-    print('total ims', df.shape[0], 'selectable ims', np.sum(idxs_orig))
+    print('total ims', n, 'selectable ims', np.sum(idxs_orig))
     print('total ids', df.id.unique().size, 'selectable ids', df[idxs_orig].id.unique().size)
     
     
@@ -119,7 +126,6 @@ def get_matches(df, dists_match, dists_ref, pairwise_constraints, attrs_to_vary,
             subgroups[f'{a}_{val}'] = (df[a].values == val) & idxs_orig
             
     # check passed args
-    n = df.shape[0]
     assert n == dists_match.shape[0], 'df shapes must match'
     assert n == dists_ref.shape[0], 'ref shapes must match'
     
@@ -127,6 +133,8 @@ def get_matches(df, dists_match, dists_ref, pairwise_constraints, attrs_to_vary,
     # start calculating each individual match
     matches = {}
     matches_skipped = []
+    pairwise_constraints = np.zeros((n, n)).astype(bool) # extra constraints for matching
+    print(f'computing {NUM_MATCHES} matches...')
     for match_num in tqdm(range(NUM_MATCHES)):
         # loop to create best matches
         for i, a in enumerate(attrs_to_vary):
@@ -151,9 +159,9 @@ def get_matches(df, dists_match, dists_ref, pairwise_constraints, attrs_to_vary,
             dists_match_constrained[pairwise_constraints] = 1e5
 
             # main constraints (e.g. attributes are different, previously selected)
-            dists_constrained = dists_match_constrained[idxs0][:, idxs1] # (R, C)
+            dists_match_constrained = dists_match_constrained[idxs0][:, idxs1] # (R, C)
 
-            arg = np.argmin(dists_constrained)
+            arg = np.argmin(dists_match_constrained)
 
             # convert match arg back to space without constraints
             arg0 = arg // C
@@ -201,7 +209,7 @@ def get_matches(df, dists_match, dists_ref, pairwise_constraints, attrs_to_vary,
                     s1: idx1,
                     s0 + '_ref': idx_ref0,
                     s1 + '_ref': idx_ref1,
-                    'dist': dists_constrained[arg0, arg1],
+                    'dist': dists_match_constrained[arg0, arg1],
                     'dist_ref0': dists0[arg_ref0][0],
                     'dist_ref1': dists1[arg_ref1][0],
                 }
