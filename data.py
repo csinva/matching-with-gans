@@ -31,10 +31,9 @@ def load_all_labs(cached_file=oj(DIR_PROCESSED, 'df.pkl'),
                   pose_file=oj(DIR_PROCESSED, 'pose.pkl')):
 
     if os.path.exists(cached_file):
-        print('loading cached labels')
         return pd.read_pickle(cached_file)
 
-    print('loading labels...')
+    print('loading + processing labels...')
     df = load_ids(dir_ims, celeba_id_fname, mapping_file)
     labs, labs_full = load_labs(celeba_attr_fname, mapping_file)
 

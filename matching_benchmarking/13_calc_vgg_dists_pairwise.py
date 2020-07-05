@@ -49,7 +49,7 @@ class VGGPerceptualLoss(torch.nn.Module):
 if __name__ == '__main__':
     DIR_ENCODINGS = '../data_processed/celeba-hq/encodings_vgg_small/'
     out_fname1 = 'processed/13_facial_dists_pairwise_vgg_small.h5'
-    out_fname2 = oj(DIR_PROCESSED, 'dists_pairwis_vgg.npy')
+    out_fname2 = oj(DIR_PROCESSED, 'dists_pairwise_vgg.npy')
     os.makedirs(DIR_ENCODINGS, exist_ok=True)
 
     # get fnames
@@ -117,5 +117,5 @@ if __name__ == '__main__':
         for c in range(r):
             dists_vgg[c, r] = dists_vgg[r, c]
     for diag in tqdm(range(n)):
-        dists_vgg[diag, diag] = 1e3
+        dists_vgg[diag, diag] = np.inf
     np.save(open(out_fname2, 'wb'), dists_vgg)
