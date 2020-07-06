@@ -1,3 +1,7 @@
+'''Note: this script was used to generate the results for face benchmarking the projections
+A faster way to get similar results is to use the pre-calculated facial_dists
+'''
+
 import pickle as pkl
 
 import matplotlib.image as mpimg
@@ -11,14 +15,7 @@ import face_recognition
 
 if __name__ == '__main__':
     # load and merge all the data
-    print('loading...')
-    df = data.load_ids()
-    labs, labs_full = data.load_labs()
-    for k in labs.keys():
-        df[k] = labs[k].values
-    for k in labs_full.keys():
-        df[k] = labs_full[k].values
-    print('done loading!')
+    df = data.load_all_labs()
 
     out_fname = 'processed/12_facial_dists.pkl'
     d = df[df['count_with_this_id'] > 1]
