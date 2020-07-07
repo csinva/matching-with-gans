@@ -226,3 +226,23 @@ def get_matches(df, dists_match, dists_ref, attrs_to_vary,
     #         print(matches, matches_skipped)
     #     print('num_matches', len(matches))
     return matches
+
+def plot_subgroup_means(g0, g1, ks, ticklabels=True, args=None):
+    '''
+    args is used to ensure that yticks are put in same order
+    '''
+    if args is None:
+        args = np.argsort(np.abs(g0[ks].mean() - g1[ks].mean()).values)
+    for g, lab in zip([g0, g1], ['Perceived as female', 'Perceived as male']):
+        means = g[ks].mean().values
+        stds = 1.96 * g[ks].std().values / np.sqrt(g.shape[0])
+        ys = np.arange(len(ks))
+        plt.errorbar(means[args], ys, label=lab, xerr=stds[args],
+                     linestyle='', marker='.', markersize=10)
+        if ticklabels:
+            plt.yticks(ys, [k.capitalize() for k in ks[args]])
+        else:
+            plt.yticks(ys, ['' for k in ks[args]])
+    plt.xlim((0, 1))
+    plt.grid()
+    return args
