@@ -25,3 +25,6 @@ data_processed
 **.pth
 venv
 processed
+**ckpt*
+**.pb
+**.meta
