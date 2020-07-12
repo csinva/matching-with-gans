@@ -240,9 +240,10 @@ def plot_subgroup_means(g0, g1, ks, ticklabels=True, args=None):
         plt.errorbar(means[args], ys, label=lab, xerr=stds[args],
                      linestyle='', marker='.', markersize=10)
         if ticklabels:
-            plt.yticks(ys, [k.capitalize() for k in ks[args]])
+            plt.yticks(ys, [k.capitalize().replace('_', ' ') for k in ks[args]])
         else:
             plt.yticks(ys, ['' for k in ks[args]])
     plt.xlim((0, 1))
+    plt.xlabel('Mean value in dataset')
     plt.grid()
     return args
