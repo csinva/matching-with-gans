@@ -9,7 +9,6 @@ from tqdm import tqdm
 from copy import deepcopy
 import util
 
-
 def get_lat(latents):
     #     lat = latents.mean(axis=1) # match in style space
     lat = latents.reshape(latents.shape[0], -1)  # match in extended style space
@@ -227,23 +226,36 @@ def get_matches(df, dists_match, dists_ref, attrs_to_vary,
     #     print('num_matches', len(matches))
     return matches
 
-def plot_subgroup_means(g0, g1, ks, ticklabels=True, args=None):
-    '''
+def plot_subgroup_means(g0, g1, ks, ticklabels=True, args=None, colors=None, CI=True):
+    '''Plots means (with errbar) horizontally for each subgroup
     args is used to ensure that yticks are put in same order
+    g0: dataframe or dict
+        each key will be one row on the y axis
+        each val should be an np array whose mean and std will be plotted
+    g1: dataframe or dict
+        same as g0 for another group
     '''
+    if 'pandas' in str(type(g0)):
+        g0 = g0[ks]
+        g1 = g1[ks]
+    
     if args is None:
-        args = np.argsort(np.abs(g0[ks].mean() - g1[ks].mean()).values)
-    for g, lab in zip([g0, g1], ['Perceived as female', 'Perceived as male']):
-        means = g[ks].mean().values
-        stds = 1.96 * g[ks].std().values / np.sqrt(g.shape[0])
+        means0 = np.array([np.mean(g0[k]) for k in ks])
+        means1 = np.array([np.mean(g1[k]) for k in ks])
+        args = np.argsort(np.abs(means0 - means1))
+    
+    for i, (g, lab) in enumerate(zip([g0, g1], ['Perceived as female', 'Perceived as male'])):
+        means = np.array([np.mean(g[k]) for k in ks])
+        sems = np.array([np.std(g[k]) / np.sqrt(g[k].size) for k in ks])
+        if CI:
+            sems = 1.96 * sems
         ys = np.arange(len(ks))
-        plt.errorbar(means[args], ys, label=lab, xerr=stds[args],
-                     linestyle='', marker='.', markersize=10)
+        plt.errorbar(means[args], ys, label=lab, xerr=sems[args],
+                     linestyle='', marker='.', markersize=10, color=colors[i])
         if ticklabels:
             plt.yticks(ys, [k.capitalize().replace('_', ' ') for k in ks[args]])
         else:
             plt.yticks(ys, ['' for k in ks[args]])
-    plt.xlim((0, 1))
-    plt.xlabel('Mean value in dataset')
+#     plt.xlabel('Mean value in dataset')
     plt.grid()
     return args

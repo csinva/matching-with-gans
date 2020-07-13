@@ -12,6 +12,9 @@ c1 = '#ff7f0e'
 c2 = '#2ca02c'
 c3 = '#d62728'
 cs = [c0, c1, c2, c3]
+cb = c0 #'#0084e3' #57, 138, 242)'
+cr = '#d40035'
+
 
 STANDARD_FIG_SIZE = (20,14)
 VERY_SMALL_SIZE = 12
