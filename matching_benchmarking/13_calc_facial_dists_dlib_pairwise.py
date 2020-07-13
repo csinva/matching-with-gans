@@ -8,7 +8,7 @@ import numpy as np
 from tqdm import tqdm
 
 if __name__ == '__main__':
-    DIR_ENCODINGS = oj(DIR_CELEBA, 'encodings_dlib')
+    DIR_ENCODINGS = oj(DIR_PROCESSED, 'encodings_dlib')
     out_fname = oj(DIR_PROCESSED, 'dists_pairwise_facial.npy') #'processed/13_facial_dists_pairwise.npy'
     os.makedirs(DIR_ENCODINGS, exist_ok=True)
 

@@ -1,11 +1,37 @@
-# installation / setup from scratch
+<p align="center">
+  <a href="#projection-and-manipulation">Projection and manipulation</a>•
+  <a href="#matching-and-benchmarking">Matching and benchmarking</a> •
+  <a href="#disentangling-latent-space">Disentangling latent space</a> 
+  <a href="#reproducibility">Reproducibility</a> 
+  <a href="#reference">Reference</a> 
+</p>
 
+
+# projection and manipulation
+- put image into a directory (e.g. projection_manipulation/test)
+- run ./project_new and you will manipulate the altered image along a few attributes:
+
+<p align="center">
+    <img src="projection_manipulation/sample_projection/chandan.jpg" width="200px" align="center">
+</p>
+
+![](projection_manipulation/sample_projection/manipulated/chandan_01.png)
+    
+    
+# matching and benchmarking
+- [matching_benchmarking](matching_benchmarking) folder contains code for reproducing the matching and benchmarking results obtained here
+    
+# disentangling latent space
+- experiments to disentangle the latent space of stylegan2
+- annotations are available (Z.npy, W.npy) from gdrive folder (place them in the data/annotation-dataest-stylegan2 folder)
+
+
+# reproducibility
+
+## setup
 - run `source activate python3`
 - `pip install tensorflow-gpu==1.14.0`
 - start the lab running in the background: `screen jupyter lab --certfile=~/ssl/mycert.pem --keyfile ~/ssl/mykey.key`
-
-
-# data
 
 ## processed data
 - `df.csv` in `data_processed/celeba-hq` contains labels along with different metrics for each image
@@ -25,23 +51,10 @@
     - they should be placed in the data_processed/ folder
 
 
-# projection / manipulation
-- put image into a directory (e.g. projection_manipulation/test)
-- run ./project_new and you will manipulate the altered image along a few attributes:
-
-<p align="center">
-    <img src="projection_manipulation/sample_projection/chandan.jpg" width="200px" align="center">
-</p>
-
-![](projection_manipulation/sample_projection/manipulated/chandan_01.png)
-    
-    
-# matching / benchmarking
-- [matching_benchmarking](matching_benchmarking) folder contains code for reproducing the matching and benchmarking results obtained here
-    
-# disentangling latent space
-- experiments to disentangle the latent space of stylegan2
-- annotations are available (Z.npy, W.npy) from gdrive folder (place them in the data/annotation-dataest-stylegan2 folder)
-
-
 # reference
+- this project builds on many wonderful open-source projects (see the readmes in the [lib](lib) subfolders for more details) including
+- [stylegan2](https://github.com/NVlabs/stylegan2) and [stylegan2 encoder](https://github.com/rolux/stylegan2encoder)
+- facial recogntion: [dlib](https://github.com/davisking/dlib), python [face_recognition](https://face-recognition.readthedocs.io/en/latest/face_recognition.html), [facenet](https://github.com/davidsandberg/facenet)
+- [fairface](https://github.com/joojs/fairface)
+- [deep_head_pose](https://github.com/shahroudy/deep-head-pose), [face_segmentation](https://github.com/nasir6/face-segmentation), and [faceQnet](https://github.com/uam-biometrics/FaceQnet)
+

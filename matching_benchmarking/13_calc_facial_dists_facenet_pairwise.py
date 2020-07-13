@@ -12,12 +12,12 @@ import matplotlib.image as mpimg
 import skimage.transform
 
 if __name__ == '__main__':
-    DIR_ENCODINGS = oj(DIR_CELEBA, 'encodings_facenet_casia') # VGGFace2
+    DIR_ENCODINGS = oj(DIR_PROCESSED, 'encodings_facenet_casia') # VGGFace2
     out_fname = oj(DIR_PROCESSED, 'dists_pairwise_facial_facenet_casia.npy') # CASIA-WebFace
     model_path = '/home/ubuntu/face-disentanglement/lib/facenet/20180408-102900' # CASIA-WebFace    
     
 #     DIR_ENCODINGS = oj(DIR_CELEBA, 'encodings_facenet') # VGGFace2
-#     out_fname = oj(DIR_PROCESSED, 'dists_pairwise_facial_facenet.npy') # VGGFace2
+#     out_fname = oj(DIR_PROCESSED, 'dists_pairwise_facial_facenet_vgg2.npy') # VGGFace2
 #     model_path = '/home/ubuntu/face-disentanglement/lib/facenet/20180402-114759' # VGGFace2
     os.makedirs(DIR_ENCODINGS, exist_ok=True)
     
