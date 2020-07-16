@@ -226,7 +226,8 @@ def get_matches(df, dists_match, dists_ref, attrs_to_vary,
     #     print('num_matches', len(matches))
     return matches
 
-def plot_subgroup_means(g0, g1, ks, ticklabels=True, args=None, colors=None, CI=True):
+def plot_subgroup_means(g0, g1, ks, ticklabels=True, args=None,
+                        colors=None, CI='Gaussian'):
     '''Plots means (with errbar) horizontally for each subgroup
     args is used to ensure that yticks are put in same order
     g0: dataframe or dict
@@ -247,7 +248,9 @@ def plot_subgroup_means(g0, g1, ks, ticklabels=True, args=None, colors=None, CI=
     for i, (g, lab) in enumerate(zip([g0, g1], ['Perceived as female', 'Perceived as male'])):
         means = np.array([np.mean(g[k]) for k in ks])
         sems = np.array([np.std(g[k]) / np.sqrt(g[k].size) for k in ks])
-        if CI:
+        if CI == 'Gaussian':
+            sems = 1.96 * sems
+        if CI == 'Bernoulli':
             sems = 1.96 * sems
         ys = np.arange(len(ks))
         plt.errorbar(means[args], ys, label=lab, xerr=sems[args],

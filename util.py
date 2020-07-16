@@ -28,7 +28,7 @@ def corrplot(corrs):
 
 
 def plot_row(images, annot_list: list = None, dpi: int = 100,
-             suptitle: str = None, ylab: str = None):
+             suptitle: str = None, ylab: str = None, fontsize_ylab=25):
     '''
     Params
     ------
@@ -46,18 +46,21 @@ def plot_row(images, annot_list: list = None, dpi: int = 100,
 
     fig = plt.figure(figsize=(N_IMS * 3, 3), dpi=dpi)
     for i in range(N_IMS):
-        plt.subplot(1, N_IMS, i + 1)
+        ax = plt.subplot(1, N_IMS, i + 1)
         imshow(images[i], annot=annot_list[i])
-
+        if i == 0:
+            show_ylab(ax, ylab, fontsize_ylab=fontsize_ylab)
+#             plt.ylabel(ylab, fontsize=fontsize_ylab)
+#             fig.text(0, 0.5, ylab, rotation=90, va='center', fontsize=fontsize_ylab)
     if suptitle is not None:
         plt.subplot(1, N_IMS, N_IMS // 2 + 1)
         plt.title(suptitle)
-    if ylab is not None:
-        fig.text(0, 0.5, ylab, rotation=90, va='center')
+#     if ylab is not None:
+        
     plt.tight_layout()
 
 
-def plot_grid(images, ylabs=[], suptitle=None, emphasize_col: int=None):
+def plot_grid(images, ylabs=[], suptitle=None, emphasize_col: int=None, fontsize_ylab=25):
     '''
     Params
     ------
@@ -87,8 +90,7 @@ def plot_grid(images, ylabs=[], suptitle=None, emphasize_col: int=None):
             imshow(images[r * C + c])
 
             if c == 0 and len(ylabs) > r:
-                fig.text(0, r / R + 0.5 / R, ylabs[R - 1 - r], rotation=90, va='center')
-#                 plt.ylab(ylabs[r])
+                show_ylab(ax, ylabs[r], fontsize_ylab=fontsize_ylab)
 
             i += 1
             if i >= images.shape[0]:
@@ -100,7 +102,21 @@ def plot_grid(images, ylabs=[], suptitle=None, emphasize_col: int=None):
     if suptitle is not None:
         fig.text(0.5, 1, suptitle,  ha='center')
 
-    plt.tight_layout()
+    '''
+    if ylabs is not None:
+        for r in range(R):
+            fig.text(0, r / R + 0.5 / R, ylabs[R - 1 - r], rotation=90,
+                         va='center', fontsize=fontsize_ylab)
+    ''' 
+    fig.tight_layout()
+    
+def show_ylab(ax, ylab, fontsize_ylab):
+    plt.axis('on')
+    ax.get_yaxis().set_ticks([])
+    ax.get_xaxis().set_ticks([])
+    for x in ['right', 'top', 'bottom', 'left']:
+        ax.spines[x].set_visible(False)
+    plt.ylabel(ylab, fontsize=fontsize_ylab)
 
 def emphasize_box(ax):
     plt.axis('on')
