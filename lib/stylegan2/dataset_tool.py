@@ -511,6 +511,8 @@ def create_from_images(tfrecord_dir, image_dir, shuffle):
     if img.shape[1] != resolution:
         error('Input images must have the same width and height')
     if resolution != 2 ** int(np.floor(np.log2(resolution))):
+#         img = PIL.Image.fromarray(img).resize(size=(1024, 1024))
+#         img = np.array(img)
         error('Input image resolution must be a power-of-two')
     if channels not in [1, 3]:
         error('Input images must be stored as RGB or grayscale')

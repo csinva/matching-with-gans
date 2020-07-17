@@ -17,6 +17,8 @@ from training import dataset
 from training import misc
 import matplotlib.image as mpimg
 import tensorflow as tf
+import PIL.Image
+import matplotlib.pyplot as plt
 
 
 def project_image(proj, src_file, dst_dir, tmp_dir, video=False):
@@ -34,10 +36,23 @@ def project_image(proj, src_file, dst_dir, tmp_dir, video=False):
     image_dir = '%s/images' % data_dir
     tfrecord_dir = '%s/tfrecords' % data_dir
     os.makedirs(image_dir, exist_ok=True)
-    shutil.copy(src_file, image_dir + '/')
+    
+    # resize as necessary sand save to image_dir
+    img = np.asarray(PIL.Image.open(src_file))
+    resolution = img.shape[0]
+    res_power_2 = 2 ** int(np.floor(np.log2(resolution)))
+    if img.shape[0] < 256:
+        res_power_2 = 256
+    if resolution != res_power_2: # resolution must be a power of 2
+        img = PIL.Image.fromarray(img).resize(size=(res_power_2, res_power_2))
+        img = np.array(img)
+        print('img.shape', img.shape, res_power_2)
+        plt.imsave(oj(image_dir, os.path.basename(src_file)), img)
+        
+    # shutil.copy(src_file, image_dir + '/')
     dataset_tool.create_from_images(tfrecord_dir, image_dir, shuffle=0)
     dataset_obj = dataset.load_dataset(
-        data_dir=data_dir, tfrecord_dir='tfrecords',
+        data_dir=data_dir, tfrecord_dir='tfrecords', verbose=False,
         max_label_size=0, repeat=False, shuffle_mb=0
     )
 
@@ -114,9 +129,13 @@ def main(args):
         regularize_mean_deviation_weight = args.regularize_mean_deviation_weight
     )
     proj.set_network(Gs)
-    src_files = sorted([os.path.join(args.src_dir, f) for f in os.listdir(args.src_dir) if f[0] not in '._'])
+    src_files = sorted([os.path.join(args.src_dir, f)
+                        for f in os.listdir(args.src_dir)
+                        if f[0] not in '._'])
     src_files = src_files[args.start_num: args.end_num]
+    print('processing', len(src_files), 'files...')
     for src_file in src_files:
+        
         # check if file already exists and skip
         filename = os.path.join(args.dst_dir, os.path.basename(src_file)[:-4] + '.png')
         if not os.path.exists(filename):
@@ -150,12 +169,12 @@ if __name__ == '__main__':
     parser.add_argument('--video-fps', type=int, default=25, help='Video framerate')
     parser.add_argument('--video-codec', default='libx264', help='Video codec')
     parser.add_argument('--video-bitrate', default='5M', help='Video bitrate')
-    parser.add_argument('--start_num', type=int, default=0, help='Number of image in directory to skip')
-    parser.add_argument('--end_num', type=int, default=int(1e6), help='Number of image in directory to skip')
+    parser.add_argument('--start_num', type=int, default=0, help='Number of images in directory to skip')
+    parser.add_argument('--end_num', type=int, default=int(1e6), help='Final image in directory to process')
     parser.add_argument('--gpu', type=int, default=0, help='Which gpu?')
 
     
     
-    parser.add_argument('--regularize_mean_deviation_weight', type=float, default=0, help='Penalize different w vectors to be the same')
+    parser.add_argument('--regularize_mean_deviation_weight', type=float, default=0.1, help='Penalize different w vectors to be the same')
     args = parser.parse_args()
     main(args)

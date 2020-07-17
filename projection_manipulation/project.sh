@@ -22,6 +22,9 @@ $PROJECT ../data/celeba-hq/ims/ ../data_processed/celeba-hq/generated_images_0.1
 #done
 
 
+# fairface projections #############################
+# $PROJECT ../data/fairface/train/ ../data_processed/fairface/generated_images/
+
 
 # stylegan2 generated #############################
 # $PROJECT ../../data/annotation-dataset-stylegan2/images/ ../../data_processed/stylegan2/generated_images_0/ --regularize_mean_deviation_weight 0
