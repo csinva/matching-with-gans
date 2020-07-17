@@ -14,7 +14,9 @@ c3 = '#d62728'
 cs = [c0, c1, c2, c3]
 cb = c0 #'#0084e3' #57, 138, 242)'
 cr = '#d40035'
-
+cp = '#cc3399'
+cy = '#d8b365'
+cg = '#5ab4ac'
 
 STANDARD_FIG_SIZE = (20,14)
 VERY_SMALL_SIZE = 12
