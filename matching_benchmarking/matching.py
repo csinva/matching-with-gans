@@ -227,7 +227,7 @@ def get_matches(df, dists_match, dists_ref, attrs_to_vary,
     return matches
 
 def plot_subgroup_means(g0, g1, ks, ticklabels=True, args=None,
-                        colors=None, CI='Gaussian'):
+                        colors=None, CI='sem'):
     '''Plots means (with errbar) horizontally for each subgroup
     args is used to ensure that yticks are put in same order
     g0: dataframe or dict
@@ -246,14 +246,18 @@ def plot_subgroup_means(g0, g1, ks, ticklabels=True, args=None,
         args = np.argsort(np.abs(means0 - means1))
     
     for i, (g, lab) in enumerate(zip([g0, g1], ['Perceived as female', 'Perceived as male'])):
-        means = np.array([np.mean(g[k]) for k in ks])
-        sems = np.array([np.std(g[k]) / np.sqrt(g[k].size) for k in ks])
-        if CI == 'Gaussian':
+        lists = [g[k] for k in ks]
+        means = np.array([np.mean(l) for l in lists])
+        sems = np.array([np.std(l) / np.sqrt(l.size) for l in lists])
+        if CI == 'sem':
             sems = 1.96 * sems
-        if CI == 'Bernoulli':
-            sems = 1.96 * sems
+            sems = sems[args]
+        elif CI == 'wilson':
+            wilsons = [util.wilson(l) for l in lists]
+            sems = np.abs(np.array([[w[0], w[1]] for w in wilsons]).transpose())
+            sems = sems[:, args]
         ys = np.arange(len(ks))
-        plt.errorbar(means[args], ys, label=lab, xerr=sems[args],
+        plt.errorbar(means[args], ys, label=lab, xerr=sems,
                      linestyle='', marker='.', markersize=10, color=colors[i])
         if ticklabels:
             plt.yticks(ys, [k.capitalize().replace('_', ' ') for k in ks[args]])

@@ -5,7 +5,7 @@ import scipy.stats
 import torch
 from os.path import join as oj
 import os
-
+from math import sqrt
 import style
 from config import *
 
@@ -280,3 +280,22 @@ def proj(u: np.ndarray, v: np.ndarray):
     '''Return projection of u onto v
     '''
     return u * np.dot(u, v) / np.dot(u, u)
+
+
+def wilson(vals, z=1): #1.96): # z 1.96 - 95%
+    '''vals is array_like of binary values
+    
+    Returns
+    -------
+    (err_lower, err_upper) around the mean
+    '''
+    vals = np.array(vals)
+    nf = np.sum(vals == 0)
+    ns = np.sum(vals)
+    n = vals.size
+
+    # implemented based on eq. from wikipedia as of jul 17 2020
+    phat = float(ns) / n
+    center = (ns + z**2 / 2) / (n + z**2)
+    diff = z / (n + z**2) * sqrt(ns * nf / n + z**2 / 4)
+    return center - phat - diff, center - phat + diff
