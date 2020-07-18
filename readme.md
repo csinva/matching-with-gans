@@ -1,8 +1,9 @@
 <p align="center">
-  <a href="#projection-and-manipulation">Projection and manipulation</a>•
+  <a href="#projection-and-manipulation">Projection and manipulation</a> •
   <a href="#matching-and-benchmarking">Matching and benchmarking</a> •
   <a href="#disentangling-latent-space">Disentangling latent space</a> 
-  <a href="#reproducibility">Reproducibility</a> 
+  <br>
+  <a href="#reproducibility">Reproducibility</a> •
   <a href="#reference">Reference</a> 
 </p>
 

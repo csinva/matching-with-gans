@@ -45,5 +45,5 @@ ATTR_TO_INDEX = {
 }
 
 
-# projection experiments
+# different directories with source code
 DIR_PROJ_ANNOTATIONS = oj(DIR_PROCESSED, 'projection_annotations')
