@@ -24,9 +24,12 @@ def plot_subgroup_means(g0, g1, ks, ticklabels=True, args=None,
         g1 = g1[ks]
     
     if args is None:
+        '''
         means0 = np.array([np.mean(g0[k]) for k in ks])
         means1 = np.array([np.mean(g1[k]) for k in ks])
         args = np.argsort(np.abs(means0 - means1))
+        '''
+        args = np.arange(len(ks))
     
     for i, (g, lab) in enumerate(zip([g0, g1], ['Perceived as female', 'Perceived as male'])):
         lists = [g[k] for k in ks]
@@ -43,7 +46,8 @@ def plot_subgroup_means(g0, g1, ks, ticklabels=True, args=None,
         plt.errorbar(means[args], ys, label=lab, xerr=sems,
                      linestyle='', marker='.', markersize=10, color=colors[i])
         if ticklabels:
-            plt.yticks(ys, [k.capitalize().replace('_', ' ') for k in ks[args]])
+            plt.yticks(ys, [k[0].upper() + k[1:].replace('black', 'Black').replace('_', ' ')
+                            for k in ks[args]])
         else:
             plt.yticks(ys, ['' for k in ks[args]])
 #     plt.xlabel('Mean value in dataset')
