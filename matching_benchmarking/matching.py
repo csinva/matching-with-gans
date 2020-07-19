@@ -225,3 +225,27 @@ def get_matches(df, dists_match, dists_ref, attrs_to_vary,
     #         print(matches, matches_skipped)
     #     print('num_matches', len(matches))
     return matches
+
+def add_intersections(d, ks_init, ignore_key='gender'):
+    ks_init = [k for k in ks_init if not k == ignore_key]
+    ks = []
+    for i, k1 in enumerate(ks_init):
+        for j in range(i):
+            k2 = ks_init[j]
+            k_full = f'{k1.capitalize()} & {k2.capitalize()}'
+            d[k_full] = np.array(d[k1] == 1) & np.array(d[k2] == 1)
+            ks.append(k_full)
+            
+            k_full = f'{k1.capitalize()} & -{k2.capitalize()}'
+            d[k_full] = np.array(d[k1] == 1) & np.array(d[k2] == 0)
+            ks.append(k_full)
+            
+            k_full = f'-{k1.capitalize()} & {k2.capitalize()}'
+            d[k_full] = np.array(d[k1] == 0) & np.array(d[k2] == 1)
+            ks.append(k_full)
+            
+            k_full = f'-{k1.capitalize()} & -{k2.capitalize()}'
+            d[k_full] = np.array(d[k1] == 0) & np.array(d[k2] == 0)
+            ks.append(k_full)
+            
+    return d, ks

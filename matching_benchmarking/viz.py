@@ -7,7 +7,10 @@ import sklearn.metrics
 import pandas as pd
 from tqdm import tqdm
 from copy import deepcopy
+from sklearn.utils.multiclass import unique_labels
+
 import util
+
 
 def plot_subgroup_means(g0, g1, ks, ticklabels=True, args=None,
                         colors=None, CI='sem'):
@@ -53,3 +56,38 @@ def plot_subgroup_means(g0, g1, ks, ticklabels=True, args=None,
 #     plt.xlabel('Mean value in dataset')
     plt.grid()
     return args
+
+
+def plot_confusion_matrix(y_true, y_pred, class_label,
+                          ax,
+                          normalize=False,
+                         
+                          cmap=plt.cm.Blues):
+    """
+    This function prints and plots the confusion matrix.
+    Normalization can be applied by setting `normalize=True`.
+    Params
+    ------
+    classes: np.ndarray(Str)
+        classes=np.array(['aux-', 'aux+'])
+    """
+    # Compute confusion matrix
+    cm = sklearn.metrics.confusion_matrix(y_true, y_pred)
+    # Only use the labels that appear in the data
+    if normalize:
+        cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+
+    im = plt.imshow(cm, interpolation='nearest', cmap=cmap)
+
+    
+    ax.set(xlabel=class_label, ylabel=class_label)
+
+    # Loop over data dimensions and create text annotations.
+    fmt = '.2f' if normalize else 'd'
+    thresh = cm.max() / 2.
+    for i in range(cm.shape[0]):
+        for j in range(cm.shape[1]):
+            ax.text(j, i, format(cm[i, j], fmt),
+                    ha="center", va="center",
+                    color="white" if cm[i, j] > thresh else "black")
+    return ax

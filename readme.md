@@ -24,7 +24,7 @@
     
 # disentangling latent space
 - experiments to disentangle the latent space of stylegan2
-- annotations are available (`Z.npy`, `W.npy`) from gdrive folder (place them in the data/annotation-dataest-stylegan2 folder)
+- annotations are available (`Z.npy`, `W.npy`) from gdrive folder (place them in the data/annotation-dataset-stylegan2 folder)
 
 
 # reproducibility
