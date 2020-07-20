@@ -60,7 +60,7 @@ def plot_row(images, annot_list: list = None, dpi: int = 100,
     plt.tight_layout()
 
 
-def plot_grid(images, ylabs=[], suptitle=None, emphasize_col: int=None, fontsize_ylab=25):
+def plot_grid(images, ylabs=[], annot_list=None, suptitle=None, emphasize_col: int=None, fontsize_ylab=25):
     '''
     Params
     ------
@@ -69,6 +69,8 @@ def plot_grid(images, ylabs=[], suptitle=None, emphasize_col: int=None, fontsize
     emphasize_col
         which column to emphasize (by not removing black border)
     '''
+    
+    # deal with inputs
     if type(images) == list:
         images = np.array(images)
     #     print(images.shape)
@@ -82,12 +84,15 @@ def plot_grid(images, ylabs=[], suptitle=None, emphasize_col: int=None, fontsize
         C = images.shape[1]
         # reshape to be (R * C, H, W, C)
         images = images.reshape((R * C, *images.shape[2:]))
+    if annot_list is None:
+        annot_list = [None] * N_IMS
+        
     i = 0
     fig = plt.figure(figsize=(C * 3, R * 3))
     for r in range(R):
         for c in range(C):
             ax = plt.subplot(R, C, i + 1)
-            imshow(images[r * C + c])
+            imshow(images[r * C + c], annot=annot_list[i])
 
             if c == 0 and len(ylabs) > r:
                 show_ylab(ax, ylabs[r], fontsize_ylab=fontsize_ylab)

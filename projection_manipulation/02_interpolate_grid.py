@@ -1,4 +1,5 @@
 '''This script makes a grid which interpolates halfway between all pairs
+and also saves the mean between al images
 '''
 
 import os
@@ -17,9 +18,8 @@ import config
 
 
 if __name__ == '__main__':
-    ALIGNED_IMAGES_DIR = sys.argv[1]
-    INTERPOLATED_IMAGES_DIR = sys.argv[2]
-    N_IMS = 11
+    DIR_ALIGNED_IMAGES = sys.argv[1]
+    DIR_INTERPOLATED_IMAGES = sys.argv[2]
 #     names = None
 #     names = ['chandan', 'andy', 'varun', 'zartosht', 'vishal', 'jamie', 'roy', 'matt', 'jesse']
 #     names = ['chandan', 'dad', 'amma', 'roli', 'mom']
@@ -28,9 +28,9 @@ if __name__ == '__main__':
     names = ['chandan', 'alan', 'alain', 'alex', 'gautam', 'kieran', 'phong', 'stan']
 
     G = Generator(image_size=1024)
-    os.makedirs(INTERPOLATED_IMAGES_DIR, exist_ok=True)
+    os.makedirs(DIR_INTERPOLATED_IMAGES, exist_ok=True)
 
-    fnames = sorted([f for f in os.listdir(ALIGNED_IMAGES_DIR)
+    fnames = sorted([f for f in os.listdir(DIR_ALIGNED_IMAGES)
                      if '.npy' in f and not '2' in f])
     
     
@@ -46,7 +46,7 @@ if __name__ == '__main__':
                     fnames_temp.add(fname)
         fnames = sorted(list(fnames_temp))
 
-    latents = np.array([np.load(oj(ALIGNED_IMAGES_DIR, f)) for f in fnames])
+    latents = np.array([np.load(oj(DIR_ALIGNED_IMAGES, f)) for f in fnames])
     ims_list = []
     n = len(fnames)
     
@@ -68,13 +68,13 @@ if __name__ == '__main__':
     
     ims = np.array(ims_list).reshape((n, n))
     util.plot_grid(ims)
-    fname_out = oj(INTERPOLATED_IMAGES_DIR, 'grid_' + fnames[0][:-4] + '-' + fnames[-1][:-4] + '.png')
+    fname_out = oj(DIR_INTERPOLATED_IMAGES, 'grid_' + fnames[0][:-4] + '-' + fnames[-1][:-4] + '.png')
     plt.savefig(fname_out, dpi=150)
     plt.close()
     
     # save mean
     util.imshow(G.generateImageFromStyleFull(np.mean(latents, axis=0).reshape(1, 18, 512)))
-    fname_out = oj(INTERPOLATED_IMAGES_DIR, 'mean_' + fnames[0][:-4] + '-' + fnames[-1][:-4] + '.png')
+    fname_out = oj(DIR_INTERPOLATED_IMAGES, 'mean_' + fnames[0][:-4] + '-' + fnames[-1][:-4] + '.png')
     plt.savefig(fname_out, dpi=150)    
     
     

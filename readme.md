@@ -9,11 +9,15 @@
 
 
 # projection and manipulation
-- put image into a directory (e.g. projection_manipulation/test)
-- run `projection_manipulation/project_and_manipulate.sh` and you will manipulate the altered image along a few attributes:
+This code allows one to project images into the GAN latent space, after which they can be modified for certain attributes (e.g. age, gender, hair-length) and mixed with other faces (e.g. other people, older/younger versions of the same person).
+
+- all this code is handled by the `projection_manipulation/project_and_manipulate.sh` script
+- to start, put images into a directory (e.g. projection_manipulation/sample_projection/test) - no need to crop / align, this will be done automatically
+    - higher-res photos work better, as well as photos where the face is front-facing and not obstructed by things like hats, scarves, etc.
+
 
 <p align="center">
-    <img src="projection_manipulation/sample_projection/original/chandan.jpg" width="200px" align="center">
+    <img src="projection_manipulation/sample_projection/chandan.jpg" width="200px" align="center">
 </p>
 
 ![](projection_manipulation/sample_projection/manipulated/chandan_01.png)
