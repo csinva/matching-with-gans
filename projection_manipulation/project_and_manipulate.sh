@@ -3,18 +3,22 @@ DIR_ORIG="./sample_projection/" # ../data/test/ # should point to directory of o
 DIR_ALIGNED="$DIR_ORIG/aligned" # all intermediate dirs will be created
 DIR_PROJECTED="$DIR_ORIG/projected"
 DIR_MANIPULATED="$DIR_ORIG/manipulated"
+DIR_INTERPOLATED="$DIR_ORIG/interpolated"
 
 # commands to be run
 ALIGN="python 00_align_images.py"
 PROJECT="python 01_project_images.py"
 MANIPULATE="python 02_manipulate.py"
+INTERPOLATE="python 02_interpolate.py"
 
-echo "aligning..."
-$ALIGN $DIR_ORIG $DIR_ALIGNED
-echo "projecting..."
-$PROJECT $DIR_ALIGNED $DIR_PROJECTED --regularize_mean_deviation_weight 0.1
-echo "manipulating..."
-$MANIPULATE $DIR_PROJECTED $DIR_MANIPULATED
+# echo "aligning..."
+# $ALIGN $DIR_ORIG $DIR_ALIGNED
+# echo "projecting..."
+# $PROJECT $DIR_ALIGNED $DIR_PROJECTED --regularize_mean_deviation_weight 0.1
+# echo "manipulating..."
+# $MANIPULATE $DIR_PROJECTED $DIR_MANIPULATED
+echo "interpolating..."
+$INTERPOLATE $DIR_PROJECTED $DIR_INTERPOLATED
 
 
 # project real ims #############################

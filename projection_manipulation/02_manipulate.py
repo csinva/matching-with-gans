@@ -1,3 +1,7 @@
+'''This script takes projected latents and changes them along
+a few predfined axes (e.g. skin color, age, hair-color, gender)
+'''
+
 import os
 
 import matplotlib.image as mpimg
@@ -20,7 +24,7 @@ if __name__ == '__main__':
     N_IMS = 11
     ATTRS = 'CAHG' # HAGCBMSEW # CHG
 
-    G = Generator(image_size=512)
+    G = Generator(image_size=1024)
     os.makedirs(MANIPULATED_IMAGES_DIR, exist_ok=True)
     for fname in sorted([f for f in os.listdir(ALIGNED_IMAGES_DIR)
                          if '.npy' in f]):
@@ -75,4 +79,5 @@ if __name__ == '__main__':
         ims = np.array([transects_1d[a] for a in ATTRS])
         ims = ims.reshape((len(ATTRS), N_IMS, *ims.shape[2:]))
         util.plot_grid(ims, ylabs=[config.ATTR_LABELS[a].capitalize() for a in ATTRS], suptitle='Original')
-        plt.savefig(fname_out, dpi=400)
+        plt.savefig(fname_out, dpi=150)
+        plt.close()
