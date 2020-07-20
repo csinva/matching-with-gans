@@ -36,6 +36,7 @@ def project_image(proj, src_file, dst_dir, tmp_dir, video=False):
     image_dir = '%s/images' % data_dir
     tfrecord_dir = '%s/tfrecords' % data_dir
     os.makedirs(image_dir, exist_ok=True)
+    print(src_file, dst_dir, tmp_dir)
     
     # resize as necessary sand save to image_dir
     img = np.asarray(PIL.Image.open(src_file))
@@ -49,6 +50,7 @@ def project_image(proj, src_file, dst_dir, tmp_dir, video=False):
         print('img.shape', img.shape, res_power_2)
         plt.imsave(oj(image_dir, os.path.basename(src_file)), img)
         
+    print(img.shape)
     # shutil.copy(src_file, image_dir + '/')
     dataset_tool.create_from_images(tfrecord_dir, image_dir, shuffle=0)
     dataset_obj = dataset.load_dataset(
@@ -109,10 +111,6 @@ def render_video(src_file, dst_dir, tmp_dir, num_frames, mode, size, fps, codec,
     video_clip = moviepy.editor.VideoClip(render_frame, duration=duration)
     video_clip.write_videofile(filename, fps=fps, codec=codec, bitrate=bitrate)
 
-
-def project_from_fname(proj):
-    return
-    
 
 def main(args):
 

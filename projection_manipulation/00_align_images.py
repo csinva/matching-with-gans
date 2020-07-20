@@ -9,8 +9,8 @@ import numpy as np
 import scipy.ndimage
 import os
 import PIL.Image
-
-
+import matplotlib.image as mpimg
+import matplotlib._png as png
 import dlib
 
 
@@ -23,7 +23,16 @@ class LandmarksDetector:
         self.shape_predictor = dlib.shape_predictor(predictor_model_path)
 
     def get_landmarks(self, image):
-        img = dlib.load_rgb_image(image)
+#         img1 = dlib.load_rgb_image(image)
+        img = mpimg.imread(image) 
+#         print(image, img1.shape, img.shape)
+
+        # imread reads in png and jpg differently, so make sure we read to the same
+        if img.shape[2] == 4:
+            img = png.read_png_int(image)
+            img = img[:, :, :3]
+            
+#         print(type(img1), type(img), img1.dtype, img.dtype, img.shape)
         dets = self.detector(img, 1)
 
         for detection in dets:
@@ -69,7 +78,19 @@ def image_align(src_file, dst_file, face_landmarks, output_size=1024, transform_
         if not os.path.isfile(src_file):
             print('\nCannot find source image. Please run "--wilds" before "--align".')
             return
-        img = PIL.Image.open(src_file)
+        
+        img = mpimg.imread(src_file) 
+#         print(image, img1.shape, img.shape)
+
+        # imread reads in png and jpg differently, so make sure we read to the same
+        if img.shape[2] == 4:
+            img = png.read_png_int(src_file)
+            img = img[:, :, :3]
+        img = PIL.Image.fromarray(img)
+        
+#         img = PIL.Image.open(src_file)
+#         im_test = np.asarray(img)
+#         print('test', im_test.shape, im_test.dtype)
 
         # Shrink.
         shrink = int(np.floor(qsize / output_size * 0.5))
