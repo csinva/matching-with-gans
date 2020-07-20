@@ -38,7 +38,8 @@ def project_image(proj, src_file, dst_dir, tmp_dir, video=False):
     os.makedirs(image_dir, exist_ok=True)
     print(src_file, dst_dir, tmp_dir)
     
-    # resize as necessary sand save to image_dir
+    # resize as necessary and save to image_dir
+    '''
     img = np.asarray(PIL.Image.open(src_file))
     resolution = img.shape[0]
     res_power_2 = 2 ** int(np.floor(np.log2(resolution)))
@@ -48,10 +49,11 @@ def project_image(proj, src_file, dst_dir, tmp_dir, video=False):
         img = PIL.Image.fromarray(img).resize(size=(res_power_2, res_power_2))
         img = np.array(img)
         print('img.shape', img.shape, res_power_2)
-        plt.imsave(oj(image_dir, os.path.basename(src_file)), img)
-        
+    plt.imsave(oj(image_dir, os.path.basename(src_file)), img)
     print(img.shape)
-    # shutil.copy(src_file, image_dir + '/')
+    '''
+    
+    shutil.copy(src_file, image_dir + '/')
     dataset_tool.create_from_images(tfrecord_dir, image_dir, shuffle=0)
     dataset_obj = dataset.load_dataset(
         data_dir=data_dir, tfrecord_dir='tfrecords', verbose=False,

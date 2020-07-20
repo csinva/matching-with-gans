@@ -22,12 +22,28 @@ if __name__ == '__main__':
     ALIGNED_IMAGES_DIR = sys.argv[1]
     INTERPOLATED_IMAGES_DIR = sys.argv[2]
     N_IMS = 11
+    names = None
+#     names = ['chandan', 'andy', 'varun']
+    names = ['chandan', 'dad', 'amma', 'roli', 'mom']
+
 
     G = Generator(image_size=1024)
     os.makedirs(INTERPOLATED_IMAGES_DIR, exist_ok=True)
 
     fnames = [f for f in os.listdir(ALIGNED_IMAGES_DIR)
               if '.npy' in f]
+    
+    # filter the names
+    if names is not None:
+        print('filtering names!')
+        fnames_temp = set()
+        for fname in fnames:
+            for name in names:
+                if name in fname:
+                    fnames_temp.add(fname)
+        fnames = sorted(list(fnames_temp))
+    
+    
     for i in range(len(fnames)):
         for j in range(i):
             fname_0 = fnames[i]

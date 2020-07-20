@@ -20,9 +20,9 @@ if __name__ == '__main__':
     ALIGNED_IMAGES_DIR = sys.argv[1]
     INTERPOLATED_IMAGES_DIR = sys.argv[2]
     N_IMS = 11
-    names = None
-    names = ['chandan', 'andy', 'varun']
-#     names = ['chandan', 'dad', 'amma']
+#     names = None
+#     names = ['chandan', 'andy', 'varun']
+    names = ['chandan', 'dad', 'amma', 'roli', 'mom']
 
     G = Generator(image_size=1024)
     os.makedirs(INTERPOLATED_IMAGES_DIR, exist_ok=True)
@@ -49,20 +49,23 @@ if __name__ == '__main__':
     
     # top row
     ims_list.append(np.zeros((5, 5)))
-    for col in tqdm(range(n)):
+    for col in range(1, n):
         ims_list.append(G.generateImageFromStyleFull(latents[col: col + 1]))
         
     # other rows
-    for row in tqdm(range(n)):
+    for row in tqdm(range(n - 1)):
         # add back orignal im on y axis
-        ims_list.append(ims_list[row + 1]) 
-        for col in range(n):
-            ims_list.append(G.generateImageFromStyleFull(0.5 * latents[row: row + 1] + 0.5 * latents[col: col + 1]))
+        ims_list.append(G.generateImageFromStyleFull(latents[row: row + 1]))
+        for col in range(1, n):
+            if col > row:
+                ims_list.append(G.generateImageFromStyleFull(0.5 * latents[row: row + 1] + 0.5 * latents[col: col + 1]))
+            else:
+                ims_list.append(np.zeros((5, 5)))
             
     
-    ims = np.array(ims_list).reshape((n + 1, n + 1))
+    ims = np.array(ims_list).reshape((n, n))
     
     util.plot_grid(ims)
-    fname_out = oj(INTERPOLATED_IMAGES_DIR, fnames[0][:-4] + '-' + fnames[-1][:-4] + '_grid' + '.png')
+    fname_out = oj(INTERPOLATED_IMAGES_DIR, 'grid_' + fnames[0][:-4] + '-' + fnames[-1][:-4] + '.png')
     plt.savefig(fname_out, dpi=150)
     print('grid saved!')

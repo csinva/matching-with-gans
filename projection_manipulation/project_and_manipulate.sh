@@ -13,14 +13,14 @@ MANIPULATE="python 02_manipulate.py"
 INTERPOLATE="python 02_interpolate.py"
 INTERPOLATE_GRID="python 02_interpolate_grid.py"
 
-# echo "aligning..."
-# $ALIGN $DIR_ORIG $DIR_ALIGNED
+echo "aligning..."
+$ALIGN $DIR_ORIG $DIR_ALIGNED
 echo "projecting..."
 $PROJECT $DIR_ALIGNED $DIR_PROJECTED --regularize_mean_deviation_weight 0.1
 # echo "manipulating..."
 # $MANIPULATE $DIR_PROJECTED $DIR_MANIPULATED
 # echo "interpolating..."
-# $INTERPOLATE_GRID $DIR_PROJECTED $DIR_INTERPOLATED
+$INTERPOLATE_GRID $DIR_PROJECTED $DIR_INTERPOLATED
 # $INTERPOLATE $DIR_PROJECTED $DIR_INTERPOLATED
 
 
