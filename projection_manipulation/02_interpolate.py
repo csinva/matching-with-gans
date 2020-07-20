@@ -24,7 +24,9 @@ if __name__ == '__main__':
     N_IMS = 11
     names = None
 #     names = ['chandan', 'andy', 'varun']
-    names = ['chandan', 'dad', 'amma', 'roli', 'mom']
+#     names = ['chandan', 'dad', 'amma', 'roli', 'mom']
+#     names = ['chandan', 'guha', 'pietro']
+    names = ['chandan', 'yinuo', 'chan']
 
 
     G = Generator(image_size=1024)

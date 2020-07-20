@@ -21,14 +21,17 @@ if __name__ == '__main__':
     INTERPOLATED_IMAGES_DIR = sys.argv[2]
     N_IMS = 11
 #     names = None
-#     names = ['chandan', 'andy', 'varun']
-    names = ['chandan', 'dad', 'amma', 'roli', 'mom']
+#     names = ['chandan', 'andy', 'varun', 'zartosht', 'vishal', 'jamie', 'roy', 'matt', 'jesse']
+#     names = ['chandan', 'dad', 'amma', 'roli', 'mom']
+#     names = ['chandan', 'guha', 'pietro']
+#     names = ['chandan', 'yinuo', 'chan']
+    names = ['chandan', 'alan', 'alain', 'alex', 'gautam', 'kieran', 'phong', 'stan']
 
     G = Generator(image_size=1024)
     os.makedirs(INTERPOLATED_IMAGES_DIR, exist_ok=True)
 
     fnames = sorted([f for f in os.listdir(ALIGNED_IMAGES_DIR)
-                     if '.npy' in f])
+                     if '.npy' in f and not '2' in f])
     
     
     
@@ -64,8 +67,15 @@ if __name__ == '__main__':
             
     
     ims = np.array(ims_list).reshape((n, n))
-    
     util.plot_grid(ims)
     fname_out = oj(INTERPOLATED_IMAGES_DIR, 'grid_' + fnames[0][:-4] + '-' + fnames[-1][:-4] + '.png')
     plt.savefig(fname_out, dpi=150)
-    print('grid saved!')
+    plt.close()
+    
+    # save mean
+    util.imshow(G.generateImageFromStyleFull(np.mean(latents, axis=0).reshape(1, 18, 512)))
+    fname_out = oj(INTERPOLATED_IMAGES_DIR, 'mean_' + fnames[0][:-4] + '-' + fnames[-1][:-4] + '.png')
+    plt.savefig(fname_out, dpi=150)    
+    
+    
+    
