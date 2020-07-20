@@ -1,15 +1,17 @@
 # specify directories  ###################################
-DIR_ORIG="./sample_projection/" # ../data/test/ # should point to directory of original images (png, jpg, jpeg)
-DIR_ALIGNED="$DIR_ORIG/aligned" # all intermediate dirs will be created
-DIR_PROJECTED="$DIR_ORIG/projected"
-DIR_MANIPULATED="$DIR_ORIG/manipulated"
-DIR_INTERPOLATED="$DIR_ORIG/interpolated"
+DIR_ROOT="./sample_projection" # should point to directory of original images (png, jpg, jpeg)
+DIR_ORIG="$DIR_ROOT/original"
+DIR_ALIGNED="$DIR_ROOT/aligned" # all intermediate dirs will be created
+DIR_PROJECTED="$DIR_ROOT/projected"
+DIR_MANIPULATED="$DIR_ROOT/manipulated"
+DIR_INTERPOLATED="$DIR_ROOT/interpolated"
 
 # commands to be run
 ALIGN="python 00_align_images.py"
 PROJECT="python 01_project_images.py"
 MANIPULATE="python 02_manipulate.py"
 INTERPOLATE="python 02_interpolate.py"
+INTERPOLATE_GRID="python 02_interpolate_grid.py"
 
 # echo "aligning..."
 # $ALIGN $DIR_ORIG $DIR_ALIGNED
@@ -18,24 +20,10 @@ INTERPOLATE="python 02_interpolate.py"
 # echo "manipulating..."
 # $MANIPULATE $DIR_PROJECTED $DIR_MANIPULATED
 echo "interpolating..."
-$INTERPOLATE $DIR_PROJECTED $DIR_INTERPOLATED
+$INTERPOLATE_GRID $DIR_PROJECTED $DIR_INTERPOLATED
+# $INTERPOLATE $DIR_PROJECTED $DIR_INTERPOLATED
 
 
-# project real ims #############################
 
-# $PROJECT ../data_processed/pilot-our-images-large/PPP/ ../data_processed/pilot-our-images-large/PPP_proj/ --regularize_mean_deviation_weight 0.1
-
-# $PROJECT ../data_processed/pilot-our-images-large/G2P2/ ../data_processed/pilot-our-images-large/G2P2_proj/ --regularize_mean_deviation_weight 0.1
-
-# $PROJECT ../data_processed/pilot-our-images-large/KFS/ ../data_processed/pilot-our-images-large/KFS_proj/ --regularize_mean_deviation_weight 0.1
-
-
-# $PROJECT ../../data_processed/pilot-our-images/KFS/ ../../data_processed/pilot-our-images/KFS_proj/ --regularize_mean_deviation_weight 0.1
-
-# $PROJECT ../../data_processed/pilot-our-images/PPP/ ../../data_processed/pilot-our-images/PPP_proj/ --regularize_mean_deviation_weight 0.1
-
-# $PROJECT ../../data_processed/pilot-our-images/G2P2/ ../../data_processed/pilot-our-images/G2P2_proj_0/ --regularize_mean_deviation_weight 0
-
-# $PROJECT ../../data_processed/pilot-our-images/KFS/ ../../data_processed/pilot-our-images/KFS_proj_0/ --regularize_mean_deviation_weight 0
-
-# $PROJECT ../../data_processed/pilot-our-images/PPP/ ../../data_processed/pilot-our-images/PPP_proj_0/ --regularize_mean_deviation_weight 0
+# misc directories real ims #############################
+# DIR_ORIG="../data_processed/pilot-our-images-large/PPP/"

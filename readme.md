@@ -13,7 +13,7 @@
 - run `projection_manipulation/project_and_manipulate.sh` and you will manipulate the altered image along a few attributes:
 
 <p align="center">
-    <img src="projection_manipulation/sample_projection/chandan.jpg" width="200px" align="center">
+    <img src="projection_manipulation/sample_projection/original/chandan.jpg" width="200px" align="center">
 </p>
 
 ![](projection_manipulation/sample_projection/manipulated/chandan_01.png)
