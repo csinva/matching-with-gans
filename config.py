@@ -19,7 +19,7 @@ DIR_STYLEGAN = oj(DIR_LIB, 'stylegan2')
 
 
 # attrs in latent space
-DIR_LINEAR_DIRECTIONS = oj(DIR_REPO, 'data/annotation-dataset-stylegan2/linear_models') # linear models for attributes on latent space
+DIR_LINEAR_DIRECTIONS = oj(DIR_REPO, 'data/annotations_stylegan2/linear_models') # linear models for attributes on latent space
 ATTRS = ['age', 'facial-hair', 'skin-color', 'gender', 'hair-length', 'makeup']
 ATTRS_MEASURED = 'HAGCBM'
 ALL_ATTRS = 'HAGCBMSEW' # 'HAGCBMSEW'

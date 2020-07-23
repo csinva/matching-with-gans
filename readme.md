@@ -43,19 +43,15 @@ This code allows one to project images into the GAN latent space, after which th
     - on AWS, this can be done by selecting a deep learning AMI, running `source activate python3`, and then running `pip install tensorflow-gpu==1.14.0`
 
 ## Rerunning the pipeline: download all files available in [this gdrive folder](https://drive.google.com/drive/folders/1YO_GZ48o30jTnME-z7d8LlcZoJejcNsk?usp=sharing)
-- requires downloading the celeba-hq dataset at 1024 x 1024 resolution (zip file)
-    - images should be place at data/celeba-hq/ims
-    - annotations are provided in the data/celeba-hq/Anno folder
-- `df.csv` in `data_processed/celeba-hq` contains labels along with different metrics for each image
-- different distances can be downloaded as `.npy` files (30k x 30k matrices)
-    - `dists_pairwise_facial.npy` - pairwise distances measure by dlib face-rec encodings
-    - `dists_pairwise_vgg.npy` - pairwise distances measure by vgg16 perceptual distance (only first 4 layers)
+
+- `data/celeba-hq/ims` folder
+  - unzip the images in  celeba-hq dataset at 1024 x 1024 resolution into this folder
+- `data/processed` folder
+  - distances: `dists_pairwise_gan.npy`, `dists_pairwise_vgg.npy`, `dists_pairwise_facial.npy`, `dists_pairwise_facial_facenet.npy`, `dists_pairwise_facial_facenet_casia.npy`, `dists_pairwise_facial_vgg2.npy` - (30k x 30k) matrices storing the pairwise distances between all the images in celeba-hq using different distance measures
+  - already present in the data folder are annotations (e.g. gender, smiling, eyeglasses) + predicted metrics (e.g. predicted yaw, roll, pitch, quality, race) for each image + latent directions corresponding to different attributes for StyleGAN2
+- all these paths can be changed in the `config.py` file
 
 
-## Distances
-- analysis here requires the pairwise distance between all 30k images of 3 types: gan dist, facial-rec dist, vgg dist
-    - we have calculated each of these matrices store in the gdrive folder
-    - they should be placed in the data_processed/ folder
 
 
 # Reference

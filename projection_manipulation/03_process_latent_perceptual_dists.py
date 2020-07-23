@@ -10,7 +10,9 @@ from config import *
 from copy import deepcopy
 sys.path.append(DIR_STYLEGAN)
 import pickle as pkl
-
+import pretrained_networks
+import transects
+import projector
 
 out_dir = oj(DIR_PROCESSED, 'processed_latents')
 os.makedirs(out_dir, exist_ok=True)
@@ -20,10 +22,7 @@ regs = [0, 0.01, 0.1, 1, 10000]
 ks = sorted(ATTRS_MEASURED)
 
 if __name__ == '__main__':
-    import pretrained_networks
-    import transects
-    import projector
-    
+
     network_pkl = 'gdrive:networks/stylegan2-ffhq-config-f.pkl'
     _, _, Gs = pretrained_networks.load_networks(network_pkl)
     proj = projector.Projector()
@@ -71,3 +70,7 @@ if __name__ == '__main__':
                 r[f'pred_{a}'] = preds[i]
         
             pkl.dump(r, open(out_fname, 'wb'))
+            
+df = pd.DataFrame([pkl.load(open(oj(DIR_PROCESSED, 'processed_latents', f), 'rb'))
+                   for f in sorted(os.listdir(oj(DIR_PROCESSED, 'processed_latents'))) if 'pkl' in f])
+df.to_csv(oj(DIR_PROCESSED, 'perceptual_dists_after_projection.csv'))

@@ -31,7 +31,11 @@ def load_all_labs(cached_file=oj(DIR_PROCESSED, 'df.pkl'),
                   quality_scores_file=oj(DIR_PROCESSED, 'quality_scores.pkl'),
                   background_stats_file=oj(DIR_PROCESSED, 'background_stats.pkl'),
                   pose_file=oj(DIR_PROCESSED, 'pose.pkl')):
-
+    '''Load all labels for each image in celeba-hq. If not using the cached df,
+    have to precompute each of individual .pkl files using scripts in the 
+    matching_banchmarking folder
+    '''
+    
     if os.path.exists(cached_file):
         return pd.read_pickle(cached_file)
 

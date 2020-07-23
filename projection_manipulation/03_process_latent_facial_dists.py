@@ -14,8 +14,7 @@ import face_recognition
 
 out_dir = oj(DIR_PROCESSED, 'processed_latents')
 os.makedirs(out_dir, exist_ok=True)
-# out_fname = oj(DIR_PROCESSED, 'processed_latents_300.pkl')
-fname_faceid = oj(DIR_PROCESSED_MISC, f'facial_dists_after_projection.csv')
+fname_faceid = oj(DIR_PROCESSED, f'facial_dists_after_projection.csv')
 IM_NUMS = range(300)
 regs = [0, 0.01, 0.1, 1, 10000]
 ks = sorted(ATTRS_MEASURED)
