@@ -249,3 +249,65 @@ def add_intersections(d, ks_init, ignore_key='gender'):
             ks.append(k_full)
             
     return d, ks
+
+
+
+def calc_propensity_matches(groups, propensity, caliper = 0.05):
+    ''' 
+    Params
+    ------
+    groups = Treatment assignments.  Must be 2 groups
+    propensity = Propensity scores for each observation. Propensity and groups should be in the same order (matching indices)
+    caliper = Maximum difference in matched propensity scores. For now, this is a caliper on the raw
+            propensity; Austin reccommends using a caliper on the logit propensity.
+    
+    Returns
+    -------
+    A series containing the individuals in the control group matched to the treatment group.
+    Note that with caliper matching, not every treated individual may have a match.
+    
+    Code for this function is adapted from [here](https://nbviewer.jupyter.org/github/kellieotto/StatMoments/blob/master/PSM.ipynb)
+    '''
+
+    # Check inputs
+    if any(propensity <=0) or any(propensity >=1):
+        raise ValueError('Propensity scores must be between 0 and 1')
+    elif not(0<caliper<1):
+        raise ValueError('Caliper must be between 0 and 1')
+    elif len(groups)!= len(propensity):
+        raise ValueError('groups and propensity scores must be same dimension')
+    elif len(groups.unique()) != 2:
+        raise ValueError('wrong number of groups')
+        
+        
+    # Code groups as 0 and 1
+    groups = groups == groups.unique()[0]
+    N = len(groups)
+    N1 = groups.sum(); N2 = N-N1
+    g1, g2 = propensity[groups == 1], (propensity[groups == 0])
+    
+    # Check if treatment groups got flipped - treatment (coded 1) should be the smaller
+    if N1 > N2:
+        N1, N2, g1, g2 = N2, N1, g2, g1 
+        
+    # Randomly permute the smaller group to get order for matching
+    np.random.seed(42)
+    idxs_shuffled = np.random.permutation(N1)
+    matches1 = []
+    matches2 = []
+    
+    for idx in tqdm(idxs_shuffled):
+        dist = abs(g1.iloc[idx] - g2)
+        
+        # if match is below some thresh
+        if dist.min() <= caliper:
+            
+            # pick the best match
+            arg_min = dist.argmin()
+            matches2.append(g2.index[arg_min])
+            matches1.append(g1.index[idx])
+            
+            
+            # don't consider this for future matches
+            g2 = g2.drop(matches2[-1])
+    return matches1, matches2
