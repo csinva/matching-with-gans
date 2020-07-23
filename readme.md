@@ -20,22 +20,37 @@ This code allows one to project images into the GAN latent space, after which th
     - higher-res photos work better, as well as photos where the face is front-facing and not obstructed by things like hats, scarves, etc.
 
 
-<p align="center">
-    Original images
-    <img src="projection_manipulation/samples/chandan.jpg" width="20%" align="center">
-    <img src="projection_manipulation/samples/pietro.jpg" width="20%" align="center">
-</p>
-<p align="center">
-    <img src="projection_manipulation/samples/interpolated/pietro_01_chandan_01.png" width="100%" align="center">
-</p>
-<p align="center">
-    <img src="projection_manipulation/samples/manipulated/chandan_01.png" width="100%" align="center">
+<p align="left">
+    Original images: 
+    <img src="projection_manipulation/samples/chandan.jpg" width="20%">
+    <img src="projection_manipulation/samples/pietro.jpg" width="20%">
 </p>
 
+Interpolating between the images...
+<p align="center">
+    <img src="projection_manipulation/samples/interpolated/pietro_01_chandan_01.png" width="100%">
+</p>
+
+Manipulating an image along pre-specified attributes
+<p align="center">
+    <img src="projection_manipulation/samples/manipulated/chandan_01.png" width="100%">
+</p>
+
+Can do a lot more, like blending together many faces or interpolating between different faces of the same person!
     
     
 # Matching and benchmarking
+The matching code here finds images that match across a certain attribute (e.g. gender). This is useful for removing confounding factors when doing downstream analyses of things like bias in facial recognition.
+
 - [matching_benchmarking](matching_benchmarking) folder contains code for reproducing the matching and benchmarking results obtained here
+
+Example of matches
+
+![]()
+
+After performing matching, confounding is much lower on CelebA-HQ
+
+![]()
    
 
 # Reproducibility
