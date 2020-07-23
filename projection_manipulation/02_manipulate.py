@@ -22,7 +22,7 @@ if __name__ == '__main__':
     ALIGNED_IMAGES_DIR = sys.argv[1]
     MANIPULATED_IMAGES_DIR = sys.argv[2]
     N_IMS = 11
-    ATTRS = 'CAHG' # HAGCBMSEW # CHG
+    ATTRS = 'ACHG' # HAGCBMSEW # CHG
 
     G = Generator(image_size=1024)
     os.makedirs(MANIPULATED_IMAGES_DIR, exist_ok=True)
@@ -79,5 +79,5 @@ if __name__ == '__main__':
         ims = np.array([transects_1d[a] for a in ATTRS])
         ims = ims.reshape((len(ATTRS), N_IMS, *ims.shape[2:]))
         util.plot_grid(ims, ylabs=[config.ATTR_LABELS[a].capitalize() for a in ATTRS], suptitle='Original')
-        plt.savefig(fname_out, dpi=150)
+        plt.savefig(fname_out, dpi=100)
         plt.close()

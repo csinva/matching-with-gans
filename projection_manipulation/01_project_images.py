@@ -19,6 +19,7 @@ import matplotlib.image as mpimg
 import tensorflow as tf
 import PIL.Image
 import matplotlib.pyplot as plt
+from tqdm import tqdm
 
 
 def project_image(proj, src_file, dst_dir, tmp_dir, video=False):
@@ -67,7 +68,8 @@ def project_image(proj, src_file, dst_dir, tmp_dir, video=False):
     if video:
         video_dir = '%s/video' % tmp_dir
         os.makedirs(video_dir, exist_ok=True)
-    while proj.get_cur_step() < proj.num_steps:
+    for step_num in tqdm(range(proj.num_steps)):
+#     while proj.get_cur_step() < proj.num_steps:
         # print('\r%d / %d ... ' % (proj.get_cur_step(), proj.num_steps), end='', flush=True)
         proj.step()
         if video:

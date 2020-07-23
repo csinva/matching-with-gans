@@ -5,8 +5,7 @@
 
 <p align="center">
   <a href="#projection-and-manipulation">Projection and manipulation</a> •
-  <a href="#matching-and-benchmarking">Matching and benchmarking</a> •
-  <a href="#disentangling-latent-space">Disentangling latent space</a> 
+  <a href="#matching-and-benchmarking">Matching and benchmarking</a>
   <br>
   <a href="#reproducibility">Reproducibility</a> •
   <a href="#reference">Reference</a> 
@@ -22,10 +21,11 @@ This code allows one to project images into the GAN latent space, after which th
 
 
 <p align="center">
-    <img src="projection_manipulation/sample_projection/chandan.jpg" width="200px" align="center">
+    <img src="projection_manipulation/samples/chandan.jpg" width="200px" align="center">
 </p>
-
-![](projection_manipulation/sample_projection/manipulated/chandan_01.png)
+<p align="center">
+    <img src="projection_manipulation/samples/manipulated/chandan_01.png" width="100%" align="center">
+</p>
     
     
 # Matching and benchmarking
