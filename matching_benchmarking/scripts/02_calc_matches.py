@@ -1,8 +1,16 @@
+'''
+we want to find matched pairs
+the pairs should change only one attribute at a time (but we may vary 2 to make a transect)
+"main" image is matched stringently
+"reference" image is matched more loosely
+'''
+
 import os
 from copy import deepcopy
 import sys
 from os.path import join as oj
 sys.path.append('..')
+sys.path.append('../..')
 
 import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
@@ -15,12 +23,6 @@ from config import *
 import data
 import util
 
-'''
-we want to find matched pairs
-the pairs should change only one attribute at a time (but we may vary 2 to make a transect)
-"main" image is matched stringently
-"reference" image is matched more loosely
-'''
 
 NUM_MATCHES = 200
 MIN_REF_DIST_THRESH_UPPER = 1e6 # 1 will weed out any crazy matches
@@ -50,4 +52,4 @@ matches = matching.get_matches(df, dists_match, dists_ref, attrs_to_vary,
                                NUM_MATCHES, MIN_REF_DIST_THRESH_UPPER, MIN_REF_DIST_THRESH_LOWER)
 
 matches = pd.DataFrame.from_dict(matches).infer_objects()
-matches.to_pickle(oj(DIR_PROCESSED_MISC, f'14_matches_{attrs_to_vary[0]}_{matches.shape[0]}.pkl'))
+matches.to_pickle(oj(DIR_PROCESSED, f'matches_{attrs_to_vary[0]}_{matches.shape[0]}.pkl'))

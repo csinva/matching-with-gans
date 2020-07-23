@@ -22,11 +22,12 @@ This code allows one to project images into the GAN latent space, after which th
 
 <p align="left">
     Original images: 
-    <img src="projection_manipulation/samples/chandan.jpg" width="20%">
-    <img src="projection_manipulation/samples/pietro.jpg" width="20%">
+    <img src="projection_manipulation/samples/chandan.jpg" width="15%">
+    <img src="projection_manipulation/samples/pietro.jpg" width="15%">
 </p>
 
-Interpolating between the images...
+
+Interpolating between the images
 <p align="center">
     <img src="projection_manipulation/samples/interpolated/pietro_01_chandan_01.png" width="100%">
 </p>
@@ -46,12 +47,16 @@ The matching code here finds images that match across a certain attribute (e.g. 
 
 Example of matches
 
-![]()
+<p align="center">
+    <img src="matching_benchmarking/samples/matches_big_gender_0.jpg" width="60%">
+    <img src="matching_benchmarking/samples/matches_big_gender_1.jpg" width="60%">
+</p>
 
 After performing matching, confounding is much lower on CelebA-HQ
 
-![]()
-   
+<p align="center">
+    <img src="matching_benchmarking/samples/matching_covariates.jpg" width="100%">
+</p>   
 
 # Reproducibility
 

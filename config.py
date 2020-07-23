@@ -3,7 +3,7 @@ DIR_REPO = '/home/ubuntu/face-disentanglement/'
 
 
 # running and saving #################################
-DIR_PROCESSED_MISC = oj(DIR_REPO, 'processed')
+# DIR_PROCESSED_MISC = oj(DIR_REPO, 'processed')
 DIR_RESULTS = oj(DIR_REPO, 'src', 'results')
 DIR_FIGS = oj(DIR_REPO, 'figs')
 
