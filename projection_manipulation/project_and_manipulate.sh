@@ -1,5 +1,5 @@
 # specify directories  ###################################
-DIR_ORIG="./sample_projection/original" # should point to directory of original images (png, jpg, jpeg)
+DIR_ORIG="./samples/original" # should point to directory of original images (png, jpg, jpeg)
 DIR_ALIGNED="$DIR_ORIG/aligned"         # intermediate directories will be created
 DIR_PROJECTED="$DIR_ORIG/projected"
 DIR_MANIPULATED="$DIR_ORIG/manipulated"

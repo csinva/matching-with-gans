@@ -31,13 +31,11 @@ class VGGPerceptualLoss(torch.nn.Module):
         x = (x - self.mean) / self.std
         x = self.transform(x, mode='bilinear', size=(112, 112), align_corners=False)
         # x = self.transform(x, mode='bilinear', size=(224, 224), align_corners=False)
-        '''
         encodings = []
         for block in self.blocks:
             x = block(x)
             encodings.append(deepcopy(x.cpu().detach().numpy().flatten()))
         return np.hstack(encodings).flatten()
-        '''
         x = self.blocks[0](x)
         return deepcopy(x.cpu().detach().numpy().flatten())
         # print(encodings[0].shape, encodings[1].shape, encodings[2].shape, encodings[1].shape)

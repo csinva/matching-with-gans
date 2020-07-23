@@ -17,7 +17,6 @@ if __name__ == '__main__':
     n = len(fnames)
 
     # calc encodings
-    '''
     for i in tqdm(range(n)):
         fname_out = oj(DIR_ENCODINGS, fnames[i][:-4]) + '.npy'
         if not os.path.exists(fname_out):
@@ -28,7 +27,6 @@ if __name__ == '__main__':
                 np.save(open(fname_out, 'wb'), encoding)
             else:
                 np.save(open(fname_out, 'wb'), np.zeros(128))
-    '''
 
     # calc failures
     FAILURES_FILE = oj(DIR_ENCODINGS, 'failures.npy')

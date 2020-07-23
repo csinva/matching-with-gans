@@ -82,6 +82,7 @@ def plot_grid(images, ylabs=[], annot_list=None, suptitle=None, emphasize_col: i
     else:
         R = images.shape[0]
         C = images.shape[1]
+        N_IMS = R * C
         # reshape to be (R * C, H, W, C)
         images = images.reshape((R * C, *images.shape[2:]))
     if annot_list is None:

@@ -1,5 +1,5 @@
 '''Note: this script was used to generate the results for face benchmarking the projections
-A faster way to get similar results is to use the pre-calculated facial_dists
+A faster way to get similar results is to use the pre-computed facial_dists
 '''
 
 import pickle as pkl
