@@ -1,3 +1,8 @@
+<h1 align="center">Matching in GAN-Space</h1>
+
+<p align="center">Code for using GANs to aid in matching, accompanying the paper "Causal matching with GANS" [arXiv]().
+</p>
+
 <p align="center">
   <a href="#projection-and-manipulation">Projection and manipulation</a> •
   <a href="#matching-and-benchmarking">Matching and benchmarking</a> •
@@ -8,7 +13,7 @@
 </p>
 
 
-# projection and manipulation
+# Projection and manipulation
 This code allows one to project images into the GAN latent space, after which they can be modified for certain attributes (e.g. age, gender, hair-length) and mixed with other faces (e.g. other people, older/younger versions of the same person).
 
 - all this code is handled by the `projection_manipulation/project_and_manipulate.sh` script
@@ -23,40 +28,37 @@ This code allows one to project images into the GAN latent space, after which th
 ![](projection_manipulation/sample_projection/manipulated/chandan_01.png)
     
     
-# matching and benchmarking
+# Matching and benchmarking
 - [matching_benchmarking](matching_benchmarking) folder contains code for reproducing the matching and benchmarking results obtained here
     
-# disentangling latent space
+# Disentangling latent space
 - experiments to disentangle the latent space of stylegan2
 - annotations are available (`Z.npy`, `W.npy`) from gdrive folder (place them in the data/annotation-dataset-stylegan2 folder)
 
 
-# reproducibility
+# Reproducibility
 
-## setup
-- run `source activate python3`
-- `pip install tensorflow-gpu==1.14.0`
-- start the lab running in the background: `screen jupyter lab --certfile=~/ssl/mycert.pem --keyfile ~/ssl/mykey.key`
+## Setup
+- running the code here requires installing the dependencies for [StyleGAN2](https://github.com/NVlabs/stylegan2)
+    - on AWS, this can be done by selecting a deep learning AMI, running `source activate python3`, and then running `pip install tensorflow-gpu==1.14.0`
 
-## processed data
-- `df.csv` in `data_processed/celeba-hq` contains labels along with different metrics for each image
-
-## rerunning pipeline: download all files available in [this gdrive folder](https://drive.google.com/drive/folders/1YO_GZ48o30jTnME-z7d8LlcZoJejcNsk?usp=sharing)
+## Rerunning the pipeline: download all files available in [this gdrive folder](https://drive.google.com/drive/folders/1YO_GZ48o30jTnME-z7d8LlcZoJejcNsk?usp=sharing)
 - requires downloading the celeba-hq dataset at 1024 x 1024 resolution (zip file)
     - images should be place at data/celeba-hq/ims
     - annotations are provided in the data/celeba-hq/Anno folder
+- `df.csv` in `data_processed/celeba-hq` contains labels along with different metrics for each image
 - different distances can be downloaded as `.npy` files (30k x 30k matrices)
     - `dists_pairwise_facial.npy` - pairwise distances measure by dlib face-rec encodings
     - `dists_pairwise_vgg.npy` - pairwise distances measure by vgg16 perceptual distance (only first 4 layers)
 
 
-## distances
+## Distances
 - analysis here requires the pairwise distance between all 30k images of 3 types: gan dist, facial-rec dist, vgg dist
     - we have calculated each of these matrices store in the gdrive folder
     - they should be placed in the data_processed/ folder
 
 
-# reference
+# Reference
 - this project builds on many wonderful open-source projects (see the readmes in the [lib](lib) subfolders for more details) including
 - [stylegan2](https://github.com/NVlabs/stylegan2) and [stylegan2 encoder](https://github.com/rolux/stylegan2encoder)
 - facial recogntion: [dlib](https://github.com/davisking/dlib), python [face_recognition](https://face-recognition.readthedocs.io/en/latest/face_recognition.html), [facenet](https://github.com/davidsandberg/facenet)
