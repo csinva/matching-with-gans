@@ -42,4 +42,5 @@ ATTR_TO_INDEX = {
 
 
 # different directories with source code
-DIR_PROJ_ANNOTATIONS = oj(DIR_PROCESSED, 'projection_annotations')
+DIR_ANNOTATIONS = oj(DIR_REPO, 'data', 'annotations_celeba-hq')
+DIR_PROJ_ANNOTATIONS = oj(DIR_ANNOTATIONS)

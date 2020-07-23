@@ -1,0 +1,1 @@
+Directory containing annotation results from experiment testing whether annotators identify a GAN-reconstructed photo as the same person or not.

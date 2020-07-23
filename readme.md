@@ -49,9 +49,9 @@ This code allows one to project images into the GAN latent space, after which th
 - `data/processed` folder
   - distances: `dists_pairwise_gan.npy`, `dists_pairwise_vgg.npy`, `dists_pairwise_facial.npy`, `dists_pairwise_facial_facenet.npy`, `dists_pairwise_facial_facenet_casia.npy`, `dists_pairwise_facial_vgg2.npy` - (30k x 30k) matrices storing the pairwise distances between all the images in celeba-hq using different distance measures
   - already present in the data folder are annotations (e.g. gender, smiling, eyeglasses) + predicted metrics (e.g. predicted yaw, roll, pitch, quality, race) for each image + latent directions corresponding to different attributes for StyleGAN2
+- `gen_latents` - these are used in downstream analysis and are required for the propensity score analysis
+- (optional) can download the raw annotations and annotated images as well
 - all these paths can be changed in the `config.py` file
-
-
 
 
 # Reference
