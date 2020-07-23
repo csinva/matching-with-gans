@@ -2,6 +2,7 @@
 '''
 
 import sys
+sys.path.append('..')
 sys.path.append('../..')
 from config import *
 sys.path.append(DIR_STYLEGAN)
