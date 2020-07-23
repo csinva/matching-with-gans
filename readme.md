@@ -9,14 +9,13 @@
   <br>
   <a href="#reproducibility">Reproducibility</a> •
   <a href="#reference">Reference</a> 
+  <br>
+  Demo: <a href="https://colab.research.google.com/drive/1bmYOtuP233cA_zSbcXwkp1yIkvZ1kAPw"> <img src="https://colab.research.google.com/assets/colab-badge.svg"> </a>
 </p>
 
 
 # Projection and manipulation
-This code allows one to project images into the GAN latent space, after which they can be modified for certain attributes (e.g. age, gender, hair-length) and mixed with other faces (e.g. other people, older/younger versions of the same person).
-
-- all this code is handled by the `projection_manipulation/project_and_manipulate.sh` script
-- to start, put images into a directory (e.g. projection_manipulation/sample_projection/test) - no need to crop / align, this will be done automatically
+This code allows one to project images into the GAN latent space, after which they can be modified for certain attributes (e.g. age, gender, hair-length) and mixed with other faces (e.g. other people, older/younger versions of the same person). All this code is handled by the `projection_manipulation/project_and_manipulate.sh` script - the easiest way to get started is to use the [Colab notebook](https://colab.research.google.com/drive/1bmYOtuP233cA_zSbcXwkp1yIkvZ1kAPw), where you can upload your own images, and they will be automatically cropped, alignedm projected, manipulated, and interpolated
 
 
 Start with 2 real images (higher-res photos work better, as well as photos where the face is front-facing and not obstructed by things like hats, scarves, etc.):
