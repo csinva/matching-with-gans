@@ -17,11 +17,10 @@ This code allows one to project images into the GAN latent space, after which th
 
 - all this code is handled by the `projection_manipulation/project_and_manipulate.sh` script
 - to start, put images into a directory (e.g. projection_manipulation/sample_projection/test) - no need to crop / align, this will be done automatically
-    - higher-res photos work better, as well as photos where the face is front-facing and not obstructed by things like hats, scarves, etc.
 
 
+Start with 2 real images (higher-res photos work better, as well as photos where the face is front-facing and not obstructed by things like hats, scarves, etc.)
 <p align="left">
-    Original images: 
     <img src="projection_manipulation/samples/chandan.jpg" width="15%">
     <img src="projection_manipulation/samples/pietro.jpg" width="15%">
 </p>
@@ -60,7 +59,7 @@ After performing matching, confounding is much lower on CelebA-HQ
 
 # Reproducibility
 
-## Setup
+## Dependencies
 - running the code here requires installing the dependencies for [StyleGAN2](https://github.com/NVlabs/stylegan2)
     - on AWS, this can be done by selecting a deep learning AMI, running `source activate python3`, and then running `pip install tensorflow-gpu==1.14.0`
 
@@ -73,7 +72,7 @@ After performing matching, confounding is much lower on CelebA-HQ
   - already present in the data folder are annotations (e.g. gender, smiling, eyeglasses) + predicted metrics (e.g. predicted yaw, roll, pitch, quality, race) for each image + latent directions corresponding to different attributes for StyleGAN2
 - `gen_latents` - these are used in downstream analysis and are required for the propensity score analysis
 - (optional) can download the raw annotations and annotated images as well
-- all these paths can be changed in the `config.py` file
+- (optional) all these paths can be changed in the `config.py` file
 
 
 # Reference
