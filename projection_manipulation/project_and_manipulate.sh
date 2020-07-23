@@ -6,11 +6,11 @@ DIR_MANIPULATED="$DIR_ORIG/manipulated"
 DIR_INTERPOLATED="$DIR_ORIG/interpolated"
 
 # commands to be run
-ALIGN="python 00_align_images.py"
-PROJECT="python 01_project_images.py"
-MANIPULATE="python 02_manipulate.py"
-INTERPOLATE="python 02_interpolate.py"
-INTERPOLATE_GRID="python 02_interpolate_grid.py"
+ALIGN="python scripts/00_align_images.py"
+PROJECT="python scripts/01_project_images.py"
+MANIPULATE="python scripts/02_manipulate.py"
+INTERPOLATE="python scripts/02_interpolate.py"
+INTERPOLATE_GRID="python scripts/02_interpolate_grid.py"
 
 # echo "aligning..."
 # $ALIGN $DIR_ORIG $DIR_ALIGNED

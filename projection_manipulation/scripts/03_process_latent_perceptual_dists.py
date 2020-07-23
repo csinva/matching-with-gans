@@ -1,3 +1,7 @@
+'''Calculates the VGG perceptual distances between original images and GAN-reconstructed images
+'''
+
+
 import sys
 from os.path import join as oj
 import os
@@ -5,7 +9,9 @@ import matplotlib.image as mpimg
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
+sys.path.append('../..')
 sys.path.append('..')
+sys.path.append('.')
 from config import *
 from copy import deepcopy
 sys.path.append(DIR_STYLEGAN)

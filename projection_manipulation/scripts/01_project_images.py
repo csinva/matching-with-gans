@@ -1,5 +1,8 @@
+'''Projects all the images from one directory and saves their latent embeddings into another directory
+'''
+
 import sys
-sys.path.append('..')
+sys.path.append('../..')
 from config import *
 sys.path.append(DIR_STYLEGAN)
 

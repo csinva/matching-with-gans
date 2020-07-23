@@ -1,3 +1,7 @@
+'''Aligns and crops all the images in one directory and saves them to another
+'''
+
+
 import os
 import sys
 import bz2

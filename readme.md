@@ -21,20 +21,22 @@ This code allows one to project images into the GAN latent space, after which th
 
 
 <p align="center">
-    <img src="projection_manipulation/samples/chandan.jpg" width="200px" align="center">
+    Original images
+    <img src="projection_manipulation/samples/chandan.jpg" width="20%" align="center">
+    <img src="projection_manipulation/samples/pietro.jpg" width="20%" align="center">
+</p>
+<p align="center">
+    <img src="projection_manipulation/samples/interpolated/pietro_01_chandan_01.png" width="100%" align="center">
 </p>
 <p align="center">
     <img src="projection_manipulation/samples/manipulated/chandan_01.png" width="100%" align="center">
 </p>
+
     
     
 # Matching and benchmarking
 - [matching_benchmarking](matching_benchmarking) folder contains code for reproducing the matching and benchmarking results obtained here
-    
-# Disentangling latent space
-- experiments to disentangle the latent space of stylegan2
-- annotations are available (`Z.npy`, `W.npy`) from gdrive folder (place them in the data/annotation-dataset-stylegan2 folder)
-
+   
 
 # Reproducibility
 

@@ -1,4 +1,4 @@
-PROJECT="python 01_project_images.py"
+PROJECT="python scripts/01_project_images.py"
 
 
 # celeba-hq projections #############################

@@ -8,7 +8,9 @@ import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
 import numpy as np
 import sys
+sys.path.append('../..')
 sys.path.append('..')
+sys.path.append('.')
 import transects
 from ganwrapper import Generator
 from tqdm import tqdm
