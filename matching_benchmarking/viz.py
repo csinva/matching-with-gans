@@ -1,15 +1,9 @@
-from os.path import join as oj
-
-import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
 import numpy as np
 import sklearn.metrics
-import pandas as pd
-from tqdm import tqdm
-from copy import deepcopy
-from sklearn.utils.multiclass import unique_labels
-from style import cb, cr, cg, cp
+
 import util
+from style import cb, cr
 
 
 def plot_subgroup_means(g0, g1, ks, ticklabels=True, args=None,
@@ -25,7 +19,7 @@ def plot_subgroup_means(g0, g1, ks, ticklabels=True, args=None,
     if 'pandas' in str(type(g0)):
         g0 = g0[ks]
         g1 = g1[ks]
-    
+
     if args is None:
         '''
         means0 = np.array([np.mean(g0[k]) for k in ks])
@@ -33,7 +27,7 @@ def plot_subgroup_means(g0, g1, ks, ticklabels=True, args=None,
         args = np.argsort(np.abs(means0 - means1))
         '''
         args = np.arange(len(ks))
-    
+
     for i, (g, lab) in enumerate(zip([g0, g1], ['Female', 'Male'])):
         lists = [g[k] for k in ks]
         means = np.array([np.mean(l) for l in lists])
@@ -53,7 +47,7 @@ def plot_subgroup_means(g0, g1, ks, ticklabels=True, args=None,
                             for k in ks[args]])
         else:
             plt.yticks(ys, ['' for k in ks[args]])
-#     plt.xlabel('Mean value in dataset')
+    #     plt.xlabel('Mean value in dataset')
     plt.grid()
     return args
 
@@ -61,7 +55,7 @@ def plot_subgroup_means(g0, g1, ks, ticklabels=True, args=None,
 def plot_confusion_matrix(y_true, y_pred, class_label,
                           ax,
                           normalize=False,
-                         
+
                           cmap=plt.cm.Blues):
     """
     This function prints and plots the confusion matrix.
@@ -79,7 +73,6 @@ def plot_confusion_matrix(y_true, y_pred, class_label,
 
     im = plt.imshow(cm, interpolation='nearest', cmap=cmap)
 
-    
     ax.set(xlabel=class_label, ylabel=class_label)
 
     # Loop over data dimensions and create text annotations.
@@ -95,7 +88,7 @@ def plot_confusion_matrix(y_true, y_pred, class_label,
 
 def plot_subgroup_mean_diffs(ds, ks, k_group, figsize=None):
     if figsize is None:
-        figsize=(12, 3)
+        figsize = (12, 3)
     R, C = 1, 2
     fig = plt.figure(dpi=200, figsize=figsize)
     ks_g = [k for k in ks if not k == k_group]
@@ -107,16 +100,16 @@ def plot_subgroup_mean_diffs(ds, ks, k_group, figsize=None):
         d = d[ks]
 
         # normalize to [0, 1]
-    #     d = (d - d.min()) / (d.max() - d.min())
+        #     d = (d - d.min()) / (d.max() - d.min())
         g0 = d[d[k_group] == 0]
         g1 = d[d[k_group] == 1]
 
         ax = plt.subplot(R, C, i + 1)
         args = plot_subgroup_means(g0, g1,
-                                    ks=np.array(ks_g),
-                                    CI='wilson',
-                                    ticklabels=i == 0, args=None, colors=colors)
+                                   ks=np.array(ks_g),
+                                   CI='wilson',
+                                   ticklabels=i == 0, args=None, colors=colors)
         plt.title(titles[i])
         plt.xlim((0, 1))
     fig.text(0.5, 0, 'Mean fraction of points which have this attribute', ha='center')
-    plt.legend(title='Perceived gender', bbox_to_anchor=(1, 0.5))  
+    plt.legend(title='Perceived gender', bbox_to_anchor=(1, 0.5))

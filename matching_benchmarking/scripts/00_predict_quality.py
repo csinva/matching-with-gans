@@ -1,4 +1,3 @@
-import os
 import sys
 
 import cv2
@@ -6,6 +5,7 @@ import numpy as np
 import pandas as pd
 from keras.models import load_model
 from tqdm import tqdm
+
 from config import *
 
 sys.path.append(oj(DIR_LIB, 'FaceQnet/src'))

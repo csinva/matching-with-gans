@@ -1,5 +1,3 @@
-import os
-from os.path import join as oj
 import sys
 sys.path.append('..')
 sys.path.append('../lib/facenet/src')

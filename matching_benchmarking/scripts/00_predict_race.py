@@ -4,7 +4,6 @@ import warnings
 
 warnings.filterwarnings("ignore")
 import os.path
-from os.path import join as oj
 import pandas as pd
 import torch
 import torch.nn as nn
@@ -12,7 +11,6 @@ import numpy as np
 import torchvision
 from torchvision import transforms
 import dlib
-import os
 from tqdm import tqdm
 import config
 from config import *

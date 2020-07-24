@@ -12,25 +12,25 @@ c1 = '#ff7f0e'
 c2 = '#2ca02c'
 c3 = '#d62728'
 cs = [c0, c1, c2, c3]
-cb = c0 #'#0084e3' #57, 138, 242)'
+cb = c0  # '#0084e3' #57, 138, 242)'
 cr = '#d40035'
 cp = '#cc3399'
 cy = '#d8b365'
 cg = '#5ab4ac'
 
-STANDARD_FIG_SIZE = (20,14)
+STANDARD_FIG_SIZE = (20, 14)
 VERY_SMALL_SIZE = 12
 SMALL_SIZE = 16
 MEDIUM_SIZE = 17
 LARGE_SIZE = 20
 VERY_LARGE_SIZE = 32
 
-plt.rc('font', size=SMALL_SIZE)          # controls default text sizes
-plt.rc('axes', titlesize=MEDIUM_SIZE)     # fontsize of the axes title
-plt.rc('axes', labelsize=MEDIUM_SIZE)    # fontsize of the x and y labels
-plt.rc('xtick', labelsize=MEDIUM_SIZE)    # fontsize of the tick labels
-plt.rc('ytick', labelsize=MEDIUM_SIZE)    # fontsize of the tick labels
-plt.rc('legend', fontsize=SMALL_SIZE)    # legend fontsize
+plt.rc('font', size=SMALL_SIZE)  # controls default text sizes
+plt.rc('axes', titlesize=MEDIUM_SIZE)  # fontsize of the axes title
+plt.rc('axes', labelsize=MEDIUM_SIZE)  # fontsize of the x and y labels
+plt.rc('xtick', labelsize=MEDIUM_SIZE)  # fontsize of the tick labels
+plt.rc('ytick', labelsize=MEDIUM_SIZE)  # fontsize of the tick labels
+plt.rc('legend', fontsize=SMALL_SIZE)  # legend fontsize
 plt.rc('figure', titlesize=SMALL_SIZE)  # fontsize of the figure title
 plt.rc('lines', lw=3)
 

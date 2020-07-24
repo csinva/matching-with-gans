@@ -1,6 +1,4 @@
-import os
 from copy import deepcopy
-from os.path import join as oj
 
 import h5py
 import numpy as np
@@ -8,7 +6,9 @@ import sklearn.metrics
 import torch
 import torchvision
 from tqdm import tqdm
+
 from config import *
+
 
 class VGGPerceptualLoss(torch.nn.Module):
     def __init__(self, resize=True):

@@ -4,14 +4,13 @@ A faster way to get similar results is to use the pre-computed facial_dists
 
 import pickle as pkl
 
+import face_recognition
 import matplotlib.image as mpimg
 import numpy as np
 from tqdm import tqdm
 
 import data
 from config import *
-
-import face_recognition
 
 if __name__ == '__main__':
     # load and merge all the data

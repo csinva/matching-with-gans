@@ -1,5 +1,6 @@
+import os
 from os.path import join as oj
-import os 
+
 DIR_REPO = os.path.dirname(os.path.realpath(__file__)) # directory of the config file
 
 

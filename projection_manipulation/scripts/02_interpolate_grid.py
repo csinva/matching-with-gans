@@ -2,20 +2,17 @@
 and also saves the mean between al images
 '''
 
-import os
+import sys
 
-import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
 import numpy as np
-import sys
+
 sys.path.append('../..')
 from ganwrapper import Generator
 from tqdm import tqdm
 
 import util
 from config import *
-import config
-
 
 if __name__ == '__main__':
     DIR_ALIGNED_IMAGES = sys.argv[1]

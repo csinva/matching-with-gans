@@ -1,21 +1,21 @@
 '''Aligns and crops all the images in one directory and saves them to another
 '''
 
-
+import bz2
 import os
 import sys
-import bz2
-from keras.utils import get_file
-# from ffhq_dataset.face_alignment import image_align
-# from ffhq_dataset.landmarks_detector import LandmarksDetector
 
+import PIL.Image
+import dlib
+import matplotlib._png as png
+import matplotlib.image as mpimg
 import numpy as np
 import scipy.ndimage
-import os
-import PIL.Image
-import matplotlib.image as mpimg
-import matplotlib._png as png
-import dlib
+from keras.utils import get_file
+
+
+# from ffhq_dataset.face_alignment import image_align
+# from ffhq_dataset.landmarks_detector import LandmarksDetector
 
 
 class LandmarksDetector:

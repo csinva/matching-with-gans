@@ -4,10 +4,11 @@ import sys
 from argparse import ArgumentParser
 from os.path import join as oj
 
-from ganwrapper import Generator
 import imageio
 import numpy as np
 import pandas as pd
+
+from ganwrapper import Generator
 
 sys.path.append('..')
 import config

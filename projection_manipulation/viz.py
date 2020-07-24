@@ -1,22 +1,12 @@
-import os
-from os.path import join as oj
-
-import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
-from tqdm import tqdm
 import sys
-import pickle as pkl
+
 sys.path.append('..')
 
 import data
-import style
-import config
 from config import *
 import util
-import glob
-import json, jsonlines
 
 df = data.load_all_labs()
 df = df.set_index('fname_id')
