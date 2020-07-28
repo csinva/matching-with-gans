@@ -2,6 +2,7 @@
 '''
 
 import sys
+sys.path.append('..')
 sys.path.append('../..')
 from config import *
 sys.path.append(DIR_STYLEGAN)
@@ -11,17 +12,12 @@ import os
 import shutil
 import numpy as np
 from os.path import join as oj
-import dnnlib
-import dnnlib.tflib as tflib
 import pretrained_networks
 import projector
 import dataset_tool
 from training import dataset
 from training import misc
 import matplotlib.image as mpimg
-import tensorflow as tf
-import PIL.Image
-import matplotlib.pyplot as plt
 from tqdm import tqdm
 
 

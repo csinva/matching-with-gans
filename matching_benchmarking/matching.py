@@ -1,13 +1,10 @@
-from os.path import join as oj
-
-import matplotlib.image as mpimg
-import matplotlib.pyplot as plt
-import numpy as np
-import sklearn.metrics
-import pandas as pd
-from tqdm import tqdm
 from copy import deepcopy
-import util
+
+import numpy as np
+import pandas as pd
+import sklearn.metrics
+from tqdm import tqdm
+
 
 def get_lat(latents):
     #     lat = latents.mean(axis=1) # match in style space

@@ -1,24 +1,16 @@
-import os
-from os.path import join as oj
+import pickle as pkl
+import sys
 
-import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
-from tqdm import tqdm
-import sys
-import pickle as pkl
+
 sys.path.append('..')
 
-import data
 import style
-import config
 from config import *
-import util
 import glob
 import json, jsonlines
-import viz
-import annot_helper
+
 
 def same_or_not(l):
     if 'Same person' in l:

@@ -1,5 +1,7 @@
+import os
 from os.path import join as oj
-DIR_REPO = '/home/ubuntu/face-disentanglement/'
+
+DIR_REPO = os.path.dirname(os.path.realpath(__file__)) # directory of the config file
 
 
 # running and saving #################################

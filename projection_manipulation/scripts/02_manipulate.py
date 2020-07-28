@@ -2,18 +2,16 @@
 a few predfined axes (e.g. skin color, age, hair-color, gender)
 '''
 
-import os
+import sys
 
-import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
 import numpy as np
-import sys
+
 sys.path.append('../..')
 sys.path.append('..')
 sys.path.append('.')
 import transects
 from ganwrapper import Generator
-from tqdm import tqdm
 
 import util
 from config import *

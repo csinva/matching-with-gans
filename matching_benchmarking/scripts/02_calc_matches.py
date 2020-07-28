@@ -5,24 +5,15 @@ the pairs should change only one attribute at a time (but we may vary 2 to make 
 "reference" image is matched more loosely
 '''
 
-import os
-from copy import deepcopy
 import sys
-from os.path import join as oj
+
 sys.path.append('..')
 sys.path.append('../..')
 
-import matplotlib.image as mpimg
-import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
-import sklearn.metrics
 import matching
-from tqdm import tqdm
 from config import *
 import data
-import util
-
 
 NUM_MATCHES = 200
 MIN_REF_DIST_THRESH_UPPER = 1e6 # 1 will weed out any crazy matches

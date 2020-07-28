@@ -1,11 +1,11 @@
-import os
-import torch
-from torchvision import transforms
-import torchvision
 import sys
 
+import torch
+import torchvision
+from torchvision import transforms
+
 sys.path.append(oj(DIR_LIB, 'deep_head_pose/code/'))
-import hopenet, utils
+import hopenet
 from PIL import Image
 import pandas as pd
 from tqdm import tqdm

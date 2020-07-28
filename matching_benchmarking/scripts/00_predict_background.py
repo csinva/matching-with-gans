@@ -1,7 +1,5 @@
 import sys
 
-from os.path import join as oj
-
 import pandas as pd
 import torch
 import torchvision.transforms as transforms
