@@ -47,7 +47,6 @@ def plot_subgroup_means(g0, g1, ks, ticklabels=True, args=None,
                             for k in ks[args]])
         else:
             plt.yticks(ys, ['' for k in ks[args]])
-    #     plt.xlabel('Mean value in dataset')
     plt.grid()
     return args
 
@@ -86,17 +85,22 @@ def plot_confusion_matrix(y_true, y_pred, class_label,
     return ax
 
 
-def plot_subgroup_mean_diffs(ds, ks, k_group, figsize=None, vert=False):
+def plot_subgroup_mean_diffs(ds, ks, k_group, figsize=None, vert=False, titles=['Before matching', 'After matching']):
+    '''Plots means of different subgroups horizontally
+    Params
+    ------
+    ds: list of dataframes
+        each element of ds is a dataframe to be plotted
+    '''
     if figsize is None:
         figsize=[12, 3]
-    R, C = 1, 2
+    R, C = 1, len(ds)
     if vert:
-        R, C = 2, 1
+        R, C = C, R
     fig = plt.figure(dpi=200, figsize=figsize)
     ks_g = [k for k in ks if not k == k_group]
     args = None
     colors = [cr, cb]
-    titles = ['Before matching', 'After matching']
 
     for i, d in enumerate(ds):
         d = d[ks]
@@ -112,6 +116,6 @@ def plot_subgroup_mean_diffs(ds, ks, k_group, figsize=None, vert=False):
                                    CI='wilson',
                                    ticklabels=i == 0, args=None, colors=colors)
         plt.title(titles[i])
-        plt.xlim((0, 1))
+        plt.xlim((-0.1, 1.1))
     fig.text(0.5, 0, 'Mean fraction of points which have this attribute', ha='center')
     plt.legend(title='Perceived gender', bbox_to_anchor=(1, 0.5))

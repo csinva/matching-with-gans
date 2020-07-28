@@ -1,5 +1,5 @@
 from copy import deepcopy
-
+from collections import OrderedDict
 import numpy as np
 import pandas as pd
 import sklearn.metrics
@@ -308,3 +308,23 @@ def calc_propensity_matches(groups, propensity, caliper = 0.05):
             # don't consider this for future matches
             g2 = g2.drop(matches2[-1])
     return matches1, matches2
+
+def matches_to_df(matches, df, k_group):
+    # match indexes are in original space [0, 30000)
+    # this is the same as the df.index [0, 30000)
+    match_keys = OrderedDict({
+        f'{k_group}_0_ref': 'dist_ref0',
+        f'{k_group}_0': 'dist',
+        f'{k_group}_1': 'dist',
+        f'{k_group}_1_ref': 'dist_ref1'
+    })
+    ks_matched = [k for k in match_keys if not 'ref' in k]
+    idxs_matched = matches[ks_matched].values
+    df_matched = df.iloc[idxs_matched.flatten()]
+
+    # add Race = Black
+    df['Race=Black'] = 0
+    df.loc[df['race4_pred'] == 'Black', 'Race=Black'] = 1
+    df_matched['Race=Black'] = 0
+    df_matched.loc[df_matched['race4_pred'] == 'Black', 'Race=Black'] = 1
+    return df_matched, match_keys
