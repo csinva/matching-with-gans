@@ -38,7 +38,7 @@ def hist_subgroups(means, labs, labs_list, BINS=4):
     plt.legend()
     plt.show()
 
-def boxplot_subgroups(vals, labs, labs_list, confs='sem', ret=False, width=7):
+def boxplot_subgroups(vals, labs, labs_list, confs='sem', ret=True, width=7):
     '''
     vals: array_like
         what to plot
@@ -70,7 +70,7 @@ def boxplot_subgroups(vals, labs, labs_list, confs='sem', ret=False, width=7):
     plt.ylabel('True conditions')
     plt.xlim((0.3, 1.05))
     if ret:
-        return np.array(means), np.array(sems)
+        return np.array(means), np.array(sems).transpose()
     
 def annotators_num_plot(annotations):
     n_annotations = sorted(annotations.annotations, reverse=True)
@@ -83,3 +83,43 @@ def annotators_num_plot(annotations):
     plt.ylabel('Number of annotations')
     plt.title('Work of individual annotators')
     plt.show()    
+    
+    
+def print_table(means_list, sems_list, index=None):
+    '''
+    Params
+    ------
+    means_list: (n,)
+    sems_list: (n, 2)
+    '''
+    index = np.array(index)
+    
+    
+    # print table with sem CI
+    # strs = np.array([f'{100 * means_tab[i]:0.1f} $\pm$ {100 * sems_tab[i]:0.2f}'
+    #                  for i in range(len(means_tab))])
+    
+    # print table with wilson CI
+    strs = np.array([f'{100 * means_list[i]:0.1f} ' + \
+                     f'({100 * (means_list[i] - sems_list[i, 0]):0.2f}, {100 * (means_list[i] + sems_list[i, 1]):0.2f})'
+                     for i in range(len(means_list))])
+    
+    
+    # put into df
+    d = pd.DataFrame(strs.reshape(-1, 2)) #, columns) #, columns=l_non_dup)
+    
+#     print(d.size, columns.size)
+    if index.size == d.shape[0] * 2:
+        index = index[::2]
+    index = [i.capitalize().replace(' (fake)', '').replace(' (real)', '') for i in index]
+    
+#     print(d, columns)
+    # d.columns = columns
+
+    d.index = index
+    d.columns = ['Fake pairs', 'Real pairs']
+    
+    s = d.to_latex(index=True).replace('textbackslash pm', 'pm').replace('\$', '$')
+    s = s.replace('bottomrule', 'bottomrule\\\\') # add space at end
+    s = s.replace('Knows well', '\n\midrule\nKnows well') # add space before knows well
+    print(s)

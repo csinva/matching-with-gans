@@ -93,10 +93,12 @@ def plot_confusion_matrix(y_true, y_pred, class_label,
     return ax
 
 
-def plot_subgroup_mean_diffs(ds, ks, k_group, figsize=None):
+def plot_subgroup_mean_diffs(ds, ks, k_group, figsize=None, vert=False):
     if figsize is None:
-        figsize=(12, 3)
+        figsize=[12, 3]
     R, C = 1, 2
+    if vert:
+        R, C = 2, 1
     fig = plt.figure(dpi=200, figsize=figsize)
     ks_g = [k for k in ks if not k == k_group]
     args = None

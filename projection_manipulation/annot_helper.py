@@ -72,8 +72,8 @@ def get_annotations():
     experiments = ['.'] #'perona-causal-faces-uncanny-000']
 
     # If output directory doesn't exist, make it
-    if not os.path.exists(OUTPUT_PDF_DIR):
-        os.makedirs(OUTPUT_PDF_DIR)
+#     if not os.path.exists(OUTPUT_PDF_DIR):
+#         os.makedirs(OUTPUT_PDF_DIR)
 
     # Do analysis figures for each experiment
     for EXPERIMENT_LABEL in experiments:
