@@ -43,11 +43,13 @@ def plot_subgroup_means(g0, g1, ks, ticklabels=True, args=None,
         plt.errorbar(means[args], ys, label=lab, xerr=sems,
                      linestyle='', marker='.', markersize=10, color=colors[i])
         if ticklabels:
-            plt.yticks(ys, [k[0].upper() + k[1:].replace('black', 'Black').replace('_', ' ')
-                            for k in ks[args]])
+            ylabs = [k[0].upper() + k[1:].replace('black', 'Black').replace('_', ' ')
+                            for k in ks[args]]
+            ylabs = [yl.replace('-Race=', 'Race≠').replace('Eyeglasses', 'Glasses') for yl in ylabs]
+            plt.yticks(ys, ylabs)
         else:
             plt.yticks(ys, ['' for k in ks[args]])
-    plt.grid()
+    plt.grid(which='both')
     return args
 
 
@@ -85,7 +87,8 @@ def plot_confusion_matrix(y_true, y_pred, class_label,
     return ax
 
 
-def plot_subgroup_mean_diffs(ds, ks, k_group, figsize=None, vert=False, titles=['Before matching', 'After matching']):
+def plot_subgroup_mean_diffs(ds, ks, k_group, figsize=None, vert=False,
+                             titles=['Before matching', 'After matching'], legend_loc='right'):
     '''Plots means of different subgroups horizontally
     Params
     ------
@@ -111,11 +114,22 @@ def plot_subgroup_mean_diffs(ds, ks, k_group, figsize=None, vert=False, titles=[
         g1 = d[d[k_group] == 1]
 
         ax = plt.subplot(R, C, i + 1)
+        plt.xticks([0, 0.5, 1])
         args = plot_subgroup_means(g0, g1,
                                    ks=np.array(ks_g),
                                    CI='wilson',
                                    ticklabels=i == 0, args=None, colors=colors)
         plt.title(titles[i])
         plt.xlim((-0.1, 1.1))
-    fig.text(0.5, 0, 'Mean fraction of points which have this attribute', ha='center')
-    plt.legend(title='Perceived gender', bbox_to_anchor=(1, 0.5))
+        
+    
+    if legend_loc == 'right':
+        plt.legend(title='Perceived gender', bbox_to_anchor=(1, 0.5))
+        fig.text(0.5, 0, 'Mean fraction of points which have this attribute', ha='center')
+    elif legend_loc == 'bottom':
+        for i in range(len(ds)):
+            plt.subplot(R, C, i + 1)
+            plt.ylim(-0.5, len(ks_g) - 0.5)
+        plt.legend(title='Perceived gender', bbox_to_anchor=(-1.5, 0), loc='upper right')
+        fig.text(0.5, 0.05, 'Mean fraction of points\n with this attribute', ha='center')
+        
