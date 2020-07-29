@@ -23,7 +23,7 @@ if __name__ == '__main__':
 #     names = ['chandan', 'andy', 'varun']
 #     names = ['chandan', 'dad', 'amma', 'roli', 'mom']
 #     names = ['chandan', 'guha', 'pietro']
-    names = ['chandan', 'yinuo', 'chan']
+#     names = ['chandan', 'yinuo', 'chan']
 
 
     G = Generator(image_size=1024)

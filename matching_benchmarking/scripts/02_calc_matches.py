@@ -16,8 +16,8 @@ from config import *
 import data
 
 NUM_MATCHES = 200
-MIN_REF_DIST_THRESH_UPPER = 1e6 # 1 will weed out any crazy matches
-MIN_REF_DIST_THRESH_LOWER = 1e-2 # 1 will weed out any matches that are too close
+MIN_REF_DIST_THRESH_UPPER = 1e6 # weeds out any crazy matches
+MIN_REF_DIST_THRESH_LOWER = 1e-2 # weeds out any matches that are too close
 
 
 # df contains filenames, ids, and attributes
