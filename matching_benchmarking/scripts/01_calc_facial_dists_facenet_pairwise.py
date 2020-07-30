@@ -1,4 +1,5 @@
 import sys
+
 sys.path.append('..')
 sys.path.append('../lib/facenet/src')
 from config import *
@@ -10,27 +11,27 @@ import matplotlib.image as mpimg
 import skimage.transform
 
 if __name__ == '__main__':
-    DIR_ENCODINGS = oj(DIR_PROCESSED, 'encodings_facenet_casia') # VGGFace2
-    out_fname = oj(DIR_PROCESSED, 'dists_pairwise_facial_facenet_casia.npy') # CASIA-WebFace
-    model_path = '/home/ubuntu/face-disentanglement/lib/facenet/20180408-102900' # CASIA-WebFace    
-    
-#     DIR_ENCODINGS = oj(DIR_CELEBA, 'encodings_facenet') # VGGFace2
-#     out_fname = oj(DIR_PROCESSED, 'dists_pairwise_facial_facenet_vgg2.npy') # VGGFace2
-#     model_path = '/home/ubuntu/face-disentanglement/lib/facenet/20180402-114759' # VGGFace2
+    DIR_ENCODINGS = oj(DIR_PROCESSED, 'encodings_facenet_casia')  # VGGFace2
+    out_fname = oj(DIR_PROCESSED, 'dists_pairwise_facial_facenet_casia.npy')  # CASIA-WebFace
+    model_path = '/home/ubuntu/face-disentanglement/lib/facenet/20180408-102900'  # CASIA-WebFace
+
+    #     DIR_ENCODINGS = oj(DIR_CELEBA, 'encodings_facenet') # VGGFace2
+    #     out_fname = oj(DIR_PROCESSED, 'dists_pairwise_facial_facenet_vgg2.npy') # VGGFace2
+    #     model_path = '/home/ubuntu/face-disentanglement/lib/facenet/20180402-114759' # VGGFace2
     os.makedirs(DIR_ENCODINGS, exist_ok=True)
-    
+
     # get fnames
     fnames = sorted([f for f in os.listdir(DIR_IMS) if '.jpg' in f])
     n = len(fnames)
-    
-    
+
     import tensorflow as tf
+
     with tf.Graph().as_default():
         with tf.Session() as sess:
-            
+
             # load the model
             facenet.load_model(model_path)
-            
+
             # Get input and output tensors
             images_placeholder = tf.get_default_graph().get_tensor_by_name("input:0")
             embeddings = tf.get_default_graph().get_tensor_by_name("embeddings:0")

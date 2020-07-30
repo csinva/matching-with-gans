@@ -55,7 +55,6 @@ if __name__ == '__main__':
     n = len(fnames)
 
     # calc encodings
-    '''
     m = VGGPerceptualLoss()
     for i in tqdm(range(n)):
         fname_out = oj(DIR_ENCODINGS, fnames[i][:-4]) + '.npy'
@@ -72,7 +71,6 @@ if __name__ == '__main__':
     f = h5py.File(out_fname, 'w')
     dset = f.create_dataset("dists", (n, n), dtype='f')
     dset[:] = 0
-    '''
 
     # append
     dset = h5py.File(out_fname1, 'a')['dists']
