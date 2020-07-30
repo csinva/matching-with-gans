@@ -6,34 +6,36 @@ import sys
 
 import matplotlib.pyplot as plt
 import numpy as np
+import os
+from os.path import join as oj
 
-sys.path.append('../..')
-sys.path.append('..')
-sys.path.append('.')
-import transects
-from projection_manipulation.ganwrapper import Generator
-
-import util
-from config import *
+dir_curr = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(oj(dir_curr, '../..'))
+sys.path.append(oj(dir_curr, '..'))
 import config
-
+import transects
+from ganwrapper import Generator
+import util
 
 if __name__ == '__main__':
     ALIGNED_IMAGES_DIR = sys.argv[1]
     MANIPULATED_IMAGES_DIR = sys.argv[2]
+    if len(sys.argv) > 3:
+        ATTRS = sys.argv[3]
+    else:
+        ATTRS = 'ACHG'  # HAGCBMSEW # CHG
     N_IMS = 11
-    ATTRS = 'ACHG' # HAGCBMSEW # CHG
 
     G = Generator(image_size=1024)
     os.makedirs(MANIPULATED_IMAGES_DIR, exist_ok=True)
     for fname in sorted([f for f in os.listdir(ALIGNED_IMAGES_DIR)
                          if '.npy' in f]):
         fname_out = oj(MANIPULATED_IMAGES_DIR, fname[:-4] + '.png')
-        
+
         # skip if it already exists
-        if os.path.exists(fname_out):
-            continue
-        
+        # if os.path.exists(fname_out):
+        #     continue
+
         latents = np.array([np.load(oj(ALIGNED_IMAGES_DIR, fname))])
 
         kwargs = {
@@ -43,7 +45,7 @@ if __name__ == '__main__':
 
             # probably not these
             'G': G,
-            'model_dir': DIR_LINEAR_DIRECTIONS, #"transects/data/latent-models/",
+            'model_dir': config.DIR_LINEAR_DIRECTIONS,
             'orth': True,
             'randomize_seeds': False,
             'return_ims': True
@@ -52,7 +54,7 @@ if __name__ == '__main__':
         # make 1D transects
         LIMS = {
             'C': [-1.5, 1.5],
-            'H': [-0.5, 0.5], # hair-length really shouldn't go beyond 0
+            'H': [-0.5, 0.5],  # hair-length really shouldn't go beyond 0
             'G': [-1.75, 1.75],
 
             # these are not calibrated
@@ -61,7 +63,7 @@ if __name__ == '__main__':
             'M': [-2, 2],
             'S': [-2, 2],
             'E': [-2, 2],
-            'W': [-2, 2],    
+            'W': [-2, 2],
         }
 
         transects_1d = {}
