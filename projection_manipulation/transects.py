@@ -8,7 +8,7 @@ import imageio
 import numpy as np
 import pandas as pd
 
-from ganwrapper import Generator
+from projection_manipulation.ganwrapper import Generator
 
 sys.path.append('..')
 import config

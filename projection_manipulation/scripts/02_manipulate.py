@@ -11,7 +11,7 @@ sys.path.append('../..')
 sys.path.append('..')
 sys.path.append('.')
 import transects
-from ganwrapper import Generator
+from projection_manipulation.ganwrapper import Generator
 
 import util
 from config import *

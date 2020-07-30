@@ -10,7 +10,7 @@ import numpy as np
 sys.path.append('../..')
 sys.path.append('..')
 sys.path.append('.')
-from ganwrapper import Generator
+from projection_manipulation.ganwrapper import Generator
 
 import util
 from config import *
