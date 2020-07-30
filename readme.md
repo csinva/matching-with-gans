@@ -10,7 +10,7 @@
   <a href="#reproducibility">Reproducibility</a> •
   <a href="#reference">Reference</a> 
   <br>
-  Demo: <a href="https://colab.research.google.com/drive/1bmYOtuP233cA_zSbcXwkp1yIkvZ1kAPw"> <img src="https://colab.research.google.com/assets/colab-badge.svg"> </a>
+  Quickstart demo (manipulate and interpolate your own face images!): <a href="https://colab.research.google.com/drive/1zevDVuqXc_ARcbirJAfEzsk1SClzBqXf"> <img src="https://colab.research.google.com/assets/colab-badge.svg"> </a>
 </p>
 
 
