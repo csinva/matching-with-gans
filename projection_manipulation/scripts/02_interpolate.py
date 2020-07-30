@@ -19,11 +19,7 @@ if __name__ == '__main__':
     ALIGNED_IMAGES_DIR = sys.argv[1]
     INTERPOLATED_IMAGES_DIR = sys.argv[2]
     N_IMS = 11
-    names = None
-#     names = ['chandan', 'andy', 'varun']
-#     names = ['chandan', 'dad', 'amma', 'roli', 'mom']
-#     names = ['chandan', 'guha', 'pietro']
-#     names = ['chandan', 'yinuo', 'chan']
+    names = None # can also pass a list of names to filter
 
 
     G = Generator(image_size=1024)

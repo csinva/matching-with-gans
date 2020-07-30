@@ -18,13 +18,7 @@ from config import *
 if __name__ == '__main__':
     DIR_ALIGNED_IMAGES = sys.argv[1]
     DIR_INTERPOLATED_IMAGES = sys.argv[2]
-    names = None
-#     names = ['chandan', 'andy', 'varun', 'zartosht', 'vishal', 'jamie', 'roy', 'matt', 'jesse']
-#     names = ['chandan', 'dad', 'amma', 'roli', 'mom']
-#     names = ['chandan', 'guha', 'pietro']
-#     names = ['chandan', 'yinuo', 'chan']
-    # names = ['chandan', 'alan', 'alain', 'alex', 'gautam', 'kieran', 'phong', 'stan']
-#     names = ['chandan', 'becca', 'bin', 'briton', 'merle', 'nick', 'robbie', 'tiffany', 'wooseok', 'xiao', 'yanshuo', 'yu', 'raaz']
+    names = None # can also pass a list of names to filter
 
     G = Generator(image_size=1024)
     os.makedirs(DIR_INTERPOLATED_IMAGES, exist_ok=True)

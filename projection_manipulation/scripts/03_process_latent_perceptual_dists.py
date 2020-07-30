@@ -22,7 +22,6 @@ import projector
 
 out_dir = oj(DIR_PROCESSED, 'processed_latents')
 os.makedirs(out_dir, exist_ok=True)
-# out_fname = oj(DIR_PROCESSED, 'processed_latents_300.pkl')
 IM_NUMS = range(300)
 regs = [0, 0.01, 0.1, 1, 10000]
 ks = sorted(ATTRS_MEASURED)
