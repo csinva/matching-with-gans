@@ -75,8 +75,8 @@ After performing matching, confounding is much lower on CelebA-HQ:
 
 # Reference
 - this project builds on many wonderful open-source projects (see the readmes in the [lib](lib) subfolders for more details) including
-- [stylegan2](https://github.com/NVlabs/stylegan2) and [stylegan2 encoder](https://github.com/rolux/stylegan2encoder)
+- stylegan: [stylegan2](https://github.com/NVlabs/stylegan2) and [stylegan2 encoder](https://github.com/rolux/stylegan2encoder)
 - facial recogntion: [dlib](https://github.com/davisking/dlib), python [face_recognition](https://face-recognition.readthedocs.io/en/latest/face_recognition.html), [facenet](https://github.com/davidsandberg/facenet)
-- [fairface](https://github.com/joojs/fairface)
-- [deep_head_pose](https://github.com/shahroudy/deep-head-pose), [face_segmentation](https://github.com/nasir6/face-segmentation), and [faceQnet](https://github.com/uam-biometrics/FaceQnet)
+- gender/race prediction: [fairface](https://github.com/joojs/fairface)
+- pose/background prediction: [deep_head_pose](https://github.com/shahroudy/deep-head-pose), [face_segmentation](https://github.com/nasir6/face-segmentation), and [faceQnet](https://github.com/uam-biometrics/FaceQnet)
 
