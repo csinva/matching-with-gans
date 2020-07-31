@@ -82,6 +82,14 @@ def load_all_labs(cached_file=oj(DIR_PROCESSED, 'df.pkl'),
     }
     for i in IDS_TO_MERGE:
         df.loc[df.id == i, 'id'] = IDS_TO_MERGE[i]
+        
+    # fix erroneous label
+    IDS_TO_FLIP_GENDER = [
+        8469
+    ]
+    for i in IDS_TO_FLIP_GENDER:
+        df.loc[df.id == i, 'gender'] = 1
+    
 
     # replace value for some attributes by the mode over all images with this id
     attrs = ['gender', 'race_pred', 'race4_pred']
