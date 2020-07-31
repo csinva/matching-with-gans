@@ -13,15 +13,10 @@ def get_lat(latents):
 
 
 def calc_dists_from_latents(lat):
-    '''Get distances
+    '''Get distances (points, points)
     '''
-    # calculate distances: (points, points)
-    #     dists = sklearn.metrics.pairwise_distances(lat, metric='cosine') # cosine dist
     dists = sklearn.metrics.pairwise_distances(lat, metric='l2')  # l2 dist
-    # sns.clustermap(dists)
     dists[np.eye(dists.shape[0]).astype(bool)] = 1e3  # don't pick same point
-    # plt.imshow(dists)
-    # dists_min = np.argmin(dists, axis=1)
     return dists
 
 
@@ -219,8 +214,6 @@ def get_matches(df, dists_match, dists_ref, attrs_to_vary,
                 idxs_to_remove = (df.id == id0) | (df.id == id1)
                 subgroups[s0][idxs_to_remove] = False
                 subgroups[s1][idxs_to_remove] = False
-    #         print(matches, matches_skipped)
-    #     print('num_matches', len(matches))
     return matches
 
 def add_intersections(d, ks_init, ignore_key='gender'):

@@ -15,7 +15,8 @@ import matching
 from config import *
 import data
 
-NUM_MATCHES = 200
+NUM_MATCHES = 400
+FACIAL_REC_THRESH = 0.8 # 0.6 is classification threshold for dlib
 MIN_REF_DIST_THRESH_UPPER = 1e6 # weeds out any crazy matches
 MIN_REF_DIST_THRESH_LOWER = 1e-2 # weeds out any matches that are too close
 
@@ -33,7 +34,7 @@ attrs_to_vary = ['gender'] # gender, black_or_white
 print('loading / specifying dists...')
 dists_match_name = 'gan_constrained'
 dists_ref = data.get_dists('vgg')
-dists_match = data.get_dists('gan') + (data.get_dists('facial') > 0.6) * 1e6 # constraint for missclassificaiton
+dists_match = data.get_dists('gan') + (data.get_dists('facial') > FACIAL_REC_THRESH) * 1e6 # constraint for missclassificaiton
 
 
 # specify things to vary (these should all be binary columns)
@@ -43,4 +44,4 @@ matches = matching.get_matches(df, dists_match, dists_ref, attrs_to_vary,
                                NUM_MATCHES, MIN_REF_DIST_THRESH_UPPER, MIN_REF_DIST_THRESH_LOWER)
 
 matches = pd.DataFrame.from_dict(matches).infer_objects()
-matches.to_pickle(oj(DIR_PROCESSED, f'matches_{attrs_to_vary[0]}_{matches.shape[0]}.pkl'))
+matches.to_pickle(oj(DIR_PROCESSED, f'matches_{attrs_to_vary[0]}_num={matches.shape[0]}_facerecthresh={FACIAL_REC_THRESH}.pkl'))
