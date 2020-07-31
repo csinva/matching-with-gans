@@ -10,7 +10,7 @@
   <a href="#reproducibility">Reproducibility</a> •
   <a href="#reference">Reference</a> 
   <br>
-  Quickstart demo (manipulate and interpolate your own face images!): <a href="https://colab.research.google.com/drive/1zevDVuqXc_ARcbirJAfEzsk1SClzBqXf"> <img src="https://colab.research.google.com/assets/colab-badge.svg"> </a>
+  <a href="https://colab.research.google.com/drive/1zevDVuqXc_ARcbirJAfEzsk1SClzBqXf">Quickstart demo</a> (manipulate and interpolate your own face images!): <a href="https://colab.research.google.com/drive/1zevDVuqXc_ARcbirJAfEzsk1SClzBqXf"> <img src="https://colab.research.google.com/assets/colab-badge.svg"> </a>
 </p>
 
 
@@ -68,7 +68,8 @@ After performing matching, confounding is much lower on CelebA-HQ:
 - `data/processed` folder
   - distances: `dists_pairwise_gan.npy`, `dists_pairwise_vgg.npy`, `dists_pairwise_facial.npy`, `dists_pairwise_facial_facenet.npy`, `dists_pairwise_facial_facenet_casia.npy`, `dists_pairwise_facial_vgg2.npy` - (30k x 30k) matrices storing the pairwise distances between all the images in celeba-hq using different distance measures
   - already present in the data folder are annotations (e.g. gender, smiling, eyeglasses) + predicted metrics (e.g. predicted yaw, roll, pitch, quality, race) for each image + latent directions corresponding to different attributes for StyleGAN2
-- `gen_latents` - these are used in downstream analysis and are required for the propensity score analysis
+- `data/processed/gen/generated_images_0.1`
+  - latents `celeba_hq_latents_stylegan2.zip` - these are used in downstream analysis and are required for the propensity score analysis
 - (optional) can download the raw annotations and annotated images as well
 - (optional) all these paths can be changed in the `config.py` file
 
