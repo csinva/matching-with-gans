@@ -95,7 +95,8 @@ def get_idxs_satisfying_reference_constraints(df, dists_match, dists_ref):
 
 
 def get_matches(df, dists_match, dists_ref, attrs_to_vary,
-                NUM_MATCHES, MIN_REF_DIST_THRESH_UPPER, MIN_REF_DIST_THRESH_LOWER):
+                NUM_MATCHES, MIN_REF_DIST_THRESH_UPPER, MIN_REF_DIST_THRESH_LOWER,
+                save_name, save_freq=5):
     '''Run full matching
     
     attrs_to_vary: List[str]
@@ -214,6 +215,11 @@ def get_matches(df, dists_match, dists_ref, attrs_to_vary,
                 idxs_to_remove = (df.id == id0) | (df.id == id1)
                 subgroups[s0][idxs_to_remove] = False
                 subgroups[s1][idxs_to_remove] = False
+                
+        # save the matches
+        if match_num % save_freq == 0:
+            df_save = pd.DataFrame.from_dict(matches).infer_objects()
+            df_save.to_pickle(save_name.replace('num=', f'num={match_num}-'))
     return matches
 
 def add_intersections(d, ks_init, ignore_key='gender'):

@@ -16,7 +16,7 @@ from config import *
 import data
 
 NUM_MATCHES = 400
-FACIAL_REC_THRESH = 0.8 # 0.6 is classification threshold for dlib
+FACIAL_REC_THRESH = 0.7 # 0.6 is classification threshold for dlib
 MIN_REF_DIST_THRESH_UPPER = 1e6 # weeds out any crazy matches
 MIN_REF_DIST_THRESH_LOWER = 1e-2 # weeds out any matches that are too close
 
@@ -40,8 +40,8 @@ dists_match = data.get_dists('gan') + (data.get_dists('facial') > FACIAL_REC_THR
 # specify things to vary (these should all be binary columns)
 # id willl automatically be different when we vary gender, race bc these things 
 # are forced to be preserved in data.py
+save_name = oj(DIR_PROCESSED, f'matches_{attrs_to_vary[0]}_num={NUM_MATCHES}_facerecthresh={FACIAL_REC_THRESH}.pkl')
 matches = matching.get_matches(df, dists_match, dists_ref, attrs_to_vary,
-                               NUM_MATCHES, MIN_REF_DIST_THRESH_UPPER, MIN_REF_DIST_THRESH_LOWER)
-
+                               NUM_MATCHES, MIN_REF_DIST_THRESH_UPPER, MIN_REF_DIST_THRESH_LOWER, save_name=save_name)
 matches = pd.DataFrame.from_dict(matches).infer_objects()
-matches.to_pickle(oj(DIR_PROCESSED, f'matches_{attrs_to_vary[0]}_num={matches.shape[0]}_facerecthresh={FACIAL_REC_THRESH}.pkl'))
+matches.to_pickle(save_name)
