@@ -15,8 +15,8 @@ import matching
 from config import *
 import data
 
-NUM_MATCHES = 400
-FACIAL_REC_THRESH = 0.7 # 0.6 is classification threshold for dlib
+NUM_MATCHES = 1200
+FACIAL_REC_THRESH = 0.6 # 0.6 is classification threshold for dlib, None removes this constraint
 MIN_REF_DIST_THRESH_UPPER = 1e6 # weeds out any crazy matches
 MIN_REF_DIST_THRESH_LOWER = 1e-2 # weeds out any matches that are too close
 
@@ -34,7 +34,12 @@ attrs_to_vary = ['gender'] # gender, black_or_white
 print('loading / specifying dists...')
 dists_match_name = 'gan_constrained'
 dists_ref = data.get_dists('vgg')
-dists_match = data.get_dists('gan') + (data.get_dists('facial') > FACIAL_REC_THRESH) * 1e6 # constraint for missclassificaiton
+dists_match = data.get_dists('gan') 
+
+# implement the facial rec threshold constraint
+# by making distances which violate the constraint extremely high
+if FACIAL_REC_THRESH is not None:
+    dists_match = dists_match + (data.get_dists('facial') > FACIAL_REC_THRESH) * 1e6 # constraint for missclassificaiton
 
 
 # specify things to vary (these should all be binary columns)

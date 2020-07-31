@@ -67,9 +67,9 @@ After performing matching, confounding is much lower on CelebA-HQ:
   - unzip the images in  celeba-hq dataset at 1024 x 1024 resolution into this folder
 - `data/processed` folder
   - distances: `dists_pairwise_gan.npy`, `dists_pairwise_vgg.npy`, `dists_pairwise_facial.npy`, `dists_pairwise_facial_facenet.npy`, `dists_pairwise_facial_facenet_casia.npy`, `dists_pairwise_facial_vgg2.npy` - (30k x 30k) matrices storing the pairwise distances between all the images in celeba-hq using different distance measures
-  - already present in the data folder are annotations (e.g. gender, smiling, eyeglasses) + predicted metrics (e.g. predicted yaw, roll, pitch, quality, race) for each image + latent directions corresponding to different attributes for StyleGAN2
 - `data/processed/gen/generated_images_0.1`
   - latents `celeba_hq_latents_stylegan2.zip` - these are used in downstream analysis and are required for the propensity score analysis
+- (already present) - annotations (e.g. gender, smiling, eyeglasses) + predicted metrics (e.g. predicted yaw, roll, pitch, quality, race) for each image + latent StyleGAN2 directions for different attributes + precomputed match numbers
 - (optional) can download the raw annotations and annotated images as well
 - (optional) all these paths can be changed in the `config.py` file
 

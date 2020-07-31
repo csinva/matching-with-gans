@@ -96,7 +96,7 @@ def get_idxs_satisfying_reference_constraints(df, dists_match, dists_ref):
 
 def get_matches(df, dists_match, dists_ref, attrs_to_vary,
                 NUM_MATCHES, MIN_REF_DIST_THRESH_UPPER, MIN_REF_DIST_THRESH_LOWER,
-                save_name, save_freq=5):
+                save_name, save_freq=50):
     '''Run full matching
     
     attrs_to_vary: List[str]
