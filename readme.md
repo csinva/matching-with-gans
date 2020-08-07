@@ -72,9 +72,9 @@ After performing matching, confounding is much lower on CelebA-HQ. This is illus
 
 ## Scripts
 
-- both the [matching_benchmarking](matching_benchmarking) folder and the [projection_manipulation](projection_manipulation) folder contain two types of files:
-  - `.py` files in the `scripts` subdirectories - these scripts are used to calculate the cached outputs in the gdrive folder. They do not need to be rerun, but show how the cached outputs were generated and can be rerun on new datasets.
-  - `.ipynb` notebooks - these are used to reproduce the results from the cached outputs in the gdrive folde. Noteboks beginning with `eda` are for exploratory analysis, which can be useful but are note required to generate the final results in the paper
+Both the [matching_benchmarking](matching_benchmarking) folder and the [projection_manipulation](projection_manipulation) folder contain two types of files:
+- `.py` files in the `scripts` subdirectories - these scripts are used to calculate the cached outputs in the gdrive folder. They do not need to be rerun, but show how the cached outputs were generated and can be rerun on new datasets.
+- `.ipynb` notebooks - these are used to reproduce the results from the cached outputs in the gdrive folde. Noteboks beginning with `eda` are for exploratory analysis, which can be useful but are note required to generate the final results in the paper
 
 # Reference
 - this project builds on many wonderful open-source projects (see the readmes in the [lib](lib) subfolders for more details) including
