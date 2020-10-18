@@ -2,6 +2,7 @@ dlib>=19.20.0
 tensorflow==1.14.0
 opencv-python>=3.4.0.12
 scikit_learn>=0.20.0
+face_recognition
 # matplotlib>=2.2.2
 # six>=1.11.0
 # scipy>=1.1.0

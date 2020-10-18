@@ -3,13 +3,14 @@ import sys
 import torch
 import torchvision
 from torchvision import transforms
-
+from os.path import join as oj
+from config import *
 sys.path.append(oj(DIR_LIB, 'deep_head_pose/code/'))
 import hopenet
 from PIL import Image
 import pandas as pd
 from tqdm import tqdm
-from config import *
+
 
 if __name__ == '__main__':
     fname_out = oj(DIR_CELEBA, 'pose.pkl')

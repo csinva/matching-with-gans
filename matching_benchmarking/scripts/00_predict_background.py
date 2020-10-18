@@ -11,7 +11,7 @@ import config
 import data
 import util
 
-sys.path.append(config.LIB_PATH)
+sys.path.append(config.DIR_LIB)
 from face_segmentation.models import LinkNet34
 import config
 from config import *
