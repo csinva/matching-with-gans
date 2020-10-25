@@ -252,17 +252,19 @@ def calc_propensity_matches(groups, propensity, caliper = 0.05):
     ''' 
     Params
     ------
-    groups = Treatment assignments.  Must be 2 groups
-    propensity = Propensity scores for each observation. Propensity and groups should be in the same order (matching indices)
-    caliper = Maximum difference in matched propensity scores. For now, this is a caliper on the raw
-            propensity; Austin reccommends using a caliper on the logit propensity.
+    groups
+        Treatment assignments.  Must be 2 groups
+    propensity
+        Propensity scores for each observation. Propensity and groups should be in the same order (matching indices)
+    caliper
+        Maximum difference in matched propensity scores. For now, this is a caliper on the raw
+        propensity; Austin reccommends using a caliper on the logit propensity.
     
     Returns
     -------
-    A series containing the individuals in the control group matched to the treatment group.
-    Note that with caliper matching, not every treated individual may have a match.
-    
-    Code for this function is adapted from [here](https://nbviewer.jupyter.org/github/kellieotto/StatMoments/blob/master/PSM.ipynb)
+    matches1, matches2
+        A series containing the individuals in the control group matched to the treatment group.
+        Note that with caliper matching, not every treated individual may have a match.
     '''
 
     # Check inputs
@@ -292,17 +294,21 @@ def calc_propensity_matches(groups, propensity, caliper = 0.05):
     matches1 = []
     matches2 = []
     
+    # cycle through members of group 1
     for idx in tqdm(idxs_shuffled):
-        dist = abs(g1.iloc[idx] - g2)
+        
+        # distance of each member of group2 to g1.iloc[idx]
+        dist = abs(g1.iloc[idx] - g2).values
         
         # if match is below some thresh
         if dist.min() <= caliper:
             
             # pick the best match
-            arg_min = dist.argmin()
+            arg_min = np.argmin(dist)
+    
+            # append indexes of matches
             matches2.append(g2.index[arg_min])
             matches1.append(g1.index[idx])
-            
             
             # don't consider this for future matches
             g2 = g2.drop(matches2[-1])

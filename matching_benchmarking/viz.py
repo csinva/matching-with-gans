@@ -124,12 +124,12 @@ def plot_subgroup_mean_diffs(ds, ks, k_group, figsize=None, vert=False,
         
     
     if legend_loc == 'right':
-        plt.legend(title='Perceived gender', bbox_to_anchor=(1, 0.5))
-        fig.text(0.5, 0, 'Mean fraction of points which have this attribute', ha='center')
+        plt.legend(title='Perceived gender', bbox_to_anchor=(1, 0.5), title_fontsize=16)
+        fig.text(0.5, 0, 'Mean fraction of points which have this attribute', ha='center', fontsize=16)
     elif legend_loc == 'bottom':
         for i in range(len(ds)):
             plt.subplot(R, C, i + 1)
             plt.ylim(-0.5, len(ks_g) - 0.5)
         plt.legend(title='Perceived gender', bbox_to_anchor=(-1.3, 0), loc='upper right')
-        fig.text(0.5, 0.05, 'Mean fraction of points\n with this attribute', ha='center')
+        fig.text(0.5, 0.05, 'Mean fraction of points\n with this attribute', ha='center', fontsize=16)
         
