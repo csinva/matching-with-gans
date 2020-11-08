@@ -105,6 +105,7 @@ def plot_subgroup_mean_diffs(ds, ks, k_group, figsize=None, vert=False,
     args = None
     colors = [cr, cb]
 
+    lets = ['A', 'B', 'C']
     for i, d in enumerate(ds):
         d = d[ks]
 
@@ -120,6 +121,7 @@ def plot_subgroup_mean_diffs(ds, ks, k_group, figsize=None, vert=False,
                                    CI='wilson',
                                    ticklabels=i == 0, args=None, colors=colors)
         plt.title(titles[i])
+        plt.title(lets[i], loc='left', fontweight='bold')
         plt.xlim((-0.1, 1.1))
         
     
