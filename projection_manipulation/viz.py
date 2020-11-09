@@ -102,43 +102,33 @@ def visualize_projection_statistics(df, d, vals):
 def visualize_projection_statistics_overlapping(df, d, vals):
     '''Visualize statistics as a function of regularization
     '''
-    ykey = 'mean_abs_corr'
     plt.figure(dpi=300, figsize=(9, 5))
-#     plt.subplot(121)
     means = df.groupby('reg_param').mean().reset_index()
     
-    x1 = means['perceptual_loss'] - means['perceptual_loss'].min()
-    plt.plot(x1, np.arange(5), 'o-', color=c0)
-    plt.text(x1.max() + 0, 4.25, 'Perceptual distance (VGG)', color=c0, fontsize=18)
+    def normalize_0_1(x):
+        '''Normalize to [0, 1]
+        '''
+        return (x - x.min()) / (x.max() - x.min())
+    
+    x1 = normalize_0_1(means['perceptual_loss']) # - means['perceptual_loss'].min()
+    plt.plot(x1, np.arange(5), 'o-', color=c0, lw=2)
+    plt.text(x1.max() -0.1, 3.8, 'Perceptual distance\n       (VGG)', color=c0, fontsize=18)
     
     plt.yticks(np.arange(5), labels=['Unregularized: $\lambda = 0$',
                                      '$\lambda = 0.001$', 
                                      '$\mathbf{Regularized: \lambda = 0.1}$',
                                      '$\lambda = 1$',
                                      'Restricted: $\lambda = \infty$'], fontsize=18)
-    TEXT_SIZE = 15
-    plt.text(x1[2] - 0.006, 1.8, '0.34', color=c0, fontsize=TEXT_SIZE)
-    plt.text(x1[0] - 0.006, -0.08, '0.31', color=c0, fontsize=TEXT_SIZE)
+    x2 = normalize_0_1(d[vals].mean())
+    plt.plot(x2 -0.01, np.arange(5), 'o-', color=c1, alpha=1, lw=2)    
+    plt.text(x2.max() -0.1, 3.1, 'Face-rec distance\n     (dlib)', color=c1, fontsize=18)
     
-    x2 = (d[vals].mean() - d[vals].mean().min()) / 11 + 0.003
-    plt.plot(x2, np.arange(5), 'o-', color=c1)    
-    plt.text(x2.max() + 0.001, 3.1, 'Face-rec distance\n     (dlib)', color=c1, fontsize=18)
-    plt.text(x2[2] + 0.0017, 1.88, '0.731', color=c1, fontsize=TEXT_SIZE)
-    plt.text(x2[0] + 0.0015, -0.08, '0.733', color=c1, fontsize=TEXT_SIZE)
+    x3 = normalize_0_1(means['mean_mse_dist'])
+    plt.plot(x3, np.arange(5), 'o-', color=cg, lw=2)
+    plt.text(x3.max() - 0.15, 0.46, 'Distance to restricted\nstyle space (MSE)', color=cg, fontsize=18)
     
-    
-    x3 = means['mean_mse_dist']
-    x3 = (x3 - x3.min()) / 60
-    plt.plot(x3, np.arange(5), 'o-', color=cg)
-    plt.text(x3[4] - 0.003, 4-0.08, '0', color=cg, fontsize=TEXT_SIZE)
-    plt.text(x3[1] + 0.001, 1-0.04, '0.90', color=cg, fontsize=TEXT_SIZE)
-    plt.text(x3.max() - 0.004, 0.16, 'Latent-space distance\n     (MSE)', color=cg, fontsize=18)
-    
-    plt.xlabel('Distance between original and reconstructed images\n(lower is better)', fontsize=18)
-    plt.xticks([])
-    plt.xlim((-0.007, 0.04))
+    plt.xlabel('Distance between original and reconstructed images\n(normalized, lower is better)', fontsize=18)
     plt.ylim((-0.25, 4.8))
-#     print(means['perceptual_loss'], d[vals].mean(), means['mean_mse_dist'])
 
     
 def hist_subgroups(means, labs, labs_list, BINS=4):
