@@ -17,6 +17,7 @@ cr = '#d40035'
 cp = '#cc3399'
 cy = '#d8b365'
 cg = '#5ab4ac'
+cp = '#5100c2' # '#db1a74'
 
 STANDARD_FIG_SIZE = (20, 14)
 VERY_SMALL_SIZE = 12

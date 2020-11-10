@@ -3,10 +3,10 @@ import numpy as np
 import sklearn.metrics
 
 import util
-from style import cb, cr
+from style import cb, cr, cp
 
 
-def plot_subgroup_means(g0, g1, ks, ticklabels=True, args=None,
+def plot_subgroup_means(g0, g1, ks, ticklabels=True, args=None, ms=10,
                         colors=None, CI='sem'):
     '''Plots means (with errbar) horizontally for each subgroup
     args is used to ensure that yticks are put in same order
@@ -41,7 +41,7 @@ def plot_subgroup_means(g0, g1, ks, ticklabels=True, args=None,
             sems = sems[:, args]
         ys = np.arange(len(ks))
         plt.errorbar(means[args], ys, label=lab, xerr=sems,
-                     linestyle='', marker='.', markersize=10, color=colors[i])
+                     linestyle='', marker='.', markersize=ms, color=colors[i])
         if ticklabels:
             ylabs = [k[0].upper() + k[1:].replace('black', 'Black').replace('_', ' ')
                             for k in ks[args]]
@@ -87,7 +87,7 @@ def plot_confusion_matrix(y_true, y_pred, class_label,
     return ax
 
 
-def plot_subgroup_mean_diffs(ds, ks, k_group, figsize=None, vert=False,
+def plot_subgroup_mean_diffs(ds, ks, k_group, figsize=None, vert=False, ms=10,
                              titles=['Before matching', 'After matching'], legend_loc='right'):
     '''Plots means of different subgroups horizontally
     Params
@@ -103,7 +103,7 @@ def plot_subgroup_mean_diffs(ds, ks, k_group, figsize=None, vert=False,
     fig = plt.figure(dpi=200, figsize=figsize)
     ks_g = [k for k in ks if not k == k_group]
     args = None
-    colors = [cr, cb]
+    colors = [cp, cb]
 
     lets = ['A', 'B', 'C']
     for i, d in enumerate(ds):
@@ -119,6 +119,7 @@ def plot_subgroup_mean_diffs(ds, ks, k_group, figsize=None, vert=False,
         args = plot_subgroup_means(g0, g1,
                                    ks=np.array(ks_g),
                                    CI='wilson',
+                                   ms=ms,
                                    ticklabels=i == 0, args=None, colors=colors)
         plt.title(titles[i])
         plt.title(lets[i], loc='left', fontweight='bold')
