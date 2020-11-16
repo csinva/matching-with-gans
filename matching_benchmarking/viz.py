@@ -3,7 +3,7 @@ import numpy as np
 import sklearn.metrics
 
 import util
-from style import cb, cr, cp
+from style import cb, cr, cp, cpink
 
 
 def plot_subgroup_means(g0, g1, ks, ticklabels=True, args=None, ms=10,
@@ -103,7 +103,7 @@ def plot_subgroup_mean_diffs(ds, ks, k_group, figsize=None, vert=False, ms=10,
     fig = plt.figure(dpi=200, figsize=figsize)
     ks_g = [k for k in ks if not k == k_group]
     args = None
-    colors = [cp, cb]
+    colors = [cpink, cb]
 
     lets = ['A', 'B', 'C']
     for i, d in enumerate(ds):
