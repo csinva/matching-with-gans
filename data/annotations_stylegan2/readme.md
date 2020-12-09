@@ -1,5 +1,7 @@
 # labels for annotations
 
+This folder contains labels for the latent space of StyleGAN2. `annotations.pkl` contains a dictionary of annotations for 5000 random images generated from the stylegan2 latent space. The keys are the same as the dict above and the values are each a numpy array of size (5000, 7), where 7 is the number of annotators (experiment described in [our previous paper](https://arxiv.org/abs/2007.06570)).
+
 Values in annotation dict correspond to indices in these lists (e.g. hair length value 0 = 'Very short')
 
 ```python
@@ -14,4 +16,4 @@ annotation_dict_names {
  }
 ```
 
-`annotations.pkl` contains a dictionary of annotations for 5000 random images generated from the stylegan2 latent space. The keys are the same as the dict above and the values are each a numpy array of size (5000, 7), where 7 is the number of annotators.
+The `linear_models` folder contains weights for linear models of the StyleGAN2 style space trained to predict each of these annotations. Traversing these directions in latent space corresponds to changing these attributes.
