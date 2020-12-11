@@ -38,12 +38,14 @@ Manipulating an image along pre-specified attributes:
 Can do a lot more, like blending together many faces or interpolating between different faces of the same person!
     
 # Matching and benchmarking
-The matching code [here](matching_benchmarking) finds images that match across a certain attribute (e.g. gender). This is useful for removing confounding factors when doing downstream analyses of things like bias in facial recognition. Similarly, we can perform matching using other methods, such as propensity scores, using the GAN latent space as covariates. Some example matches:
+The matching code [here](matching_benchmarking) finds images that match across a certain attribute (e.g. perceived gender). This is useful for removing confounding factors when doing downstream analyses of things like gender bias in facial recognition. Similarly, we can perform matching using other methods, such as propensity scores, using the GAN latent space as covariates. Some example matches:
 
 <p align="center">
     <img src="matching_benchmarking/samples/matches_big_gender_0.jpg" width="100%">
     <img src="matching_benchmarking/samples/matches_big_gender_1.jpg" width="100%">
 </p>
+Note: these annotations do not necessarily reflect the *gender identity* of the person, rather they refer to *binarized gender as perceived by a casual observer*
+
 
 
 After performing matching, confounding is much lower on CelebA-HQ. This is illustrated by the fact that the mean values of several key (binary) attributes become much closer after matching:
