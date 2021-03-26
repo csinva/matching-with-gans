@@ -1,6 +1,6 @@
 <h1 align="center">Matching in GAN-Space</h1>
 
-<p align="center">Code for using GANs to aid in matching, accompanying the paper "Overcoming confounding in face datasets via GAN-based matching" [arXiv]().
+<p align="center">Code for using GANs to aid in matching, accompanying the paper "Overcoming confounding in face datasets via GAN-based matching" <a href="https://arxiv.org/abs/2103.13455">(arXiv)</a>
 </p>
 
 <p align="center">
@@ -56,11 +56,12 @@ After performing matching, confounding is much lower on CelebA-HQ. This is illus
 
 # Reproducibility
 
-## Dependencies
-- tested with python 3.6 and tensorflow-gpu 1.14.0 (the gpu dependencies are only required for the projection / manipulation code which uses  [StyleGAN2](https://github.com/NVlabs/stylegan2))
+## Dependencies ![Python 3.6](https://img.shields.io/badge/python-3.6-blue.svg) ![](https://img.shields.io/badge/tensorflow-1.14.0-blue)
+
+- uses tensorflow-gpu 1.14.0 (the gpu dependencies are only required for the projection / manipulation code which uses  [StyleGAN2](https://github.com/NVlabs/stylegan2))
 - the required dependencies can be set up on AWS by selecting a deep learning AMI, running `source activate python3`, and then running `pip install tensorflow-gpu==1.14.0`
 
-## Data/cached outputs for reproducing pipeline [this gdrive folder](https://drive.google.com/drive/folders/1YO_GZ48o30jTnME-z7d8LlcZoJejcNsk?usp=sharing)
+## Data/cached outputs for reproducing pipeline in [this gdrive folder](https://drive.google.com/drive/folders/1YO_GZ48o30jTnME-z7d8LlcZoJejcNsk?usp=sharing)
 
 - `data/celeba-hq/ims` folder
   - unzip the images in  celeba-hq dataset at 1024 x 1024 resolution into this folder
@@ -68,7 +69,7 @@ After performing matching, confounding is much lower on CelebA-HQ. This is illus
   - distances: `dists_pairwise_gan.npy`, `dists_pairwise_vgg.npy`, `dists_pairwise_facial.npy`, `dists_pairwise_facial_facenet.npy`, `dists_pairwise_facial_facenet_casia.npy`, `dists_pairwise_facial_vgg2.npy` - (30k x 30k) matrices storing the pairwise distances between all the images in celeba-hq using different distance measures
 - `data/processed/gen/generated_images_0.1`
   - latents `celeba_hq_latents_stylegan2.zip` - these are used in downstream analysis and are required for the propensity score analysis
-- (already present) - annotations (e.g. gender, smiling, eyeglasses) + predicted metrics (e.g. predicted yaw, roll, pitch, quality, race) for each image + latent StyleGAN2 directions for different attributes + precomputed match numbers
+- (already present in repo) - annotations (e.g. gender, smiling, eyeglasses) + predicted metrics (e.g. predicted yaw, roll, pitch, quality, race) for each image + latent StyleGAN2 directions for different attributes + precomputed match numbers
 - (optional) can download the raw annotations and annotated images as well
 - (optional) all these paths can be changed in the `config.py` file
 
@@ -84,3 +85,12 @@ Both the [matching_benchmarking](matching_benchmarking) folder and the [projecti
 - facial recogntion: [dlib](https://github.com/davisking/dlib), python [face_recognition](https://face-recognition.readthedocs.io/en/latest/face_recognition.html), [facenet](https://github.com/davidsandberg/facenet)
 - gender/race prediction: [fairface](https://github.com/joojs/fairface)
 - pose/background prediction: [deep_head_pose](https://github.com/shahroudy/deep-head-pose), [face_segmentation](https://github.com/nasir6/face-segmentation), and [faceQnet](https://github.com/uam-biometrics/FaceQnet)
+
+```r
+@article{singh2021matched,
+    title={Matched sample selection with GANs for mitigating attribute confounding}, 
+    author={Chandan Singh and Guha Balakrishnan and Pietro Perona},
+    journal={arXiv preprint arXiv:2103.13455},    
+    year={2021}
+}
+```
